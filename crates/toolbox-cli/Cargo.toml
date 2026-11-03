@@ -1,0 +1,16 @@
+[package]
+name = "toolbox-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+[[bin]]
+name = "mkdstb"
+path = "src/main.rs"
+[dependencies]
+toolbox-core = { path = "../toolbox-core" }
+nitro-formats = { path = "../nitro-formats" }
+serde_json.workspace = true
+clap = { version = "4", features = ["derive"] }
+
+[dev-dependencies]
+tempfile = "3"
