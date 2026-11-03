@@ -49,6 +49,29 @@ pub fn files() -> BTreeMap<String, Vec<u8>> {
     .write();
     BTreeMap::from([
         (
+            "data/Course/studio.carc".into(),
+            nitro_formats::compress(
+                &Narc::new(BTreeMap::from([
+                    (
+                        "course_model.nsbmd".into(),
+                        nitro_formats::synthetic::nsbmd(),
+                    ),
+                    ("course_model.nsbtx".into(), texture_fixture()),
+                    (
+                        "course_model.nsbca".into(),
+                        nitro_formats::synthetic::nsbca(),
+                    ),
+                    (
+                        "course_collision.kcl".into(),
+                        nitro_formats::synthetic::kcl(),
+                    ),
+                    ("course_map.nkm".into(), nitro_formats::synthetic::nkm()),
+                ]))
+                .expect("synthetic course archive")
+                .write(),
+            ),
+        ),
+        (
             "data/Studio/demo.carc".into(),
             nitro_formats::compress(&inner),
         ),

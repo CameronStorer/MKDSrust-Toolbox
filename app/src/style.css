@@ -1663,3 +1663,43 @@ canvas {
     padding: 20px;
   }
 }
+.scene-panel { display: flex; flex-direction: column; overflow: hidden; }
+.scene-toolbar { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-bottom: 1px solid var(--line); flex-shrink: 0; flex-wrap: wrap; }
+.scene-toolbar > select:first-child { flex: 1; min-width: 130px; max-width: 380px; }
+.scene-toolbar label { display: flex; align-items: center; gap: 5px; }
+.viewport-host { flex: 1; min-height: 100px; position: relative; overflow: hidden; }
+.viewport-host canvas { display: block; width: 100%; height: 100%; }
+.viewport-counter, .viewport-hint, .viewport-badge { position: absolute; pointer-events: none; color: #dbe2e4; font: 10px 'JetBrains Mono', monospace; background: #182024c9; padding: 5px 8px; border-radius: 3px; }
+.viewport-counter { top: 12px; right: 12px; }
+.viewport-hint { bottom: 12px; left: 12px; }
+.viewport-badge { top: 12px; left: 12px; letter-spacing: 1px; }
+.viewport-message { position: absolute; inset: 0; display: grid; place-content: center; padding: 30px; z-index: 1; background: var(--panel); }
+.scene-outliner { overflow: auto; }
+.scene-outliner summary { padding: 9px 12px; color: var(--muted); font-size: 11px; cursor: pointer; }
+.outliner-entry { display: block; width: 100%; text-align: left; justify-content: flex-start; border: 0; border-radius: 0; background: transparent; padding: 6px 18px; font: 11px 'JetBrains Mono', monospace; overflow: hidden; text-overflow: ellipsis; }
+.outliner-entry.selected { background: var(--selected); color: var(--accent); }
+.budget-row { display: contents; }
+.record-bytes { white-space: normal; display: block; line-height: 1.8; padding-top: 8px; overflow-wrap: anywhere; }
+.overlay-panel { overflow: auto; }
+.overlay-row { display: flex; align-items: center; gap: 7px; padding: 5px 10px; }
+.overlay-row span { flex: 1; }
+.overlay-row input[type=color] { padding: 0; width: 22px; height: 22px; border: 0; }
+.overlay-row button { font-size: 10px; min-width: 45px; padding: 2px 4px; }
+.overlay-row button.active { color: var(--accent); background: var(--selected); }
+.legend-row { display: flex; align-items: center; gap: 8px; padding: 5px 2px; }
+.legend-row i { display: inline-block; width: 12px; height: 12px; }
+.timeline input[type=range] { width: calc(100% - 30px); margin: 15px; accent-color: var(--accent); }
+.bench-panel { overflow: auto; }
+.bench-content { padding: 22px 30px; max-width: 780px; }
+.bench-content h2 { margin: 0 0 8px; font-size: 21px; }
+.bench-content > label { display: grid; gap: 7px; margin: 20px 0 12px; }
+.bench-content code { font-size: 11px; overflow-wrap: anywhere; }
+.bench-content .section-label { margin: 25px -5px 12px; }
+.bench-actions { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
+.bench-content fieldset { display: flex; gap: 20px; padding: 12px; border: 1px solid var(--line); opacity: 0.5; }
+.bench-content fieldset label { display: grid; gap: 7px; flex: 1; }
+.bench-content dl { display: grid; grid-template-columns: 100px 1fr; gap: 12px; }
+.bench-content dd { margin: 0; }
+.running { color: var(--accent); }
+.game-log { overflow: auto; padding: 14px 18px; background: var(--input); }
+.game-log pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 11px/1.8 'JetBrains Mono', monospace; color: var(--muted); }

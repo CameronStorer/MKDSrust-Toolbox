@@ -51,6 +51,10 @@ pub enum Request {
     Undo,
     Redo,
     Pack,
+    Play {
+        game: String,
+    },
+    Stop,
     Validate,
     Settings {
         settings: Settings,
@@ -71,6 +75,7 @@ pub enum Request {
 }
 #[derive(Clone, Debug, Serialize, Type)]
 pub struct Snapshot {
+    pub bench: crate::bench::BenchSnapshot,
     pub rom_path: String,
     pub game: String,
     pub rom_hash: String,
@@ -100,6 +105,7 @@ pub struct BinaryRequest {
     pub bank: u32,
 }
 pub struct Service {
+    pub bench: crate::bench::Bench,
     pub session: Option<RomSession>,
     pub project: Option<Project>,
     pub settings: Settings,
@@ -111,6 +117,7 @@ pub struct Service {
 impl Default for Service {
     fn default() -> Self {
         Self {
+            bench: crate::bench::Bench::default(),
             session: None,
             project: None,
             settings: crate::settings::load(),
@@ -179,6 +186,7 @@ impl Service {
             }
         }
         Ok(Snapshot {
+            bench: self.bench.snapshot(Path::new(&self.settings.install_path)),
             rom_path: session
                 .map(|s| s.path.to_string_lossy().into())
                 .unwrap_or_default(),
@@ -204,6 +212,7 @@ impl Service {
         })
     }
     pub fn dispatch(&mut self, request: Request) -> Result<Snapshot> {
+        self.bench.poll()?;
         let changes_project = matches!(
             &request,
             Request::CreateProject { .. }
@@ -217,6 +226,23 @@ impl Service {
         );
         match request {
             Request::Snapshot => {}
+            Request::Stop => self.bench.stop()?,
+            Request::Play { game } => {
+                let project = self
+                    .project
+                    .as_ref()
+                    .ok_or_else(|| Error::Invalid("create or open a project first".into()))?;
+                let session = self
+                    .session
+                    .as_ref()
+                    .ok_or_else(|| Error::Invalid("open your ROM first".into()))?;
+                self.bench.play(
+                    Path::new(&self.settings.install_path),
+                    &game,
+                    project,
+                    session,
+                )?;
+            }
             Request::OpenRom { path } => {
                 let session = RomSession::open(Path::new(&path))?;
                 self.session = Some(session);
@@ -395,6 +421,8 @@ impl Service {
             Request::Settings { settings } => {
                 if !["dark", "light"].contains(&settings.theme.as_str())
                     || !["Blender", "Maya", "MKTB"].contains(&settings.navigation.as_str())
+                    || !settings.camera_speed.is_finite()
+                    || !(0.1..=10.).contains(&settings.camera_speed)
                 {
                     return Err(Error::Invalid(
                         "invalid theme or navigation preference".into(),
@@ -439,8 +467,18 @@ impl Service {
                         Some(p) => p.bytes(s, &path)?,
                         None => s.file(&path)?,
                     })?
+                } else if to == "glb" {
+                    crate::scene::CourseScene::load(self.project.as_ref(), s, &path)?.glb(false)?
+                } else if to == "obj" {
+                    let bytes = match &self.project {
+                        Some(p) => p.bytes(s, &path)?,
+                        None => s.file(&path)?,
+                    };
+                    crate::model::obj(&nitro_formats::kcl::Kcl::parse(&preview::plain(bytes)?)?)?
                 } else {
-                    return Err(Error::Invalid("export supports png or json".into()));
+                    return Err(Error::Invalid(
+                        "export supports png, json, glb or obj".into(),
+                    ));
                 };
                 self.check_output(Path::new(&output))?;
                 crate::project::atomic_write(Path::new(&output), &bytes)?;
@@ -484,6 +522,10 @@ impl Service {
     }
     pub fn binary(&self, r: BinaryRequest) -> Result<Vec<u8>> {
         let s = self.session()?;
+        if r.mode == "glb" || r.mode == "course-glb" {
+            return crate::scene::CourseScene::load(self.project.as_ref(), s, &r.path)?
+                .glb(r.mode == "course-glb");
+        }
         if r.mode == "png" {
             return preview::png(&preview::image(
                 self.project.as_ref(),

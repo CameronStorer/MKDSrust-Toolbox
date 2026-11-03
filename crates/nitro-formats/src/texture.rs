@@ -27,7 +27,7 @@ pub struct Nsbtx {
     pub textures: Vec<Texture>,
     pub palettes: Vec<Palette>,
 }
-fn dictionary(b: &[u8], at: usize, stride: usize) -> Result<Vec<(String, Vec<u8>)>> {
+pub(crate) fn dictionary(b: &[u8], at: usize, stride: usize) -> Result<Vec<(String, Vec<u8>)>> {
     let count = slice(b, at + 1, 1)?[0] as usize;
     let len = u16le(b, at + 2)? as usize;
     let d = slice(b, at, len)?;
@@ -49,7 +49,9 @@ fn dictionary(b: &[u8], at: usize, stride: usize) -> Result<Vec<(String, Vec<u8>
 }
 impl Nsbtx {
     pub fn parse(b: &[u8]) -> Result<Self> {
-        if slice(b, 0, 4)? != b"BTX0" || u16le(b, 4)? != 0xfeff {
+        if ![b"BTX0".as_slice(), b"BMD0".as_slice()].contains(&slice(b, 0, 4)?)
+            || u16le(b, 4)? != 0xfeff
+        {
             return Err(error(0, "expected little-endian BTX0"));
         }
         let size = u32le(b, 8)? as usize;

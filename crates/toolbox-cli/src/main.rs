@@ -38,6 +38,10 @@ enum Command {
         texture: usize,
         #[arg(long, default_value_t = 0)]
         bank: usize,
+        #[arg(long)]
+        textures: Option<PathBuf>,
+        #[arg(long)]
+        animation: Option<PathBuf>,
     },
     Pack {
         project: PathBuf,
@@ -50,6 +54,8 @@ enum Command {
 enum To {
     Png,
     Json,
+    Glb,
+    Obj,
 }
 fn run(cli: Cli) -> Result<()> {
     match cli.command {
@@ -91,17 +97,43 @@ fn run(cli: Cli) -> Result<()> {
             screen,
             texture,
             bank,
+            textures,
+            animation,
         } => {
             let bytes = std::fs::read(&file)?;
             let ext = match to {
                 To::Png => "png",
                 To::Json => "json",
+                To::Glb => "glb",
+                To::Obj => "obj",
             };
             let output = output.unwrap_or_else(|| file.with_extension(ext));
             if output == file {
                 return Err(Error::Invalid("output must differ from input".into()));
             }
             let data = match to {
+                To::Glb => {
+                    let model = nitro_formats::model::Nsbmd::parse(&preview::plain(&bytes)?)?;
+                    let textures = textures
+                        .map(|p| {
+                            Ok::<_, Error>(nitro_formats::texture::Nsbtx::parse(&preview::plain(
+                                &std::fs::read(p)?,
+                            )?)?)
+                        })
+                        .transpose()?;
+                    let animations = animation
+                        .map(|p| {
+                            Ok::<_, Error>(nitro_formats::animation::parse(&preview::plain(
+                                &std::fs::read(p)?,
+                            )?)?)
+                        })
+                        .transpose()?
+                        .unwrap_or_default();
+                    toolbox_core::model::glb(Some(&model), textures.as_ref(), &animations, None)?
+                }
+                To::Obj => toolbox_core::model::obj(&nitro_formats::kcl::Kcl::parse(
+                    &preview::plain(&bytes)?,
+                )?)?,
                 To::Json => preview::convert_json(&bytes)?,
                 To::Png => {
                     let mut files = std::collections::BTreeMap::from([("image".into(), bytes)]);

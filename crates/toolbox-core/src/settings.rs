@@ -12,6 +12,7 @@ pub struct Settings {
     pub install_path: String,
     pub theme: String,
     pub navigation: String,
+    pub camera_speed: f32,
     pub keybindings: BTreeMap<String, String>,
 }
 impl Default for Settings {
@@ -23,6 +24,7 @@ impl Default for Settings {
                 .unwrap_or_default(),
             theme: "dark".into(),
             navigation: "Blender".into(),
+            camera_speed: 1.0,
             keybindings: BTreeMap::new(),
         }
     }

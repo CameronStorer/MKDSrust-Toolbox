@@ -2,6 +2,7 @@ import { pickDirectory, pickRom, savePath } from './backend';
 import { stages, useStore, workspaces, type Workspace } from './store';
 import type { Snapshot } from './bindings';
 import { useView } from './view';
+import { useScene } from './scene-view';
 export interface Command {
   id: string;
   title: string;
@@ -20,7 +21,7 @@ export function openWorkspace(workspace: Workspace) {
       ? ['bmg']
       : workspace === 'Texture & 2D'
         ? ['nclr', 'ncgr', 'nscr', 'nsbtx']
-        : [];
+        : workspace === 'Model' ? ['nsbmd'] : workspace === 'Track' ? ['nkm', 'kcl', 'nsbmd'] : [];
   if (
     formats.length &&
     !store.snapshot?.files.find(
@@ -52,6 +53,12 @@ export async function exportSelection(to: string) {
     });
 }
 export const commands: Command[] = [
+  { id: 'project.play', title: 'Play project', category: 'Project', shortcut: 'F5', when: project,
+    run: async () => { openWorkspace('Test Bench'); await useStore.getState().run({ kind: 'Play', game: useScene.getState().game }); } },
+  { id: 'project.stop', title: 'Stop game', category: 'Project', shortcut: 'Shift+F5', when: (s) => !!s?.bench.running,
+    run: () => useStore.getState().run({ kind: 'Stop' }) },
+  ...(['glb', 'obj'] as const).map((to): Command => ({ id: `file.${to}`, title: `Export as ${to.toUpperCase()}…`, category: 'File',
+    when: (s) => !!s?.files.find((f) => f.path === s.selected && f.format === (to === 'glb' ? 'nsbmd' : 'kcl')), run: () => exportSelection(to) })),
   {
     id: 'file.openRom',
     title: 'Open ROM…',

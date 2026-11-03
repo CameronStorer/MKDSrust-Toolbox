@@ -90,8 +90,26 @@ async fn inspect(
     .map_err(|e| e.to_string())?
 }
 fn bindings() -> tauri_specta::Builder {
-    tauri_specta::Builder::new()
-        .commands(tauri_specta::collect_commands![dispatch, binary, inspect])
+    tauri_specta::Builder::new().commands(tauri_specta::collect_commands![
+        dispatch, binary, inspect, scene
+    ])
+}
+#[tauri::command]
+#[specta::specta]
+async fn scene(
+    path: String,
+    state: tauri::State<'_, Backend>,
+) -> Result<toolbox_core::scene::SceneInfo, String> {
+    let backend = state.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        let s = backend.service.lock().map_err(|e| e.to_string())?;
+        let session = s.session.as_ref().ok_or("open a ROM first")?;
+        toolbox_core::scene::CourseScene::load(s.project.as_ref(), session, &path)
+            .map(|s| s.info)
+            .map_err(|e| e.to_string())
+    })
+    .await
+    .map_err(|e| e.to_string())?
 }
 fn main() {
     let bindings = bindings();

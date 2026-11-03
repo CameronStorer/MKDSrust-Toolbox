@@ -97,8 +97,9 @@ export function Settings() {
                       <option key={n}>{n}</option>
                     ))}
                   </select>
-                  <small>Saved for the 3D workspaces in later stages.</small>
+                  <small>MMB orbits; RMB pans. MKTB also uses LMB to orbit.</small>
                 </label>
+                <label className="settings-field">Camera speed<input aria-label="Camera speed" type="number" min="0.1" max="10" step="0.1" value={draft.camera_speed} onChange={(e) => setDraft({ ...draft, camera_speed: Number(e.target.value) })} /></label>
               </>
             ) : (
               <>

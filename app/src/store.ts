@@ -16,12 +16,9 @@ export const workspaces = [
 ] as const;
 export type Workspace = (typeof workspaces)[number];
 export const stages: Partial<Record<Workspace, number>> = {
-  Track: 2,
-  Model: 4,
   'Rig & Animate': 5,
   Audio: 8,
   Code: 7,
-  'Test Bench': 3,
 };
 interface State {
   snapshot: Snapshot | null;

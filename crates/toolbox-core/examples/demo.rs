@@ -7,7 +7,7 @@ use toolbox_core::{
 };
 fn main() -> toolbox_core::Result<()> {
     let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let folder = root.join(".cache/demo-project-v1");
+    let folder = root.join(".cache/demo-project-stage2");
     std::fs::create_dir_all(&folder)?;
     let session = RomSession::from_bytes(
         synthetic::rom(),
@@ -35,6 +35,18 @@ fn main() -> toolbox_core::Result<()> {
     let out = root.join("app/src/demo.json");
     std::fs::write(out, serde_json::to_vec_pretty(&snapshot)?)?;
     let session = service.session.as_ref().unwrap();
+    let scene = toolbox_core::scene::CourseScene::load(
+        None,
+        session,
+        "data/Course/studio.carc/course_map.nkm",
+    )?;
+    std::fs::write(
+        root.join("app/src/demo-scene.json"),
+        serde_json::to_vec_pretty(&scene.info)?,
+    )?;
+    std::fs::create_dir_all(root.join("app/public/demo"))?;
+    std::fs::write(root.join("app/public/demo/course.glb"), scene.glb(true)?)?;
+    std::fs::write(root.join("app/public/demo/model.glb"), scene.glb(false)?)?;
     let messages = session
         .nodes
         .iter()

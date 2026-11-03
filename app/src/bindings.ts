@@ -32,6 +32,14 @@ async inspect(path: string) : Promise<Result<Preview, string>> {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
+},
+async scene(path: string) : Promise<Result<SceneInfo, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("scene", { path }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 
@@ -45,17 +53,23 @@ async inspect(path: string) : Promise<Result<Preview, string>> {
 
 /** user-defined types **/
 
+export type BenchSnapshot = { games: GameInstall[]; running: boolean; logs: string[]; last_run: RunSummary | null }
 export type BinaryRequest = { path: string; mode: string; start: number; length: number; palette: string | null; screen: string | null; texture: number; bank: number }
+export type Budget = { polygons: number; vertices: number; texture_bytes: number; palette_bytes: number; matrices: number; reasons: string[] }
 export type FileNode = { path: string; name: string; format: string; category: string; size: number; offset: number; compressed: boolean; archive: boolean; parent: string | null }
+export type GameInstall = { id: string; name: string; path: string }
 export type HistoryItem = { title: string; applied: boolean }
 export type Issue = { severity: Severity; location: string; message: string; why: string; fix: string | null }
 export type Manifest = { id: string; name: string; version: string; author: string; type: string; description?: string; platforms?: string[] }
 export type PackResult = { path: string; size: number; warnings: string[] }
 export type Preview = { colors: number[]; palette_stride: number; messages: TextMessage[]; textures: string[]; palettes: string[]; width: number; height: number }
-export type Request = { kind: "Snapshot" } | { kind: "OpenRom"; path: string } | { kind: "CreateProject"; path: string; manifest: Manifest } | { kind: "OpenProject"; path: string } | { kind: "Select"; path: string } | { kind: "Palette"; path: string; indices: number[]; colors: number[] } | { kind: "Text"; path: string; index: number; tokens: TextToken[] } | { kind: "Revert"; path: string } | { kind: "UpdateManifest"; manifest: Manifest } | { kind: "Undo" } | { kind: "Redo" } | { kind: "Pack" } | { kind: "Validate" } | { kind: "Settings"; settings: Settings } | { kind: "Extract"; path: string; output: string } | { kind: "Export"; path: string; output: string; to: string; palette: string | null; screen: string | null; texture: number; bank: number }
-export type Settings = { rom_path: string; install_path: string; theme: string; navigation: string; keybindings: Partial<{ [key in string]: string }> }
+export type Request = { kind: "Snapshot" } | { kind: "OpenRom"; path: string } | { kind: "CreateProject"; path: string; manifest: Manifest } | { kind: "OpenProject"; path: string } | { kind: "Select"; path: string } | { kind: "Palette"; path: string; indices: number[]; colors: number[] } | { kind: "Text"; path: string; index: number; tokens: TextToken[] } | { kind: "Revert"; path: string } | { kind: "UpdateManifest"; manifest: Manifest } | { kind: "Undo" } | { kind: "Redo" } | { kind: "Pack" } | { kind: "Play"; game: string } | { kind: "Stop" } | { kind: "Validate" } | { kind: "Settings"; settings: Settings } | { kind: "Extract"; path: string; output: string } | { kind: "Export"; path: string; output: string; to: string; palette: string | null; screen: string | null; texture: number; bank: number }
+export type RunSummary = { package_size: number; install_path: string; executable: string; exit_code: number | null; stopped: boolean }
+export type SceneEntry = { section: string; index: number; position: [number, number, number] | null; end: [number, number, number] | null; fields: ([string, string])[]; raw: number[] }
+export type SceneInfo = { path: string; model_path: string | null; kcl_path: string | null; nkm_path: string | null; materials: string[]; bones: string[]; animations: string[]; entries: SceneEntry[]; budget: Budget; issues: string[]; collision_types: number[] }
+export type Settings = { rom_path: string; install_path: string; theme: string; navigation: string; camera_speed: number; keybindings: Partial<{ [key in string]: string }> }
 export type Severity = "Warning" | "Error"
-export type Snapshot = { rom_path: string; game: string; rom_hash: string; project_path: string; manifest: Manifest | null; files: FileNode[]; edited: string[]; history: HistoryItem[]; selected: string; preview: Preview; settings: Settings; warnings: string[]; issues: Issue[]; pack: PackResult | null; can_undo: boolean; can_redo: boolean }
+export type Snapshot = { bench: BenchSnapshot; rom_path: string; game: string; rom_hash: string; project_path: string; manifest: Manifest | null; files: FileNode[]; edited: string[]; history: HistoryItem[]; selected: string; preview: Preview; settings: Settings; warnings: string[]; issues: Issue[]; pack: PackResult | null; can_undo: boolean; can_redo: boolean }
 export type TextMessage = { id: number; tokens: TextToken[]; preview: string }
 export type TextToken = { kind: "Text"; value: string } | { kind: "Code"; value: number[] }
 

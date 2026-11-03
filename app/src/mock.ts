@@ -1,10 +1,14 @@
 // The source JSON and image are emitted by Rust's synthetic fixture example.
 import demo from './demo.json';
 import assets from './demo-assets.json';
+import sceneData from './demo-scene.json';
+import type { SceneInfo } from './bindings';
+export async function scene(path: string): Promise<SceneInfo> { return { ...clone(sceneData) as SceneInfo, path }; }
 import { rgb555 } from './colors';
 import type { Request, Snapshot, BinaryRequest, TextToken } from './bindings';
 const clone = <T>(v: T): T => structuredClone(v);
 const state = clone(demo) as Snapshot;
+state.bench.games = [{ id: 'studio', name: 'Synthetic native game', path: '/MKDSrust/games/studio' }];
 let colors = [...state.preview.colors];
 const original = [...colors];
 const messages = clone(assets.messages) as Record<string, typeof state.preview.messages>;
@@ -55,6 +59,16 @@ export async function dispatch(r: Request): Promise<Snapshot> {
   let editedPath = '';
   let title = '';
   switch (r.kind) {
+    case 'Play':
+      state.bench.running = true;
+      state.bench.logs = ['[stdout] Synthetic native game started.\n', '[stdout] Mounted studio.colour-study. Ready.\n'];
+      state.bench.last_run = { package_size: 1248, install_path: '/MKDSrust/games/studio/mods/studio.colour-study', executable: '/MKDSrust/games/studio/game', exit_code: null, stopped: false };
+      break;
+    case 'Stop':
+      state.bench.running = false;
+      state.bench.logs.push('[stdout] Stopped by Toolbox.\n');
+      if (state.bench.last_run) { state.bench.last_run.exit_code = 0; state.bench.last_run.stopped = true; }
+      break;
     case 'Snapshot':
       break;
     case 'Select':
@@ -165,6 +179,7 @@ export async function dispatch(r: Request): Promise<Snapshot> {
   return clone(state);
 }
 export async function binary(r: BinaryRequest): Promise<ArrayBuffer> {
+  if (r.mode === 'glb' || r.mode === 'course-glb') return (await fetch(`/demo/${r.mode === 'glb' ? 'model' : 'course'}.glb`)).arrayBuffer();
   if (r.mode === 'png') {
     if (r.path.endsWith('.nsbtx')) return (await fetch('/demo/texture.png')).arrayBuffer();
     const paletteOnly = r.path.endsWith('.nclr');

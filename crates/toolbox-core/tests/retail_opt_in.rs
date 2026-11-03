@@ -89,3 +89,51 @@ fn user_rom_roundtrips_and_palette_patch() {
     }
     assert_eq!(bytes, edited);
 }
+#[test]
+fn user_rom_3d_formats_and_course_export() {
+    let Some(path) = std::env::var_os("MKDS_ROM") else {
+        eprintln!("SKIPPED: set MKDS_ROM for local 3D format coverage");
+        return;
+    };
+    let s = RomSession::open(std::path::Path::new(&path)).unwrap();
+    let mut course = None;
+    for node in &s.nodes {
+        if !["nsbmd", "kcl", "nkm"].contains(&node.format.as_str()) {
+            continue;
+        }
+        let bytes = toolbox_core::preview::plain(s.file(&node.path).unwrap()).unwrap();
+        match node.format.as_str() {
+            "nsbmd" => {
+                nitro_formats::model::Nsbmd::parse(&bytes)
+                    .unwrap_or_else(|e| panic!("{}: {e}", node.path));
+            }
+            "kcl" => {
+                nitro_formats::kcl::Kcl::parse(&bytes)
+                    .unwrap_or_else(|e| panic!("{}: {e}", node.path));
+            }
+            "nkm" => {
+                assert_eq!(
+                    nitro_formats::nkm::Nkm::parse(&bytes)
+                        .unwrap_or_else(|e| panic!("{}: {e}", node.path))
+                        .write()
+                        .unwrap(),
+                    bytes,
+                    "{}",
+                    node.path
+                );
+                course.get_or_insert(node.path.clone());
+            }
+            _ => unreachable!(),
+        }
+    }
+    let scene =
+        toolbox_core::scene::CourseScene::load(None, &s, &course.expect("ROM contains a course"))
+            .unwrap();
+    let temp = tempfile::tempdir().unwrap();
+    std::fs::write(temp.path().join("course.glb"), scene.glb(false).unwrap()).unwrap();
+    std::fs::write(
+        temp.path().join("course.obj"),
+        toolbox_core::model::obj(scene.kcl.as_ref().expect("course KCL")).unwrap(),
+    )
+    .unwrap();
+}

@@ -35,6 +35,9 @@ import { Texture, Palette } from './panels/Texture';
 import { MessageList, TextEditor } from './panels/Text';
 import { Settings } from './Settings';
 import { CommandPalette } from './CommandPalette';
+import { SceneViewport, SceneOutliner, SceneProperties, Overlays, Timeline } from './panels/Scene';
+import { TestBench, GameLog } from './panels/TestBench';
+import { useScene } from './scene-view';
 const components: Record<string, React.FunctionComponent<IDockviewPanelProps>> = {
   overview: Overview,
   explorer: Explorer,
@@ -47,6 +50,13 @@ const components: Record<string, React.FunctionComponent<IDockviewPanelProps>> =
   text: TextEditor,
   preview: Preview,
   placeholder: Placeholder,
+  scene: SceneViewport,
+  sceneOutliner: SceneOutliner,
+  sceneProperties: SceneProperties,
+  overlays: Overlays,
+  timeline: Timeline,
+  bench: TestBench,
+  logs: GameLog,
 };
 function Preview() {
   const snapshot = useStore((s) => s.snapshot);
@@ -101,7 +111,7 @@ function Dock() {
                 ? 'texture'
                 : workspace === 'Text'
                   ? 'text'
-                  : 'placeholder',
+                  : workspace === 'Model' || workspace === 'Track' ? 'scene' : workspace === 'Test Bench' ? 'bench' : 'placeholder',
         title:
           workspace === 'Overview'
             ? 'Project dashboard'
@@ -115,14 +125,14 @@ function Dock() {
       });
       const left = dock.addPanel({
         id: 'outliner',
-        component: workspace === 'Text' ? 'messages' : 'explorer',
-        title: workspace === 'Text' ? 'Messages' : 'Explorer',
+        component: workspace === 'Text' ? 'messages' : workspace === 'Track' || workspace === 'Model' ? 'sceneOutliner' : 'explorer',
+        title: workspace === 'Text' ? 'Messages' : workspace === 'Track' || workspace === 'Model' ? 'Outliner' : 'Explorer',
         position: { referencePanel: center.id, direction: 'left' },
         initialWidth: workspace === 'Text' ? 290 : 270,
       });
       const right = dock.addPanel({
         id: 'properties',
-        component: workspace === 'Texture & 2D' ? 'palette' : 'properties',
+        component: workspace === 'Texture & 2D' ? 'palette' : workspace === 'Model' || workspace === 'Track' ? 'sceneProperties' : 'properties',
         title: workspace === 'Texture & 2D' ? 'Palette' : 'Properties',
         position: { referencePanel: center.id, direction: 'right' },
         initialWidth: workspace === 'Texture & 2D' ? 300 : 260,
@@ -143,6 +153,9 @@ function Dock() {
           initialHeight: 235,
         });
       }
+      if (workspace === 'Model') dock.addPanel({ id: 'timeline', component: 'timeline', title: 'Animation timeline', position: { referencePanel: center.id, direction: 'below' }, initialHeight: 130 });
+      if (workspace === 'Track') dock.addPanel({ id: 'overlays', component: 'overlays', title: 'Overlays', position: { referencePanel: right.id, direction: 'below' }, initialHeight: 380 });
+      if (workspace === 'Test Bench') dock.addPanel({ id: 'logs', component: 'logs', title: 'Game output', position: { referencePanel: center.id, direction: 'below' }, initialHeight: 280 });
       if (workspace === 'Overview') {
         dock.addPanel({
           id: 'properties-extra',
@@ -180,6 +193,7 @@ export function App() {
   const [menu, setMenu] = useState('');
   const [tour, setTour] = useState(false);
   const [compat, setCompat] = useState(false);
+  const sceneInfo = useScene((s) => s.info);
   useEffect(() => {
     void run({ kind: 'Snapshot' });
   }, [run]);
@@ -305,10 +319,11 @@ export function App() {
         >
           <HelpCircle size={15} />
         </button>
-        <button className="play" title="Play arrives in stage 3" disabled>
+        <button className="play" title="Pack, install and launch in MKDSrust · F5" disabled={!snapshot?.manifest || busy || snapshot?.bench.running} onClick={() => { openWorkspace('Test Bench'); void run({ kind: 'Play', game: useScene.getState().game }); }}>
           <Play size={12} />
           Play
         </button>
+        {snapshot?.bench.running && <button onClick={() => void run({ kind: 'Stop' })}>Stop</button>}
         <div className="compat-anchor">
           <button className="compat-badge" onClick={() => setCompat(!compat)}>
             <ShieldQuestion size={14} />
@@ -341,6 +356,7 @@ export function App() {
         <span>/</span>
         <strong>{workspace}</strong>
         <div className="grow" />
+        {(workspace === 'Model' || workspace === 'Track') && sceneInfo && <span>{sceneInfo.budget.polygons.toLocaleString()} polys · {sceneInfo.budget.vertices.toLocaleString()} verts · {sceneInfo.issues.length} course issues</span>}
         <button onClick={() => set({ paletteOpen: true })}>
           <Search size={12} />
           Search commands<kbd>Ctrl Shift P</kbd>
@@ -400,7 +416,7 @@ export function App() {
           <Package size={12} />
           {snapshot?.edited.length ?? 0} edits
         </span>
-        <span className="stage-label">STAGE 1</span>
+        <span className="stage-label">STAGES 2 + 3</span>
       </footer>
       {settingsOpen && <Settings />}
       {paletteOpen && <CommandPalette />}

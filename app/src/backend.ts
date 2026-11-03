@@ -5,6 +5,13 @@ import {
   type BinaryRequest,
   type Preview,
 } from './bindings';
+import type { SceneInfo } from './bindings';
+export async function inspectScene(path: string): Promise<SceneInfo> {
+  if (isMock) return (await import('./mock')).scene(path);
+  const result = await commands.scene(path);
+  if (result.status === 'error') throw new Error(result.error);
+  return result.data;
+}
 export const isMock = import.meta.env.VITE_MOCK_BACKEND === '1';
 export async function inspect(path: string): Promise<Preview> {
   if (isMock) return (await import('./mock')).inspect(path);

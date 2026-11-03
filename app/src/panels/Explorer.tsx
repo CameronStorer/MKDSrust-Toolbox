@@ -121,6 +121,8 @@ export function Explorer() {
                 onDoubleClick={() => {
                   if (row.file?.format === 'bmg') openWorkspace('Text');
                   if (row.file?.format === 'nclr') openWorkspace('Texture & 2D');
+                  if (row.file?.format === 'nsbmd') openWorkspace('Model');
+                  if (['nkm', 'kcl'].includes(row.file?.format ?? '')) openWorkspace('Track');
                 }}
                 onKeyDown={(e) => {
                   if (row.folder && ['ArrowLeft', 'ArrowRight'].includes(e.key)) {
@@ -174,6 +176,9 @@ export function Explorer() {
           </button>
           <button onClick={() => void exportSelection('png')}>Export as PNG…</button>
           <button onClick={() => void exportSelection('json')}>Export as JSON…</button>
+          {snapshot?.files.find((f) => f.path === snapshot.selected)?.format === 'nsbmd' && <><button onClick={() => openWorkspace('Model')}>Open in Model workspace</button><button onClick={() => void exportSelection('glb')}>Export as GLB…</button></>}
+          {['nkm', 'kcl'].includes(snapshot?.files.find((f) => f.path === snapshot.selected)?.format ?? '') && <button onClick={() => openWorkspace('Track')}>Open in Track workspace</button>}
+          {snapshot?.files.find((f) => f.path === snapshot.selected)?.format === 'kcl' && <button onClick={() => void exportSelection('obj')}>Export as OBJ…</button>}
           <button
             onClick={() =>
               openWorkspace(snapshot?.preview.messages.length ? 'Text' : 'Texture & 2D')
