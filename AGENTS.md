@@ -1,7 +1,7 @@
 # Instructions for coding agents
 
 Read `docs/SPEC.md` (product and architecture), `docs/PLUGIN_FORMAT.md` (mod package contract) and
-`docs/PRIOR_ART.md` first. The current task is in `docs/STAGE1.md`.
+`docs/PRIOR_ART.md` first. The current task is in `docs/STAGE2.md` (stage 1 is done, see `docs/STATUS.md`).
 
 Hard rules:
 1. **No Nintendo material, ever.** Do not add any ROM, game file, extracted asset, text, sound, or SDK code/binary. Tests
@@ -11,7 +11,7 @@ Hard rules:
    `CREDITS.md`, and keep its header. Same-author code from `C:\Users\cam\dev\mkds-native-builder` (GPL-3.0) may be
    ported freely: `1_build_tool/src/dsfiles.rs` (LZ77 incl. `lz77_recompress`/splice, NARC), `rom.rs` (ROM header,
    FNT/FAT), `modding.rs` + `modpkg.rs` (package format, bsdiff via `qbsdiff`). Do NOT modify that repo.
-3. Don't push, publish releases or change git remotes. Commit locally on `main` in small, logical commits.
+3. Don't push, publish releases or change git remotes. Your sandbox cannot write `.git`: leave changes uncommitted; the maintainer commits them.
 4. Keep it cross-platform (no Windows-only APIs). Rust stable, edition 2021. TypeScript strict.
 5. Before declaring done: `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`,
    `cargo test --workspace`, and in `app/`: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, and
