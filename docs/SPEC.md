@@ -100,6 +100,19 @@ The checks are the same rules the site uses (`PLUGIN_FORMAT.md` "Platform compat
 
 Its result fills the manifest's `platforms` field.
 
+### 3.3 Export for real hardware
+A project must also run on a real DS (flashcart) or a DS emulator, not only in MKDSrust. **Export for DS**:
+- applies the project, plus optionally other enabled DS-compatible mods in load order, to the user's own ROM;
+- rebuilds the ROM file system: FNT/FAT, file data alignment, overlay and banner offsets, header CRC;
+- writes either a patched copy of the user's ROM, which stays on their machine and is never uploaded or shared, or a
+  shareable patch file (BPS or xdelta, both supported) against the clean retail ROM;
+- runs the DS-compatibility checks (3.2) first, and refuses or warns on PC-only content;
+- verifies the result: it re-reads the rebuilt ROM, checks every changed file round-trips, and the header/CRC are
+  valid. Optionally it boots it in MKDSrust as a smoke test.
+
+The CLI gets the same as `mkdstb export-ds <project> --rom <rom> (--out patched.nds | --patch out.bps)`.
+Packages on mkdsrust.com marked "DS compatible" can be exported the same way from the launcher.
+
 ## 4. Architecture
 ```
 MKDSrust-Toolbox/
@@ -153,6 +166,7 @@ MKDSrust-Toolbox/
 7. **Code:** Lua scripting API docs and the IDE, Rust source patches against the readable source.
 8. **Audio:** SDAT editing, MIDI ↔ SSEQ, WAV ↔ SWAV/STRM.
 9. **Effects and 2D UI layouts.**
+10. **Export for real hardware** (3.3). It can come earlier: it only needs the ROM rebuild and the patch writers.
 
 ## 6. Quality bar
 - `cargo test`, `cargo clippy -D warnings`, `npm run lint`, `npm run typecheck` and `npm test` (vitest) all pass in CI
