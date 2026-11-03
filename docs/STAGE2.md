@@ -56,11 +56,11 @@ If something is blocked, note it in docs/STATUS.md and move on to the next item.
   - Stop button;
   - a "last run" summary (package size, install path, exit code).
   - **Race setup (the game supports it now):** the game executable accepts
-    `--race course=<id|name>,character=N,kart=N,class=N,racers=N` (any subset) and starts that race directly,
+    `--race course=<id|name>,character=N,kart=N,racers=N` (any subset) and starts that race directly,
     with no menus (about half a second after boot). `--list-courses` prints `id<TAB>internal_name` lines from the
     player's own game and exits (run it with `--headless --instructions 20000000 --mute`). Build the course picker
-    from that list (cache it per install). Character/kart pickers take ids 0-12 / 0-36 for now; `class` is the raw
-    engine-class value (0, 1, 2...). Racers 1-8.
+    from that list (cache it per install). Character/kart pickers take ids for now. Racers 1-8. Engine class isn't
+    supported yet (show the picker disabled).
   - **Reload:** in-place asset reload isn't supported by the game yet. "Reload" = Stop, re-pack/install, and start
     again with the same `--race` (it's fast). Bind it to Ctrl+R in the Test Bench.
 - Update the Playwright screenshots (mock backend with synthetic data): Model, Track (with overlays on), Test Bench.
