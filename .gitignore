@@ -9,3 +9,12 @@ build/
 *.dsv
 .env
 /local/
+.cache/
+app/.cache/
+.cargo/
+app/test-results/
+app/playwright-report/
+*.zip
+*.tsbuildinfo
+
+.local/
