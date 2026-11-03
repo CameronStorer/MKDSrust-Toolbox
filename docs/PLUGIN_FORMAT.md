@@ -1,7 +1,7 @@
 # MKDSrust plugin / mod package format (v1)
 
 Shared contract between the game (native FS overlay), the launcher (install/enable UI) and the site (upload screening).
-Status: agreed baseline, 2026-10-28. Change only with all three sides updated.
+Status: agreed baseline, 2026-10-28; format 2 (scripts) added 2026-11-03. Change only with all three sides updated.
 
 ## Package
 A `.zip` (≤100 MB, ≤5000 files, ≤400 MB unpacked, paths ≤200 chars, no `..`, no absolute paths, no symlinks) with
@@ -77,3 +77,18 @@ when applied to the ROM). Badges shown on the site and in the launcher:
 - **Verified on DS**: set by moderators after the author or community submits a hardware/emulator test report.
 Launcher (later): "Export for DS" applies enabled DS-compatible mods to the player's own ROM and writes a patched copy or
 an xdelta/BPS patch for flash carts / emulators. Never distribute the patched ROM.
+
+## Format 2: Luau scripts (2026-11-03)
+`"format": 2` adds two manifest fields. Everything in format 1 still applies.
+```json
+"scripts": ["scripts/item_odds.luau", "scripts/hud.luau"],   // Luau source files in the package, run in this order
+"api": 1                                                       // the script API version (required with scripts)
+```
+- A format 2 package may have an empty `files` (scripts only). Format 1 packages may not use `scripts` or `api`.
+- Scripts are `.luau` UTF-8 source text: no NUL bytes, so no compiled bytecode; at most 256 KiB each and 32 per
+  package; paths follow the usual rules.
+- **Site:** every script puts the package in review, and a moderator reads it before approving.
+- **Game:** each script runs sandboxed, with no files, OS or network, a CPU budget per frame and a memory limit.
+  Scripts run only from enabled mods, in load order, and never in `--timing exact` acceptance runs.
+- The API is documented in MKDSrust-Docs `4_docs/LUA_SCRIPTING_DESIGN.md`. Owner decisions: raw-memory access will be
+  allowed in published mods with a badge; online play is out of scope.
