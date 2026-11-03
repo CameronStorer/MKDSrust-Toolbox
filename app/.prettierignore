@@ -1,0 +1,7 @@
+src/bindings.ts
+src/demo.json
+src/demo-assets.json
+node_modules
+dist
+src-tauri
+.cache

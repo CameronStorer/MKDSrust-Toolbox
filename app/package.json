@@ -1,0 +1,49 @@
+{
+  "name": "mkdsrust-toolbox",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --configLoader runner --host 127.0.0.1 --port 1420 --strictPort",
+    "build": "tsc -b && vite build --configLoader runner",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write src scripts *.json *.ts *.js",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run --configLoader runner",
+    "test:e2e": "playwright test",
+    "screenshots": "playwright test screenshots",
+    "tauri": "tauri",
+    "bindings": "cargo run --manifest-path src-tauri/Cargo.toml -- --export-bindings"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.2.5",
+    "@fontsource/jetbrains-mono": "^5.2.5",
+    "@tauri-apps/api": "^2.8.0",
+    "@tauri-apps/plugin-dialog": "^2.4.0",
+    "@tanstack/react-virtual": "^3.13.12",
+    "dockview": "^4.0.0",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "@playwright/test": "^1.55.0",
+    "@tauri-apps/cli": "^2.8.0",
+    "@types/node": "^22.18.0",
+    "@types/react": "^18.3.24",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^9.35.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.3.0",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.6.2",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.42.0",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "MKDSrust Toolbox",
+  "version": "0.1.0",
+  "identifier": "com.mkdsrust.toolbox",
+  "build": {"frontendDist":"../dist","devUrl":"http://127.0.0.1:1420","beforeDevCommand":"npm run dev","beforeBuildCommand":"npm run build"},
+  "app": {
+    "windows": [{"title":"MKDSrust Toolbox","width":1440,"height":960,"minWidth":1024,"minHeight":680}],
+    "security": {"csp":"default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; connect-src ipc: http://ipc.localhost toolbox: http://toolbox.localhost"}
+  },
+  "bundle": {"active":false}
+}

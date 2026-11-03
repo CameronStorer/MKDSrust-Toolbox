@@ -1,0 +1,17 @@
+[package]
+name = "toolbox-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+[dependencies]
+tauri = { version = "2", features = [] }
+toolbox-core = { path = "../../crates/toolbox-core" }
+nitro-formats = { path = "../../crates/nitro-formats" }
+serde.workspace = true
+serde_json.workspace = true
+specta.workspace = true
+specta-typescript = "=0.0.9"
+tauri-specta = { version = "=2.0.0-rc.21", features = ["typescript"] }
+tauri-plugin-dialog = "2"
