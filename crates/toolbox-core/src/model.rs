@@ -17,7 +17,7 @@ struct Buffer {
 }
 impl Buffer {
     fn view(&mut self, b: &[u8]) -> usize {
-        while self.data.len() % 4 != 0 {
+        while !self.data.len().is_multiple_of(4) {
             self.data.push(0)
         }
         let i = self.views.len();

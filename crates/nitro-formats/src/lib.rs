@@ -3,6 +3,7 @@ pub mod animation;
 pub mod archive;
 pub mod bmg;
 pub mod bps;
+pub mod cell;
 pub mod detect;
 pub mod graphics;
 pub mod kcl;
@@ -11,9 +12,9 @@ pub mod math;
 pub mod model;
 pub mod nkm;
 pub mod rom;
+pub mod rom_build;
 #[doc(hidden)]
 pub mod synthetic;
-pub mod rom_build;
 pub mod texture;
 pub use lz77::{compress, decompress, recompress};
 

@@ -35,6 +35,21 @@ pub struct Rom {
     pub banner: Option<Banner>,
 }
 impl Rom {
+    /// Includes unnamed overlay files, which do not appear in the FNT.
+    pub fn file_by_id(&self, id: u32) -> Result<&[u8]> {
+        let fat = u32le(&self.bytes, 0x48)? as usize;
+        let size = u32le(&self.bytes, 0x4c)? as usize;
+        if id as usize >= size / 8 {
+            return Err(error(fat, "file id outside FAT"));
+        }
+        let at = fat + id as usize * 8;
+        let start = u32le(&self.bytes, at)? as usize;
+        let end = u32le(&self.bytes, at + 4)? as usize;
+        if end < start {
+            return Err(error(at, "invalid FAT range"));
+        }
+        slice(&self.bytes, start, end - start)
+    }
     pub fn parse(b: &[u8]) -> Result<Self> {
         slice(b, 0, 512)?;
         let range = |at, len_at| -> Result<Range<usize>> {

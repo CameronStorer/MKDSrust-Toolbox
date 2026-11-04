@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { X, FolderOpen, Keyboard, Settings as SettingsIcon } from 'lucide-react';
 import { useStore } from './store';
 import { commands } from './commands';
-import { pickDirectory, pickRom } from './backend';
+import { pickDirectory, pickRom, pickFile } from './backend';
 export function Settings() {
   const { snapshot, run, set } = useStore();
   const [draft, setDraft] = useState(snapshot?.settings);
@@ -99,7 +99,64 @@ export function Settings() {
                   </select>
                   <small>MMB orbits; RMB pans. MKTB also uses LMB to orbit.</small>
                 </label>
-                <label className="settings-field">Camera speed<input aria-label="Camera speed" type="number" min="0.1" max="10" step="0.1" value={draft.camera_speed} onChange={(e) => setDraft({ ...draft, camera_speed: Number(e.target.value) })} /></label>
+                <label className="settings-field">
+                  <span>
+                    <input
+                      type="checkbox"
+                      checked={draft.allow_pc_only}
+                      onChange={(e) => setDraft({ ...draft, allow_pc_only: e.target.checked })}
+                    />{' '}
+                    Allow PC-only features
+                  </span>
+                </label>
+                <label className="settings-field">
+                  Emulator executable
+                  <div>
+                    <input
+                      value={draft.emulator_path}
+                      onChange={(e) => setDraft({ ...draft, emulator_path: e.target.value })}
+                    />
+                    <button
+                      onClick={() =>
+                        void pickFile(['exe', '*']).then((p) => {
+                          if (p) setDraft({ ...draft, emulator_path: p });
+                        })
+                      }
+                    >
+                      Choose…
+                    </button>
+                  </div>
+                </label>
+                <label className="settings-field">
+                  Flashcart export folder
+                  <div>
+                    <input
+                      value={draft.flashcart_path}
+                      onChange={(e) => setDraft({ ...draft, flashcart_path: e.target.value })}
+                    />
+                    <button
+                      onClick={() =>
+                        void pickDirectory().then((p) => {
+                          if (p) setDraft({ ...draft, flashcart_path: p });
+                        })
+                      }
+                    >
+                      Choose…
+                    </button>
+                  </div>
+                </label>
+                <label className="settings-field">
+                  Camera speed
+                  <input
+                    aria-label="Camera speed"
+                    type="number"
+                    min="0.1"
+                    max="10"
+                    step="0.1"
+                    value={draft.camera_speed}
+                    onChange={(e) => setDraft({ ...draft, camera_speed: Number(e.target.value) })}
+                  />
+                </label>
               </>
             ) : (
               <>

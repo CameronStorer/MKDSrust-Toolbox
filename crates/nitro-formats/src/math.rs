@@ -106,11 +106,12 @@ pub fn inverse(m: Mat4) -> Option<Mat4> {
         for x in &mut a[c] {
             *x /= d
         }
-        for r in 0..4 {
+        let pivot = a[c];
+        for (r, row) in a.iter_mut().enumerate() {
             if r != c {
-                let v = a[r][c];
-                for k in 0..8 {
-                    a[r][k] -= v * a[c][k]
+                let v = row[c];
+                for (x, p) in row.iter_mut().zip(pivot) {
+                    *x -= v * p;
                 }
             }
         }

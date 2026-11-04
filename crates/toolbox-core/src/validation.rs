@@ -60,6 +60,20 @@ fn check_file(path: &str, bytes: &[u8], depth: usize, budget: &mut usize) -> Vec
         };
     }
     let mut issues = vec![];
+    let parsed = if bytes.starts_with(b"RGCN") {
+        nitro_formats::graphics::Ncgr::parse(bytes).map(|_| ())
+    } else if bytes.starts_with(b"RCSN") {
+        nitro_formats::graphics::Nscr::parse(bytes).map(|_| ())
+    } else if bytes.starts_with(b"NKMD") {
+        nitro_formats::nkm::Nkm::parse(bytes).map(|_| ())
+    } else if path.to_ascii_lowercase().ends_with(".kcl") {
+        nitro_formats::kcl::Kcl::parse(bytes).map(|_| ())
+    } else {
+        Ok(())
+    };
+    if let Err(e) = parsed {
+        return invalid(path, e.to_string());
+    }
     let mut add = |message: String, why: &str| {
         issues.push(Issue {
             severity: Severity::Warning,
@@ -69,6 +83,12 @@ fn check_file(path: &str, bytes: &[u8], depth: usize, budget: &mut usize) -> Vec
             fix: None,
         })
     };
+    if nitro_formats::detect::detect(bytes, path).is_none() {
+        add(
+            "DS compatibility of this file is unknown".into(),
+            "Use a supported DS data format to verify compatibility",
+        );
+    }
     if bytes.starts_with(b"RLCN") {
         match Nclr::parse(bytes) {
             Ok(p) => {
@@ -104,6 +124,24 @@ fn check_file(path: &str, bytes: &[u8], depth: usize, budget: &mut usize) -> Vec
     if bytes.starts_with(b"BTX0") {
         match Nsbtx::parse(bytes) {
             Ok(b) => {
+                let texture_bytes: usize = b
+                    .textures
+                    .iter()
+                    .map(|t| t.data.len() + t.indices.len())
+                    .sum();
+                let palette_bytes: usize = b.palettes.iter().map(|p| p.colors.len() * 2).sum();
+                if texture_bytes > 512 * 1024 {
+                    add(
+                        format!("Texture VRAM: {texture_bytes} bytes / 512 KiB"),
+                        "The DS texture memory allocation is limited",
+                    );
+                }
+                if palette_bytes > 96 * 1024 {
+                    add(
+                        format!("Palette VRAM: {palette_bytes} bytes / 96 KiB"),
+                        "The DS palette memory allocation is limited",
+                    );
+                }
                 for t in b.textures {
                     if t.width > 1024
                         || t.height > 1024
@@ -120,10 +158,62 @@ fn check_file(path: &str, bytes: &[u8], depth: usize, budget: &mut usize) -> Vec
             Err(e) => return invalid(path, e.to_string()),
         }
     }
+    if bytes.starts_with(b"RECN") {
+        if let Err(e) = nitro_formats::cell::Ncer::parse(bytes) {
+            return invalid(path, e.to_string());
+        }
+    }
+    if bytes.starts_with(b"RNAN") {
+        if let Err(e) = nitro_formats::cell::Nanr::parse(bytes) {
+            return invalid(path, e.to_string());
+        }
+    }
+    if bytes.starts_with(b"BMD0") {
+        match nitro_formats::model::Nsbmd::parse(bytes) {
+            Err(e) => return invalid(path, e.to_string()),
+            Ok(b) => {
+                for m in b.models {
+                    let polys: usize = m.meshes.iter().map(|m| m.indices.len() / 3).sum();
+                    let vertices: usize = m.meshes.iter().map(|m| m.positions.len()).sum();
+                    if polys > 2048 {
+                        add(
+                            format!("{}: {polys} polygons / 2,048", m.name),
+                            "The DS geometry engine has a per-frame polygon limit",
+                        );
+                    }
+                    if vertices > 6144 {
+                        add(
+                            format!("{}: {vertices} vertices / 6,144", m.name),
+                            "The DS geometry engine has a per-frame vertex limit",
+                        );
+                    }
+                    if m.bones.len() > 32 {
+                        add(
+                            format!("{}: {} matrix slots / 32", m.name, m.bones.len()),
+                            "The DS matrix stack has 32 slots",
+                        );
+                    }
+                    for w in m.warnings {
+                        add(w, "This model uses features the reader cannot verify");
+                    }
+                }
+            }
+        }
+    }
     issues
 }
 pub fn validate(project: &Project, session: &RomSession) -> Vec<Issue> {
     let mut out = vec![];
+    if session.rom.bytes().len() > 256 * 1024 * 1024 {
+        out.extend(invalid("ROM", "ROM exceeds the 256 MiB DS limit".into()));
+    }
+    if let Ok(changes) = crate::base::changes(session) {
+        for c in changes {
+            if let Ok(bytes) = session.file(&c.path) {
+                out.extend(Stage1Check.check(&c.path, bytes));
+            }
+        }
+    }
     for path in project.edits.keys() {
         match project.bytes(session, path) {
             Ok(b) => out.extend(Stage1Check.check(path, b)),

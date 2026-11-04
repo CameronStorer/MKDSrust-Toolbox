@@ -26,4 +26,16 @@ interface SceneState {
   game: string;
   set: (state: Partial<Omit<SceneState, 'set'>>) => void;
 }
-export const useScene = create<SceneState>((set) => ({ info: null, selected: '', layers: structuredClone(layerDefaults), mode: 'textured', grid: true, animation: -1, frame: 0, playing: false, frameRequest: 0, game: '', set }));
+export const useScene = create<SceneState>((set) => ({
+  info: null,
+  selected: '',
+  layers: structuredClone(layerDefaults),
+  mode: 'textured',
+  grid: true,
+  animation: -1,
+  frame: 0,
+  playing: false,
+  frameRequest: 0,
+  game: '',
+  set,
+}));

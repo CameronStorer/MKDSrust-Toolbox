@@ -52,7 +52,11 @@ export function Properties() {
       <div className="compat-card">
         <ShieldQuestion size={18} />
         <div>
-          Unknown<p>Full hardware checks arrive in a later stage.</p>
+          {snapshot?.compatibility ?? 'Unknown'}
+          <p>
+            Format and budget checks for the project. Test exported ROMs in your emulator or on
+            hardware.
+          </p>
         </div>
       </div>
       <div className="section-label">
@@ -68,7 +72,7 @@ export function Properties() {
       ) : (
         <p className="inset muted">
           {snapshot?.manifest
-            ? 'No issues reported. Run Project → Validate to check edits.'
+            ? 'No issues reported by current format and budget checks.'
             : 'Create a project to validate your edits.'}
         </p>
       )}

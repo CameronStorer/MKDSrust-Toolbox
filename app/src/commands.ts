@@ -20,8 +20,12 @@ export function openWorkspace(workspace: Workspace) {
     workspace === 'Text'
       ? ['bmg']
       : workspace === 'Texture & 2D'
-        ? ['nclr', 'ncgr', 'nscr', 'nsbtx']
-        : workspace === 'Model' ? ['nsbmd'] : workspace === 'Track' ? ['nkm', 'kcl', 'nsbmd'] : [];
+        ? ['nclr', 'ncgr', 'nscr', 'nsbtx', 'ncer', 'nanr']
+        : workspace === 'Model'
+          ? ['nsbmd']
+          : workspace === 'Track'
+            ? ['nkm', 'kcl', 'nsbmd']
+            : [];
   if (
     formats.length &&
     !store.snapshot?.files.find(
@@ -31,6 +35,11 @@ export function openWorkspace(workspace: Workspace) {
     const file = store.snapshot?.files.find((f) => f.format === formats[0]);
     if (file) void store.run({ kind: 'Select', path: file.path });
   }
+}
+export async function openFile(workspace: Workspace, path: string) {
+  const store = useStore.getState();
+  await store.run({ kind: 'Select', path });
+  if (useStore.getState().snapshot?.selected === path) openWorkspace(workspace);
 }
 export async function exportSelection(to: string) {
   const { snapshot, run } = useStore.getState();
@@ -53,12 +62,50 @@ export async function exportSelection(to: string) {
     });
 }
 export const commands: Command[] = [
-  { id: 'project.play', title: 'Play project', category: 'Project', shortcut: 'F5', when: project,
-    run: async () => { openWorkspace('Test Bench'); await useStore.getState().run({ kind: 'Play', game: useScene.getState().game }); } },
-  { id: 'project.stop', title: 'Stop game', category: 'Project', shortcut: 'Shift+F5', when: (s) => !!s?.bench.running,
-    run: () => useStore.getState().run({ kind: 'Stop' }) },
-  ...(['glb', 'obj'] as const).map((to): Command => ({ id: `file.${to}`, title: `Export as ${to.toUpperCase()}…`, category: 'File',
-    when: (s) => !!s?.files.find((f) => f.path === s.selected && f.format === (to === 'glb' ? 'nsbmd' : 'kcl')), run: () => exportSelection(to) })),
+  {
+    id: 'file.exportDs',
+    title: 'Export for DS…',
+    category: 'File',
+    when: project,
+    run: () => useStore.getState().set({ exportOpen: true }),
+  },
+  {
+    id: 'project.reload',
+    title: 'Reload Test Bench',
+    category: 'Project',
+    shortcut: 'Ctrl+R',
+    when: (s) => project(s) && useStore.getState().workspace === 'Test Bench',
+    run: () => useStore.getState().run({ kind: 'Reload', game: useScene.getState().game }),
+  },
+  {
+    id: 'project.play',
+    title: 'Play project',
+    category: 'Project',
+    shortcut: 'F5',
+    when: project,
+    run: async () => {
+      openWorkspace('Test Bench');
+      await useStore.getState().run({ kind: 'Play', game: useScene.getState().game });
+    },
+  },
+  {
+    id: 'project.stop',
+    title: 'Stop game',
+    category: 'Project',
+    shortcut: 'Shift+F5',
+    when: (s) => !!s?.bench.running,
+    run: () => useStore.getState().run({ kind: 'Stop' }),
+  },
+  ...(['glb', 'obj'] as const).map((to): Command => ({
+    id: `file.${to}`,
+    title: `Export as ${to.toUpperCase()}…`,
+    category: 'File',
+    when: (s) =>
+      !!s?.files.find(
+        (f) => f.path === s.selected && f.format === (to === 'glb' ? 'nsbmd' : 'kcl'),
+      ),
+    run: () => exportSelection(to),
+  })),
   {
     id: 'file.openRom',
     title: 'Open ROM…',
@@ -75,23 +122,7 @@ export const commands: Command[] = [
     title: 'Create project…',
     category: 'Project',
     when: (s) => !!s?.rom_path,
-    run: async () => {
-      const path = await pickDirectory();
-      if (path)
-        await useStore.getState().run({
-          kind: 'CreateProject',
-          path,
-          manifest: {
-            id: 'author.my-mod',
-            name: 'Untitled mod',
-            author: 'Author',
-            version: '0.1.0',
-            type: 'texture',
-            platforms: ['pc'],
-            description: '',
-          },
-        });
-    },
+    run: () => useStore.getState().set({ createOpen: true }),
   },
   {
     id: 'project.open',

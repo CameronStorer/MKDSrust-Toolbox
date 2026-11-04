@@ -1,3 +1,4 @@
+import { Cells } from './Cells';
 import { useEffect, useRef, useState } from 'react';
 import {
   Grid2X2,
@@ -13,7 +14,14 @@ import { useStore } from '../store';
 import { useView } from '../view';
 import { companion, usePreview } from '../hooks';
 import { hex555, rgb555, fromHex, shift555 } from '../colors';
+import { PaintTools } from './PaintTools';
 export function Texture() {
+  const format = useStore(
+    (s) => s.snapshot?.files.find((f) => f.path === s.snapshot?.selected)?.format,
+  );
+  return format === 'ncer' || format === 'nanr' ? <Cells /> : <RasterTexture />;
+}
+function RasterTexture() {
   const snapshot = useStore((s) => s.snapshot);
   const view = useView();
   const [url, setUrl] = useState('');
@@ -131,6 +139,13 @@ export function Texture() {
         >
           <Grid2X2 size={14} />
         </button>
+        <button
+          title="Tile grid"
+          aria-pressed={view.tileGrid}
+          onClick={() => view.set({ tileGrid: !view.tileGrid })}
+        >
+          8×8
+        </button>
       </div>
       <div className="source-controls">
         <label>
@@ -212,6 +227,7 @@ export function Texture() {
           </label>
         </div>
       )}
+      <PaintTools canvas={canvas} path={path} palette={palette} screen={screen} ready={url} />
       <div
         className="canvas-area checker"
         ref={scroller}
@@ -259,6 +275,12 @@ export function Texture() {
               <div
                 className="pixel-grid"
                 style={{ backgroundSize: `${view.zoom}px ${view.zoom}px` }}
+              />
+            )}
+            {view.tileGrid && (
+              <div
+                className="pixel-grid tile-grid"
+                style={{ backgroundSize: `${view.zoom * 8}px ${view.zoom * 8}px` }}
               />
             )}
           </div>

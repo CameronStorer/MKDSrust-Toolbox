@@ -43,6 +43,12 @@ export async function pickRom(): Promise<string | null> {
     filters: [{ name: 'Nintendo DS image', extensions: ['nds'] }],
   });
 }
+export async function pickFile(extensions: string[]): Promise<string | null> {
+  if (isMock) return `/user/synthetic.${extensions[0]}`;
+  return (await import('@tauri-apps/plugin-dialog')).open({
+    filters: [{ name: 'Supported files', extensions }],
+  });
+}
 export async function savePath(defaultPath: string): Promise<string | null> {
   if (isMock) return `/exports/${defaultPath}`;
   return (await import('@tauri-apps/plugin-dialog')).save({ defaultPath });

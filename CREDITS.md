@@ -6,7 +6,8 @@ Any code ported from another project is listed here with its license, and keeps 
 | Project | License | Used for |
 |---|---|---|
 | [MKDSrust builder](https://github.com/CameronStorer/MKDSrust) | GPL-3.0 | LZ77 / NARC / mod packing (same author) |
-| [apicula](https://github.com/scurest/apicula) | 0BSD | Reference for TEX0 and texture dictionary layouts; independent bounded implementation |
+| [apicula](https://github.com/scurest/apicula) | 0BSD | Reference for model/GX, joint animation, TEX0 and texture dictionary layouts; independent bounded implementation |
+| [DS Pokémon Hacking format research](https://ds-pokemon-hacking.github.io/docs/universal/resources/nitro/graphics_2d/section_cebk/) (Gonhex, NOCASH, magical) | Format reference only | NCER/CEBK and NANR/ABNK layouts; independent implementation, no code copied |
 | [dockview](https://github.com/mathuo/dockview) | MIT | Dockable workspace panels |
 | [Inter](https://github.com/rsms/inter) | SIL OFL 1.1 | Bundled UI font, via Fontsource; license in `app/public/licenses/Inter-OFL.txt` |
 | [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) | SIL OFL 1.1 | Bundled hex/numeric font, via Fontsource; license in `app/public/licenses/JetBrainsMono-OFL.txt` |

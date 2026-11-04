@@ -1703,3 +1703,31 @@ canvas {
 .running { color: var(--accent); }
 .game-log { overflow: auto; padding: 14px 18px; background: var(--input); }
 .game-log pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 11px/1.8 'JetBrains Mono', monospace; color: var(--muted); }
+.project-dialog { width: min(820px, 94vw); max-height: 90vh; overflow: auto; }
+.dialog-content { padding: 20px 24px; }
+.dialog-content > label { display: grid; gap: 8px; margin: 18px 0; }
+.path-row { display: flex; gap: 8px; }
+.path-row input { flex: 1; min-width: 100px; }
+.export-result { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 12px; overflow-wrap: anywhere; }
+.ds-export-button { margin: 0 0 20px; padding: 10px 18px; }
+.paint-toolbar { display: flex; gap: 5px; flex-wrap: wrap; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+.paint-toolbar button { text-transform: capitalize; }
+.paint-toolbar button.active, .cell-frames button.active { color: var(--accent); background: var(--selected); }
+.paint-toolbar label { display: flex; align-items: center; gap: 6px; }
+.paint-toolbar input { width: 55px; }
+.paint-swatches { display: flex; flex-wrap: wrap; padding: 5px 10px; gap: 2px; max-height: 68px; overflow: auto; }
+.paint-swatches button { width: 14px; height: 14px; padding: 0; border: 1px solid transparent; border-radius: 0; }
+.paint-swatches button[aria-pressed=true] { border-color: white; outline: 1px solid var(--accent); }
+.recipe-panel, .import-controls { padding: 12px 18px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
+.recipe-panel li { margin: 8px 0; }
+.import-controls { max-height: 50vh; overflow: auto; }
+.import-controls > label { display: inline-flex; gap: 6px; align-items: center; margin: 10px; }
+.import-controls > strong { display: block; }
+.import-previews { display: flex; gap: 12px; }
+.import-previews figure { margin: 4px; flex: 1; }
+.import-previews img { max-height: 100px; max-width: 100%; image-rendering: pixelated; background: var(--input); }
+.cell-panel { display: flex; flex-direction: column; }
+.cell-preview { image-rendering: pixelated; width: 100%; max-width: 768px; object-fit: contain; }
+.cell-frames { display: flex; gap: 5px; flex-wrap: wrap; padding: 10px; }
+.compat-anchor .popover { max-height: 65vh; overflow: auto; }
+.tile-grid { background-image: linear-gradient(to right, #91a7ae99 1px, transparent 1px), linear-gradient(to bottom, #91a7ae99 1px, transparent 1px); }

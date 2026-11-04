@@ -14,7 +14,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { useStore, select } from '../store';
-import { exportSelection, openWorkspace } from '../commands';
+import { exportSelection, openWorkspace, openFile } from '../commands';
 import type { FileNode } from '../bindings';
 interface TreeRow {
   path: string;
@@ -119,10 +119,16 @@ export function Explorer() {
                   if (row.file) select(row.path);
                 }}
                 onDoubleClick={() => {
-                  if (row.file?.format === 'bmg') openWorkspace('Text');
-                  if (row.file?.format === 'nclr') openWorkspace('Texture & 2D');
-                  if (row.file?.format === 'nsbmd') openWorkspace('Model');
-                  if (['nkm', 'kcl'].includes(row.file?.format ?? '')) openWorkspace('Track');
+                  if (row.file?.format === 'bmg') void openFile('Text', row.path);
+                  if (
+                    ['nclr', 'ncgr', 'nscr', 'nsbtx', 'ncer', 'nanr'].includes(
+                      row.file?.format ?? '',
+                    )
+                  )
+                    void openFile('Texture & 2D', row.path);
+                  if (row.file?.format === 'nsbmd') void openFile('Model', row.path);
+                  if (['nkm', 'kcl'].includes(row.file?.format ?? ''))
+                    void openFile('Track', row.path);
                 }}
                 onKeyDown={(e) => {
                   if (row.folder && ['ArrowLeft', 'ArrowRight'].includes(e.key)) {
@@ -176,9 +182,18 @@ export function Explorer() {
           </button>
           <button onClick={() => void exportSelection('png')}>Export as PNG…</button>
           <button onClick={() => void exportSelection('json')}>Export as JSON…</button>
-          {snapshot?.files.find((f) => f.path === snapshot.selected)?.format === 'nsbmd' && <><button onClick={() => openWorkspace('Model')}>Open in Model workspace</button><button onClick={() => void exportSelection('glb')}>Export as GLB…</button></>}
-          {['nkm', 'kcl'].includes(snapshot?.files.find((f) => f.path === snapshot.selected)?.format ?? '') && <button onClick={() => openWorkspace('Track')}>Open in Track workspace</button>}
-          {snapshot?.files.find((f) => f.path === snapshot.selected)?.format === 'kcl' && <button onClick={() => void exportSelection('obj')}>Export as OBJ…</button>}
+          {snapshot?.files.find((f) => f.path === snapshot.selected)?.format === 'nsbmd' && (
+            <>
+              <button onClick={() => openWorkspace('Model')}>Open in Model workspace</button>
+              <button onClick={() => void exportSelection('glb')}>Export as GLB…</button>
+            </>
+          )}
+          {['nkm', 'kcl'].includes(
+            snapshot?.files.find((f) => f.path === snapshot.selected)?.format ?? '',
+          ) && <button onClick={() => openWorkspace('Track')}>Open in Track workspace</button>}
+          {snapshot?.files.find((f) => f.path === snapshot.selected)?.format === 'kcl' && (
+            <button onClick={() => void exportSelection('obj')}>Export as OBJ…</button>
+          )}
           <button
             onClick={() =>
               openWorkspace(snapshot?.preview.messages.length ? 'Text' : 'Texture & 2D')

@@ -8,6 +8,11 @@ use std::{
 #[derive(Clone, Debug, Serialize, Deserialize, Type)]
 #[serde(default)]
 pub struct Settings {
+    pub allow_pc_only: bool,
+    pub play_target: String,
+    pub emulator_path: String,
+    pub flashcart_path: String,
+    pub race: crate::bench::RaceSetup,
     pub rom_path: String,
     pub install_path: String,
     pub theme: String,
@@ -18,6 +23,11 @@ pub struct Settings {
 impl Default for Settings {
     fn default() -> Self {
         Self {
+            allow_pc_only: false,
+            play_target: "emulator".into(),
+            emulator_path: String::new(),
+            flashcart_path: String::new(),
+            race: Default::default(),
             rom_path: String::new(),
             install_path: detect_install()
                 .map(|p| p.to_string_lossy().into())

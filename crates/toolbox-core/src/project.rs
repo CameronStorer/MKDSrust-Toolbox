@@ -39,6 +39,8 @@ impl Default for Manifest {
 }
 #[derive(Clone, Debug, Serialize, Deserialize, Type)]
 pub struct ProjectConfig {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub base: Option<crate::base::BaseConfig>,
     pub manifest: Manifest,
     pub rom_sha256: String,
     pub game: String,
@@ -53,6 +55,10 @@ pub struct Project {
 }
 #[derive(Clone, Debug)]
 pub enum Command {
+    Batch {
+        title: String,
+        commands: Vec<Command>,
+    },
     File {
         title: String,
         path: String,
@@ -67,6 +73,22 @@ pub enum Command {
 impl Command {
     fn apply(&self, project: &mut Project, forward: bool) -> Result<()> {
         match self {
+            Self::Batch { commands, .. } => {
+                let ordered: Vec<_> = if forward {
+                    commands.iter().collect()
+                } else {
+                    commands.iter().rev().collect()
+                };
+                for (i, c) in ordered.iter().enumerate() {
+                    if let Err(e) = c.apply(project, forward) {
+                        for previous in ordered[..i].iter().rev() {
+                            let _ = previous.apply(project, !forward);
+                        }
+                        return Err(e);
+                    }
+                }
+                Ok(())
+            }
             Self::File {
                 path,
                 before,
@@ -86,6 +108,7 @@ impl Command {
     }
     fn title(&self) -> String {
         match self {
+            Self::Batch { title, .. } => title.clone(),
             Self::File { title, .. } => title.clone(),
             Self::Manifest { .. } => "Edit project information".into(),
         }
@@ -119,6 +142,7 @@ impl Project {
         Ok(Self {
             root: PathBuf::new(),
             config: ProjectConfig {
+                base: None,
                 manifest,
                 rom_sha256: session.sha256.clone(),
                 game: session.rom.game_code.clone(),
@@ -174,6 +198,7 @@ impl Project {
             )?;
         }
         let config = ProjectConfig {
+            base: None,
             manifest,
             rom_sha256: session.sha256.clone(),
             game: session.rom.game_code.clone(),
@@ -319,6 +344,48 @@ impl Project {
             path: path.into(),
             before,
             after,
+        })
+    }
+    pub fn edit_many(
+        &mut self,
+        edits: BTreeMap<String, Vec<u8>>,
+        title: &str,
+        session: &RomSession,
+    ) -> Result<()> {
+        for path in edits.keys() {
+            check_path(path)?;
+            check_edit_conflicts(edits.keys().map(String::as_str), path)?;
+        }
+        let mut commands = vec![];
+        for (path, bytes) in edits {
+            check_path(&path)?;
+            check_edit_conflicts(self.edits.keys().map(String::as_str), &path)?;
+            if let Ok(b) = session.file(&path) {
+                self.baselines
+                    .entry(path.clone())
+                    .or_insert_with(|| b.to_vec());
+            }
+            let after = if session.file(&path).is_ok_and(|b| b == bytes) {
+                None
+            } else {
+                Some(bytes)
+            };
+            let before = self.edits.get(&path).cloned();
+            if before != after {
+                commands.push(Command::File {
+                    title: title.into(),
+                    path,
+                    before,
+                    after,
+                });
+            }
+        }
+        if commands.is_empty() {
+            return Ok(());
+        }
+        self.execute(Command::Batch {
+            title: title.into(),
+            commands,
         })
     }
     pub fn revert(&mut self, path: &str) -> Result<()> {

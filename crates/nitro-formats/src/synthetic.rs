@@ -1,5 +1,54 @@
 //! Generated, original geometry for tests and browser demos. Contains no game data.
 use crate::{put16, put32};
+fn g2d(magic: &[u8; 4], tag: &[u8; 4], body: Vec<u8>) -> Vec<u8> {
+    let mut b = vec![0; 24];
+    b[..4].copy_from_slice(magic);
+    put16(&mut b, 4, 0xfeff);
+    put16(&mut b, 6, 0x100);
+    put16(&mut b, 12, 16);
+    put16(&mut b, 14, 1);
+    b[16..20].copy_from_slice(tag);
+    put32(&mut b, 20, (body.len() + 8) as u32);
+    b.extend_from_slice(&body);
+    let len = b.len();
+    put32(&mut b, 8, len as u32);
+    b
+}
+pub fn ncer() -> Vec<u8> {
+    let mut body = vec![0; 24 + 16 + 12];
+    put16(&mut body, 0, 2);
+    put32(&mut body, 4, 24);
+    put16(&mut body, 24, 1);
+    put16(&mut body, 32, 1);
+    put32(&mut body, 36, 6);
+    put16(&mut body, 40, 0x20f8);
+    put16(&mut body, 42, 0x01f8);
+    put16(&mut body, 44, 0);
+    put16(&mut body, 46, 0x20f8);
+    put16(&mut body, 48, 0x11f8);
+    put16(&mut body, 50, 2);
+    g2d(b"RECN", b"KBEC", body)
+}
+pub fn nanr() -> Vec<u8> {
+    let mut body = vec![0; 24 + 16 + 16 + 4];
+    put16(&mut body, 0, 1);
+    put16(&mut body, 2, 2);
+    put32(&mut body, 4, 24);
+    put32(&mut body, 8, 40);
+    put32(&mut body, 12, 56);
+    put16(&mut body, 24, 2);
+    put16(&mut body, 30, 1);
+    put32(&mut body, 32, 2);
+    put32(&mut body, 40, 0);
+    put16(&mut body, 44, 12);
+    put16(&mut body, 46, 0xbeef);
+    put32(&mut body, 48, 2);
+    put16(&mut body, 52, 12);
+    put16(&mut body, 54, 0xbeef);
+    put16(&mut body, 56, 0);
+    put16(&mut body, 58, 1);
+    g2d(b"RNAN", b"KNBA", body)
+}
 pub fn dictionary(entries: &[(&str, Vec<u8>)], stride: usize) -> Vec<u8> {
     let table = 8 + (entries.len() + 1) * 4;
     let names = table + 4 + entries.len() * stride;
@@ -78,7 +127,7 @@ pub fn nsbmd() -> Vec<u8> {
     b.extend([7, 0, 0, 0]);
     let sbc = b.len();
     b.extend([0x26, 0, 0, 0, 0, 0x0b, 4, 0, 5, 0, 1]);
-    while b.len() % 4 != 0 {
+    while !b.len().is_multiple_of(4) {
         b.push(0)
     }
     let mats = b.len();
@@ -106,7 +155,7 @@ pub fn nsbmd() -> Vec<u8> {
     b.extend(dictionary(&[("studio", p)], 4));
     b.extend(pal);
     b.push(0);
-    while b.len() % 4 != 0 {
+    while !b.len().is_multiple_of(4) {
         b.push(0)
     }
     put16(&mut b, mats, texoff as u16);
@@ -196,7 +245,7 @@ pub fn nkm() -> Vec<u8> {
     put16(&mut obj, 36, 42);
     put16(&mut obj, 38, 65535);
     put32(&mut obj, 56, 1);
-    let points = vec![
+    let points = [
         [-250., 10., -250.],
         [250., 10., -250.],
         [250., 10., 250.],

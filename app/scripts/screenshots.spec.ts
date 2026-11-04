@@ -35,6 +35,14 @@ for (const theme of ['dark', 'light'])
         await expect(page.getByRole('button', { name: 'Colour 0', exact: true })).toBeVisible();
         await expect(page.getByLabel('Texture preview')).toHaveAttribute('width', '128');
       }
+      if (workspace === 'Model' || workspace === 'Track') {
+        await expect(page.getByTestId('viewport')).toHaveAttribute('data-loaded', 'true');
+        if (workspace === 'Track') await expect(page.getByLabel('Show Collision')).toBeChecked();
+      }
+      if (workspace === 'Test Bench') {
+        await page.getByRole('button', { name: 'Refresh courses' }).click();
+        await page.getByLabel('Race course').selectOption('0');
+      }
       await page.evaluate(() => document.fonts.ready);
       await page.screenshot({
         path: path.resolve(

@@ -3,6 +3,8 @@ import { inspect } from './backend';
 import { useStore } from './store';
 import type { Preview } from './bindings';
 export const emptyPreview: Preview = {
+  cells: [],
+  sequences: [],
   colors: [],
   palette_stride: 0,
   messages: [],

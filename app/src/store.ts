@@ -27,6 +27,8 @@ interface State {
   notice: string;
   workspace: Workspace;
   settingsOpen: boolean;
+  exportOpen: boolean;
+  createOpen: boolean;
   paletteOpen: boolean;
   layoutVersion: number;
   set: (state: Partial<Omit<State, 'set' | 'run'>>) => void;
@@ -41,6 +43,8 @@ export const useStore = create<State>((set) => ({
   notice: 'Ready',
   workspace: workspaces.find((w) => w === query) ?? 'Overview',
   settingsOpen: false,
+  exportOpen: false,
+  createOpen: false,
   paletteOpen: false,
   layoutVersion: 0,
   set,

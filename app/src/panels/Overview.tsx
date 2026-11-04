@@ -16,7 +16,7 @@ import { commands, invokeCommand, openWorkspace } from '../commands';
 import { bytes } from './Properties';
 import type { Manifest } from '../bindings';
 export function Overview() {
-  const { snapshot, run, busy } = useStore();
+  const { snapshot, run, busy, set } = useStore();
   const [draft, setDraft] = useState<Manifest | null>(null);
   const serializedManifest = JSON.stringify(snapshot?.manifest ?? null);
   useEffect(
@@ -41,7 +41,10 @@ export function Overview() {
               <strong>Open your ROM</strong>
               <p>AMCE · USA revision 0. Your original stays read only.</p>
             </div>
-            <button className="accent" onClick={() => invokeCommand(commands[0])}>
+            <button
+              className="accent"
+              onClick={() => invokeCommand(commands.find((c) => c.id === 'file.openRom')!)}
+            >
               <FolderOpen size={14} />
               {snapshot?.rom_path ? 'Change ROM' : 'Choose ROM'}
             </button>
@@ -52,12 +55,18 @@ export function Overview() {
               <strong>Start a project</strong>
               <p>Edits and project information live in your own folder.</p>
             </div>
-            <button disabled={!snapshot?.rom_path} onClick={() => invokeCommand(commands[1])}>
+            <button
+              disabled={!snapshot?.rom_path}
+              onClick={() => invokeCommand(commands.find((c) => c.id === 'project.create')!)}
+            >
               Create project
               <ChevronRight size={14} />
             </button>
           </div>
-          <button className="text-button" onClick={() => invokeCommand(commands[2])}>
+          <button
+            className="text-button"
+            onClick={() => invokeCommand(commands.find((c) => c.id === 'project.open')!)}
+          >
             Open an existing project <ArrowUpRight size={14} />
           </button>
           <div className="local-note">
@@ -78,6 +87,24 @@ export function Overview() {
         </div>
         <span className="project-version mono">v{snapshot.manifest.version}</span>
       </div>
+      <button className="accent ds-export-button" onClick={() => set({ exportOpen: true })}>
+        Export for DS…
+      </button>
+      {snapshot.base && (
+        <div className="overview-section">
+          <h2>What this hack changes</h2>
+          <p>
+            Base: {snapshot.base.source_name} · <code>{snapshot.base.source_sha256}</code>
+          </p>
+          {snapshot.base_changes.map((c) => (
+            <div className="change-row" key={c.path}>
+              <span className="mono">{c.path}</span>
+              <span>{c.change}</span>
+            </div>
+          ))}
+          <p className="issue">Publishing needs the original author's credit or permission.</p>
+        </div>
+      )}
       <div className="overview-stats">
         <div>
           <FileDiff size={19} />

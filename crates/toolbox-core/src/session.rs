@@ -27,6 +27,8 @@ pub struct FileNode {
     pub parent: Option<String>,
 }
 pub struct RomSession {
+    /// Present only when the working image is an imported base; never persisted as a ROM.
+    pub clean: Option<Vec<u8>>,
     pub rom: Rom,
     pub path: PathBuf,
     pub sha256: String,
@@ -50,6 +52,7 @@ impl RomSession {
             ));
         }
         let mut s = Self {
+            clean: None,
             rom,
             path,
             sha256,
@@ -133,6 +136,16 @@ impl RomSession {
             .map(Vec::as_slice)
             .or_else(|| self.rom.file(path))
             .ok_or_else(|| Error::Invalid(format!("file not found: {path}")))
+    }
+    pub fn clean_bytes(&self) -> &[u8] {
+        self.clean.as_deref().unwrap_or_else(|| self.rom.bytes())
+    }
+    pub fn with_base(&self, patch: &[u8]) -> Result<Self> {
+        let bytes = nitro_formats::bps::apply(self.clean_bytes(), patch)?;
+        let mut working = Self::from_bytes(bytes, self.path.clone())?;
+        working.clean = Some(self.clean_bytes().to_vec());
+        working.sha256 = self.sha256.clone();
+        Ok(working)
     }
     pub fn root_for<'a>(&'a self, path: &str) -> Option<&'a str> {
         self.rom

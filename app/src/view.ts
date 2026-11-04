@@ -7,6 +7,7 @@ interface View {
   bank: number;
   zoom: number;
   grid: boolean;
+  tileGrid: boolean;
   selectedColors: number[];
   set: (v: Partial<Omit<View, 'set'>>) => void;
 }
@@ -18,6 +19,7 @@ export const useView = create<View>((set) => ({
   bank: 0,
   zoom: 3,
   grid: false,
+  tileGrid: false,
   selectedColors: [0],
   set,
 }));

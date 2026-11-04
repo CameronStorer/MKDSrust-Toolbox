@@ -77,6 +77,11 @@ test('first run opens a ROM before creating a project', async ({ page }) => {
   await page.getByRole('button', { name: 'Choose ROM', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Create project', exact: true })).toBeEnabled();
   await page.getByRole('button', { name: 'Create project', exact: true }).click();
+  await page.getByRole('button', { name: 'Choose folder…', exact: true }).click();
+  await page
+    .getByRole('dialog', { name: 'New project' })
+    .getByRole('button', { name: 'Create project', exact: true })
+    .click();
   await expect(page.getByLabel('Project name')).toHaveValue('Untitled mod');
   await page.getByRole('button', { name: 'Text', exact: true }).click();
   await expect(page.getByLabel('Text segment 1')).toBeEnabled();

@@ -204,6 +204,30 @@ fn screen_add(
     Ok(())
 }
 pub fn build(project: &Project, session: &RomSession) -> Result<(Vec<u8>, Vec<String>)> {
+    if session.clean.is_some() {
+        let base_changes = crate::base::changes(session)?;
+        if base_changes
+            .iter()
+            .any(|c| c.change == "changed code" || c.change == "removed")
+        {
+            return Err(Error::Invalid(
+                "this base changes code or removes files; use Export for DS or an emulator".into(),
+            ));
+        }
+        let clean = RomSession::from_bytes(session.clean_bytes().to_vec(), session.path.clone())?;
+        let (bytes, _, _) = crate::export::build_rom(project, session)?;
+        let final_rom = nitro_formats::rom::Rom::parse(&bytes)?;
+        let edits = final_rom
+            .files
+            .keys()
+            .filter_map(|p| {
+                let b = final_rom.file(p)?;
+                (clean.rom.file(p) != Some(b)).then(|| (p.clone(), b.to_vec()))
+            })
+            .collect();
+        let flattened = Project::in_memory(&clean, project.config.manifest.clone(), edits)?;
+        return build(&flattened, &clean);
+    }
     validate_manifest(&project.config.manifest)?;
     if project.config.rom_sha256 != session.sha256 {
         return Err(Error::Invalid("target ROM hash changed".into()));
@@ -258,11 +282,19 @@ pub fn build(project: &Project, session: &RomSession) -> Result<(Vec<u8>, Vec<St
     };
     let mut payloads = BTreeMap::new();
     let mut warnings = vec![];
-    // Unknown compatibility is deliberately conservative in Stage 1.
-    if manifest.info.platforms.contains(&"ds".into()) {
+    if let Some(base) = &project.config.base {
+        warnings.push(format!(
+            "Based on {} ({}); publishing requires the original author's credit or permission",
+            base.source_name, base.source_sha256
+        ));
+    }
+    let compatibility = crate::validation::validate(project, session);
+    if manifest.info.platforms.contains(&"ds".into()) && !compatibility.is_empty() {
         manifest.info.platforms = vec!["pc".into()];
-        warnings.push(
-            "DS compatibility has not been fully checked in Stage 1; exported as PC only".into(),
+        warnings.extend(
+            compatibility
+                .iter()
+                .map(|i| format!("{}: {}; exported as PC only", i.location, i.message)),
         );
     }
     for path in roots {

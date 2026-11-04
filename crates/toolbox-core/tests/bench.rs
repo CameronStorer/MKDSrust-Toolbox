@@ -9,6 +9,26 @@ use toolbox_core::{
     synthetic,
 };
 #[test]
+fn race_subset_and_course_list_contract() {
+    use toolbox_core::bench::{parse_courses, RaceSetup};
+    let mut r = RaceSetup {
+        course: Some(12),
+        character: Some(3),
+        kart: None,
+        racers: Some(8),
+    };
+    assert_eq!(
+        r.argument().unwrap().as_deref(),
+        Some("course=12,character=3,racers=8")
+    );
+    r.racers = Some(9);
+    assert!(r.argument().is_err());
+    assert!(RaceSetup::default().argument().unwrap().is_none());
+    let courses = parse_courses("boot log\n12\tstudio_course\n13\tsynthetic_circuit\n");
+    assert_eq!(courses.len(), 2);
+    assert_eq!(courses[1].id, 13);
+}
+#[test]
 fn game_process_fixture() {
     if !std::env::args().any(|a| a == "--exact") {
         return;

@@ -21,6 +21,8 @@ pub struct TextMessage {
 }
 #[derive(Clone, Debug, Serialize, Type, Default)]
 pub struct Preview {
+    pub cells: Vec<u32>,
+    pub sequences: Vec<Vec<CellFrame>>,
     pub colors: Vec<u16>,
     pub palette_stride: u32,
     pub messages: Vec<TextMessage>,
@@ -28,6 +30,11 @@ pub struct Preview {
     pub palettes: Vec<String>,
     pub width: u32,
     pub height: u32,
+}
+#[derive(Clone, Debug, Serialize, Type)]
+pub struct CellFrame {
+    pub cell: u32,
+    pub duration: u32,
 }
 pub fn plain(bytes: &[u8]) -> Result<Vec<u8>> {
     Ok(if bytes.first() == Some(&0x10) {
@@ -65,11 +72,39 @@ pub fn preview(bytes: &[u8]) -> Result<Preview> {
     if b.starts_with(b"BTX0") {
         let t = Nsbtx::parse(&b)?;
         p.textures = t.textures.iter().map(|t| t.name.clone()).collect();
+        p.colors = t
+            .palettes
+            .first()
+            .map(|p| p.colors.clone())
+            .unwrap_or_default();
+        p.palette_stride = p.colors.len() as u32;
         p.palettes = t.palettes.iter().map(|p| p.name.clone()).collect();
         if let Some(t) = t.textures.first() {
             p.width = t.width;
             p.height = t.height;
         }
+    }
+    if b.starts_with(b"RECN") {
+        p.cells = nitro_formats::cell::Ncer::parse(&b)?
+            .cells
+            .iter()
+            .map(|c| c.objects.len() as u32)
+            .collect();
+    }
+    if b.starts_with(b"RNAN") {
+        p.sequences = nitro_formats::cell::Nanr::parse(&b)?
+            .sequences
+            .iter()
+            .map(|s| {
+                s.frames
+                    .iter()
+                    .map(|f| CellFrame {
+                        cell: f.cell as u32,
+                        duration: f.duration as u32,
+                    })
+                    .collect()
+            })
+            .collect();
     }
     Ok(p)
 }
@@ -89,6 +124,17 @@ pub fn image(
         })
     };
     let b = bytes(path)?;
+    if b.starts_with(b"RECN") || b.starts_with(b"RNAN") {
+        return cell_image(
+            project,
+            session,
+            path,
+            palette_path,
+            screen_path,
+            texture,
+            0,
+        );
+    }
     if b.starts_with(b"RLCN") {
         let p = Nclr::parse(&b)?;
         let width = 16;
@@ -126,6 +172,54 @@ pub fn image(
         .ok_or_else(|| Error::Invalid("select a companion NCLR palette".into()))?;
     let palette = Nclr::parse(&bytes(&palette_path)?)?;
     Ok(tile.render(&palette, screen.as_ref(), bank)?)
+}
+pub fn cell_image(
+    project: Option<&Project>,
+    session: &RomSession,
+    path: &str,
+    palette: Option<&str>,
+    cell_path: Option<&str>,
+    sequence: usize,
+    frame: usize,
+) -> Result<Image> {
+    let bytes = |p: &str| -> Result<Vec<u8>> {
+        plain(match project {
+            Some(pj) => pj.bytes(session, p)?,
+            None => session.file(p)?,
+        })
+    };
+    let b = bytes(path)?;
+    let ncer_path = if b.starts_with(b"RECN") {
+        path.to_string()
+    } else {
+        cell_path
+            .map(String::from)
+            .or_else(|| find_companion(session, path, "ncer"))
+            .ok_or_else(|| Error::Invalid("choose a companion NCER".into()))?
+    };
+    let cells = nitro_formats::cell::Ncer::parse(&bytes(&ncer_path)?)?;
+    let tile_path = find_companion(session, &ncer_path, "ncgr")
+        .ok_or_else(|| Error::Invalid("choose matching NCGR tiles beside the NCER".into()))?;
+    let pal_path = palette
+        .map(String::from)
+        .or_else(|| find_companion(session, &ncer_path, "nclr"))
+        .ok_or_else(|| Error::Invalid("choose a companion NCLR".into()))?;
+    let tiles = Ncgr::parse(&bytes(&tile_path)?)?;
+    let pal = Nclr::parse(&bytes(&pal_path)?)?;
+    if b.starts_with(b"RNAN") {
+        let anim = nitro_formats::cell::Nanr::parse(&b)?;
+        let f = anim
+            .sequences
+            .get(sequence)
+            .and_then(|s| s.frames.get(frame))
+            .ok_or_else(|| Error::Invalid("animation frame outside sequence".into()))?;
+        Ok(nitro_formats::cell::transform(
+            &cells.render(f.cell as usize, &tiles, &pal)?,
+            f,
+        ))
+    } else {
+        Ok(cells.render(sequence, &tiles, &pal)?)
+    }
 }
 pub fn find_companion(session: &RomSession, path: &str, ext: &str) -> Option<String> {
     let stem = path.rsplit_once('.').map_or(path, |x| x.0);

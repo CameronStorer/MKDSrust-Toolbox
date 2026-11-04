@@ -26,6 +26,36 @@ pub enum Request {
         path: String,
         manifest: Manifest,
     },
+    CreateFromBase {
+        path: String,
+        manifest: Manifest,
+        source: String,
+    },
+    ExportDs {
+        rom: Option<String>,
+        bps: Option<String>,
+    },
+    ShowInFolder {
+        path: String,
+    },
+    Paint {
+        path: String,
+        palette: Option<String>,
+        texture: u32,
+        bank: u32,
+        points: Vec<(u32, u32, u16)>,
+    },
+    ImportGraphic {
+        path: String,
+        source: String,
+        palette: Option<String>,
+        texture: u32,
+        bank: u32,
+        format: u8,
+        dither: bool,
+    },
+    ApplyGraphic,
+    CancelGraphic,
     OpenProject {
         path: String,
     },
@@ -55,6 +85,12 @@ pub enum Request {
         game: String,
     },
     Stop,
+    Reload {
+        game: String,
+    },
+    Courses {
+        game: String,
+    },
     Validate,
     Settings {
         settings: Settings,
@@ -75,6 +111,11 @@ pub enum Request {
 }
 #[derive(Clone, Debug, Serialize, Type)]
 pub struct Snapshot {
+    pub graphic_import: Option<crate::graphic::ImportInfo>,
+    pub base: Option<crate::base::BaseConfig>,
+    pub base_changes: Vec<crate::base::BaseChange>,
+    pub ds_export: Option<crate::export::ExportResult>,
+    pub compatibility: String,
     pub bench: crate::bench::BenchSnapshot,
     pub rom_path: String,
     pub game: String,
@@ -105,6 +146,8 @@ pub struct BinaryRequest {
     pub bank: u32,
 }
 pub struct Service {
+    pub graphic_import: Option<crate::graphic::ImportDraft>,
+    pub ds_export: Option<crate::export::ExportResult>,
     pub bench: crate::bench::Bench,
     pub session: Option<RomSession>,
     pub project: Option<Project>,
@@ -117,6 +160,8 @@ pub struct Service {
 impl Default for Service {
     fn default() -> Self {
         Self {
+            graphic_import: None,
+            ds_export: None,
             bench: crate::bench::Bench::default(),
             session: None,
             project: None,
@@ -186,6 +231,21 @@ impl Service {
             }
         }
         Ok(Snapshot {
+            graphic_import: self.graphic_import.as_ref().map(|d| d.info.clone()),
+            base: project.and_then(|p| p.config.base.clone()),
+            base_changes: session
+                .map(crate::base::changes)
+                .transpose()?
+                .unwrap_or_default(),
+            ds_export: self.ds_export.clone(),
+            compatibility: if project.is_none() {
+                "Unknown"
+            } else if self.issues.is_empty() {
+                "DS OK"
+            } else {
+                "PC only"
+            }
+            .into(),
             bench: self.bench.snapshot(Path::new(&self.settings.install_path)),
             rom_path: session
                 .map(|s| s.path.to_string_lossy().into())
@@ -216,6 +276,7 @@ impl Service {
         let changes_project = matches!(
             &request,
             Request::CreateProject { .. }
+                | Request::CreateFromBase { .. }
                 | Request::OpenProject { .. }
                 | Request::Palette { .. }
                 | Request::Text { .. }
@@ -223,11 +284,106 @@ impl Service {
                 | Request::UpdateManifest { .. }
                 | Request::Undo
                 | Request::Redo
+                | Request::Paint { .. }
+                | Request::ApplyGraphic
         );
         match request {
+            Request::Paint {
+                path,
+                palette,
+                texture,
+                bank,
+                points,
+            } => {
+                let (p, s) = self.editing()?;
+                crate::graphic::paint(
+                    p,
+                    s,
+                    &path,
+                    palette.as_deref(),
+                    texture as usize,
+                    bank as usize,
+                    &points,
+                )?;
+                self.packed = None;
+            }
+            Request::ImportGraphic {
+                path,
+                source,
+                palette,
+                texture,
+                bank,
+                format,
+                dither,
+            } => {
+                let (p, s) = self.editing()?;
+                self.graphic_import = Some(crate::graphic::import(
+                    p,
+                    s,
+                    &path,
+                    Path::new(&source),
+                    palette.as_deref(),
+                    texture as usize,
+                    bank as usize,
+                    format,
+                    dither,
+                )?);
+            }
+            Request::ApplyGraphic => {
+                let draft = self
+                    .graphic_import
+                    .take()
+                    .ok_or_else(|| Error::Invalid("preview a PNG import first".into()))?;
+                let (p, s) = self.editing()?;
+                p.edit_many(draft.edits, "Import PNG", s)?;
+                self.packed = None;
+            }
+            Request::CancelGraphic => self.graphic_import = None,
+            Request::ShowInFolder { path } => {
+                crate::bench::show_in_folder(Path::new(&path))?;
+            }
+            Request::ExportDs { rom, bps } => {
+                for path in [rom.as_ref(), bps.as_ref()].into_iter().flatten() {
+                    self.check_output(Path::new(path))?;
+                }
+                let (p, s) = self.editing()?;
+                self.ds_export = Some(crate::export::export_ds(
+                    p,
+                    s,
+                    rom.as_deref().map(Path::new),
+                    bps.as_deref().map(Path::new),
+                )?);
+            }
+            Request::CreateFromBase {
+                path,
+                manifest,
+                source,
+            } => {
+                let clean = RomSession::from_bytes(
+                    self.session()?.clean_bytes().to_vec(),
+                    self.session()?.path.clone(),
+                )?;
+                let (p, s) =
+                    crate::base::create(Path::new(&path), &clean, manifest, Path::new(&source))?;
+                self.project = Some(p);
+                self.session = Some(s);
+                self.selected.clear();
+                self.packed = None;
+                self.ds_export = None;
+            }
             Request::Snapshot => {}
             Request::Stop => self.bench.stop()?,
-            Request::Play { game } => {
+            Request::Courses { game } => {
+                self.bench.list_courses(
+                    Path::new(&self.settings.install_path),
+                    &game,
+                    self.session
+                        .as_ref()
+                        .ok_or_else(|| Error::Invalid("open a ROM first".into()))?,
+                )?;
+            }
+            Request::Play { game } | Request::Reload { game } => {
+                self.bench.stop()?;
                 let project = self
                     .project
                     .as_ref()
@@ -236,12 +392,38 @@ impl Service {
                     .session
                     .as_ref()
                     .ok_or_else(|| Error::Invalid("open your ROM first".into()))?;
-                self.bench.play(
-                    Path::new(&self.settings.install_path),
-                    &game,
-                    project,
-                    session,
-                )?;
+                if self.settings.play_target == "emulator" {
+                    self.bench.play_emulator(
+                        Path::new(&self.settings.emulator_path),
+                        project,
+                        session,
+                    )?;
+                } else if self.settings.play_target == "flashcart" {
+                    if self.settings.flashcart_path.trim().is_empty()
+                        || !Path::new(&self.settings.flashcart_path).is_dir()
+                    {
+                        return Err(Error::Invalid(
+                            "choose a flashcart export folder in Settings".into(),
+                        ));
+                    }
+                    let out = Path::new(&self.settings.flashcart_path)
+                        .join(format!("{}.nds", project.config.manifest.id));
+                    self.check_output(&out)?;
+                    self.ds_export = Some(crate::export::export_ds(
+                        project,
+                        session,
+                        Some(&out),
+                        None,
+                    )?);
+                } else {
+                    self.bench.play_race(
+                        Path::new(&self.settings.install_path),
+                        &game,
+                        project,
+                        session,
+                        &self.settings.race,
+                    )?;
+                }
             }
             Request::OpenRom { path } => {
                 let session = RomSession::open(Path::new(&path))?;
@@ -251,11 +433,16 @@ impl Service {
                 self.issues.clear();
                 self.packed = None;
                 self.settings.rom_path = path;
+                self.ds_export = None;
                 if self.persist_settings {
                     crate::settings::save(&self.settings)?;
                 }
             }
             Request::CreateProject { path, manifest } => {
+                self.session = Some(RomSession::from_bytes(
+                    self.session()?.clean_bytes().to_vec(),
+                    self.session()?.path.clone(),
+                )?);
                 self.project = Some(Project::create(
                     Path::new(&path),
                     self.session()?,
@@ -272,6 +459,7 @@ impl Service {
                     )?;
                     self.session = Some(RomSession::open(Path::new(&config.rom_path))?);
                 }
+                self.session = Some(crate::base::working(Path::new(&path), self.session()?)?);
                 self.project = Some(Project::open(Path::new(&path), self.session()?)?);
                 self.packed = None;
                 self.selected.clear();
@@ -419,6 +607,10 @@ impl Service {
                 self.issues = validation::validate(p, s);
             }
             Request::Settings { settings } => {
+                settings.race.argument()?;
+                if !["emulator", "mkdsrust", "flashcart"].contains(&settings.play_target.as_str()) {
+                    return Err(Error::Invalid("invalid play target".into()));
+                }
                 if !["dark", "light"].contains(&settings.theme.as_str())
                     || !["Blender", "Maya", "MKTB"].contains(&settings.navigation.as_str())
                     || !settings.camera_speed.is_finite()
@@ -485,7 +677,13 @@ impl Service {
             }
         }
         if changes_project {
-            self.issues.clear();
+            self.graphic_import = None;
+            self.issues = if let (Some(p), Some(s)) = (&self.project, &self.session) {
+                validation::validate(p, s)
+            } else {
+                vec![]
+            };
+            self.ds_export = None;
         }
         self.snapshot()
     }
@@ -521,6 +719,53 @@ impl Service {
         Ok(())
     }
     pub fn binary(&self, r: BinaryRequest) -> Result<Vec<u8>> {
+        if r.mode == "cell-png" {
+            return preview::png(&preview::cell_image(
+                self.project.as_ref(),
+                self.session()?,
+                &r.path,
+                r.palette.as_deref(),
+                r.screen.as_deref(),
+                r.texture as usize,
+                r.start as usize,
+            )?);
+        }
+        if r.mode == "import-preview" {
+            return preview::png(
+                &self
+                    .graphic_import
+                    .as_ref()
+                    .ok_or_else(|| Error::Invalid("no import preview".into()))?
+                    .image,
+            );
+        }
+        if r.mode == "paint-data" || r.mode == "palette-colors" {
+            let s = self.session()?;
+            let b = match &self.project {
+                Some(p) => p.bytes(s, &r.path)?,
+                None => s.file(&r.path)?,
+            };
+            if r.mode == "paint-data" {
+                return crate::graphic::paint_data(b, r.texture as usize, r.bank as usize);
+            }
+            let b = preview::plain(b)?;
+            let colors = if b.starts_with(b"BTX0") {
+                nitro_formats::texture::Nsbtx::parse(&b)?
+                    .palettes
+                    .get(r.bank as usize)
+                    .map(|p| p.colors.clone())
+                    .unwrap_or_default()
+            } else {
+                let p = Nclr::parse(&b)?;
+                let stride = if p.depth == 3 { 16 } else { 256 };
+                p.colors
+                    .chunks(stride)
+                    .nth(r.bank as usize)
+                    .unwrap_or(&[])
+                    .to_vec()
+            };
+            return Ok(colors.iter().flat_map(|c| c.to_le_bytes()).collect());
+        }
         let s = self.session()?;
         if r.mode == "glb" || r.mode == "course-glb" {
             return crate::scene::CourseScene::load(self.project.as_ref(), s, &r.path)?
@@ -554,7 +799,7 @@ impl Service {
         let rom = std::env::var_os("MKDS_ROM")
             .map(PathBuf::from)
             .unwrap_or_else(|| PathBuf::from(config.rom_path));
-        let session = RomSession::open(&rom)?;
+        let session = crate::base::working(project, &RomSession::open(&rom)?)?;
         let project = Project::open(project, &session)?;
         Ok((project, session))
     }

@@ -48,6 +48,201 @@ pub(crate) fn dictionary(b: &[u8], at: usize, stride: usize) -> Result<Vec<(Stri
     Ok(out)
 }
 impl Nsbtx {
+    /// Repack changed pools and relocate the containing blocks. Unrelated dictionary entries,
+    /// texture flags, compressed pools and unknown blocks are retained.
+    pub fn replace(
+        &self,
+        texture: usize,
+        palette: usize,
+        value: &Texture,
+        colors: Option<&[u16]>,
+    ) -> Result<Vec<u8>> {
+        if texture >= self.textures.len() || value.format == 5 {
+            return Err(error(
+                texture,
+                "select a texture; convert 4x4 compressed textures before editing",
+            ));
+        }
+        decode(
+            value,
+            colors
+                .or_else(|| self.palettes.get(palette).map(|p| p.colors.as_slice()))
+                .unwrap_or(&[]),
+        )?;
+        let previous = &self.textures[texture];
+        if previous.format == value.format
+            && previous.width == value.width
+            && previous.height == value.height
+            && previous.data.len() == value.data.len()
+            && colors.is_none_or(|c| {
+                self.palettes
+                    .get(palette)
+                    .is_some_and(|p| p.colors.len() == c.len())
+            })
+        {
+            let mut out = self.raw.clone();
+            for i in 0..u16le(&out, 14)? as usize {
+                let at = u32le(&out, 16 + i * 4)? as usize;
+                if slice(&out, at, 4)? != b"TEX0" {
+                    continue;
+                }
+                let td = u16le(&out, at + 14)? as usize + at;
+                let record = td + 8 + u16le(&out, td + 6)? as usize + 4 + texture * 8;
+                let params = u32le(&out, record)?;
+                let dest = at + u32le(&out, at + 20)? as usize + (params as usize & 65535) * 8;
+                out[dest..dest + value.data.len()].copy_from_slice(&value.data);
+                crate::put32(
+                    &mut out,
+                    record,
+                    (params & !(1 << 29)) | (u32::from(value.transparent_zero) << 29),
+                );
+                if let Some(c) = colors {
+                    let pd = u32le(&out, at + 52)? as usize + at;
+                    let record = pd + 8 + u16le(&out, pd + 6)? as usize + 4 + palette * 4;
+                    let dest =
+                        at + u32le(&out, at + 56)? as usize + u16le(&out, record)? as usize * 8;
+                    for (i, c) in c.iter().enumerate() {
+                        crate::put16(&mut out, dest + i * 2, *c);
+                    }
+                }
+            }
+            return Ok(out);
+        }
+        let count = u16le(&self.raw, 14)? as usize;
+        let mut blocks = vec![];
+        for i in 0..count {
+            let at = u32le(&self.raw, 16 + i * 4)? as usize;
+            let mut block = slice(&self.raw, at, u32le(&self.raw, at + 4)? as usize)?.to_vec();
+            if block.starts_with(b"TEX0") {
+                let add_palette = colors.is_some() && self.palettes.is_empty() && palette == 0;
+                if colors.is_some() && palette >= self.palettes.len() && !add_palette {
+                    return Err(error(palette, "palette index outside dictionary"));
+                }
+                let td = u16le(&block, 14)? as usize;
+                let pd = u32le(&block, 52)? as usize;
+                let table = td + 8 + u16le(&block, td + 6)? as usize;
+                let mut pal_table = pd + 8 + u16le(&block, pd + 6)? as usize;
+                let metadata_end = (td + u16le(&block, td + 2)? as usize)
+                    .max(pd + u16le(&block, pd + 2)? as usize)
+                    .max(60);
+                block.truncate(metadata_end);
+                if add_palette {
+                    while !block.len().is_multiple_of(4) {
+                        block.push(0);
+                    }
+                    let pd = block.len();
+                    // A one-entry Patricia dictionary: root -> only leaf -> root.
+                    let mut dict = vec![0; 40];
+                    dict[1] = 1;
+                    crate::put16(&mut dict, 2, 40);
+                    crate::put16(&mut dict, 4, 8);
+                    crate::put16(&mut dict, 6, 8);
+                    dict[8] = 127;
+                    dict[9] = 1;
+                    crate::put16(&mut dict, 16, 4);
+                    crate::put16(&mut dict, 18, 8);
+                    let name = previous.name.as_bytes();
+                    let count = name.len().min(16);
+                    dict[24..24 + count].copy_from_slice(&name[..count]);
+                    block.extend_from_slice(&dict);
+                    crate::put32(&mut block, 52, pd as u32);
+                    pal_table = pd + 16;
+                }
+                let mut normal = vec![];
+                let mut compressed = vec![];
+                let mut descriptors = vec![];
+                for (j, old_texture) in self.textures.iter().enumerate() {
+                    let t = if j == texture { value } else { old_texture };
+                    let pool = if t.format == 5 {
+                        &mut compressed
+                    } else {
+                        &mut normal
+                    };
+                    let offset = pool.len();
+                    pool.extend_from_slice(&t.data);
+                    while !pool.len().is_multiple_of(8) {
+                        pool.push(0);
+                    }
+                    if pool.len() / 8 > u16::MAX as usize {
+                        return Err(error(at, "texture pool exceeds DS address space"));
+                    }
+                    if t.format == 5 {
+                        descriptors.resize(offset / 2, 0);
+                        descriptors.extend_from_slice(&t.indices);
+                        descriptors.resize(pool.len() / 2, 0);
+                    }
+                    let record = table + 4 + j * 8;
+                    let old = u32le(&block, record)?;
+                    let params = (old & 0xc00f0000)
+                        | (offset as u32 / 8)
+                        | ((t.width.ilog2() - 3) << 20)
+                        | ((t.height.ilog2() - 3) << 23)
+                        | ((t.format as u32) << 26)
+                        | (u32::from(t.transparent_zero) << 29);
+                    crate::put32(&mut block, record, params);
+                }
+                let mut pals = vec![];
+                if add_palette {
+                    for color in colors.unwrap_or(&[]) {
+                        pals.extend_from_slice(&color.to_le_bytes());
+                    }
+                    while !pals.len().is_multiple_of(8) {
+                        pals.push(0);
+                    }
+                }
+                for (j, p) in self.palettes.iter().enumerate() {
+                    let c = if j == palette {
+                        colors.unwrap_or(&p.colors)
+                    } else {
+                        &p.colors
+                    };
+                    let offset = pals.len();
+                    for v in c {
+                        pals.extend_from_slice(&v.to_le_bytes());
+                    }
+                    while !pals.len().is_multiple_of(8) {
+                        pals.push(0);
+                    }
+                    if pals.len() / 8 > u16::MAX as usize {
+                        return Err(error(at, "palette pool too large"));
+                    }
+                    crate::put16(&mut block, pal_table + 4 + j * 4, (offset / 8) as u16);
+                }
+                for (offset_field, length_field, data) in [
+                    (20, Some(12), &normal),
+                    (36, Some(28), &compressed),
+                    (40, None, &descriptors),
+                    (56, Some(48), &pals),
+                ] {
+                    while !block.len().is_multiple_of(8) {
+                        block.push(0);
+                    }
+                    let start = block.len();
+                    block.extend_from_slice(data);
+                    crate::put32(&mut block, offset_field, start as u32);
+                    if let Some(field) = length_field {
+                        crate::put16(&mut block, field, (data.len() / 8) as u16);
+                    }
+                }
+                let len = block.len();
+                crate::put32(&mut block, 4, len as u32);
+            }
+            blocks.push(block);
+        }
+        let header = u16le(&self.raw, 12)? as usize;
+        let mut out = slice(&self.raw, 0, header.max(16 + count * 4))?.to_vec();
+        for (i, block) in blocks.iter().enumerate() {
+            while !out.len().is_multiple_of(4) {
+                out.push(0);
+            }
+            let at = out.len();
+            crate::put32(&mut out, 16 + i * 4, at as u32);
+            out.extend_from_slice(block);
+        }
+        let len = out.len();
+        crate::put32(&mut out, 8, len as u32);
+        Ok(out)
+    }
     pub fn parse(b: &[u8]) -> Result<Self> {
         if ![b"BTX0".as_slice(), b"BMD0".as_slice()].contains(&slice(b, 0, 4)?)
             || u16le(b, 4)? != 0xfeff
@@ -161,6 +356,71 @@ impl Nsbtx {
             .unwrap_or(&[]);
         decode(t, colors)
     }
+}
+pub fn encode(
+    image: &Image,
+    format: u8,
+    palette: &[u16],
+    indices: &[u8],
+    transparent_zero: bool,
+) -> Result<Texture> {
+    let n = image.width as usize * image.height as usize;
+    if indices.len() != n || image.rgba.len() != n * 4 || ![1, 2, 3, 4, 6, 7].contains(&format) {
+        return Err(error(0, "invalid encoder input"));
+    }
+    let mut data = vec![];
+    match format {
+        2 => {
+            for chunk in indices.chunks(4) {
+                let mut v = 0;
+                for (i, p) in chunk.iter().enumerate() {
+                    if *p >= 4 {
+                        return Err(error(i, "4-colour index out of range"));
+                    }
+                    v |= *p << (i * 2);
+                }
+                data.push(v);
+            }
+        }
+        3 => {
+            for chunk in indices.chunks(2) {
+                if chunk.iter().any(|p| *p >= 16) {
+                    return Err(error(0, "16-colour index out of range"));
+                }
+                data.push(chunk[0] | (chunk.get(1).copied().unwrap_or(0) << 4));
+            }
+        }
+        1 | 6 => {
+            let (bits, max) = if format == 1 { (5, 7) } else { (3, 31) };
+            for (i, p) in indices.iter().enumerate() {
+                if *p >= 1 << bits {
+                    return Err(error(i, "alpha-index texture index out of range"));
+                }
+                let a = (image.rgba[i * 4 + 3] as u16 * max / 255) as u8;
+                data.push(*p | a << bits);
+            }
+        }
+        4 => data.extend_from_slice(indices),
+        7 => {
+            for p in image.rgba.chunks_exact(4) {
+                let c = crate::graphics::rgba_to_bgr555([p[0], p[1], p[2], p[3]])
+                    | if p[3] >= 128 { 0x8000 } else { 0 };
+                data.extend_from_slice(&c.to_le_bytes());
+            }
+        }
+        _ => unreachable!(),
+    }
+    let t = Texture {
+        name: String::new(),
+        width: image.width,
+        height: image.height,
+        format,
+        transparent_zero,
+        data,
+        indices: vec![],
+    };
+    decode(&t, palette)?;
+    Ok(t)
 }
 pub fn decode(t: &Texture, palette: &[u16]) -> Result<Image> {
     if t.width < 8

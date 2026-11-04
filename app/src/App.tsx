@@ -1,3 +1,4 @@
+import { ExportDialog, CreateDialog } from './ProjectDialogs';
 import { useEffect, useRef, useState } from 'react';
 import {
   DockviewReact,
@@ -62,7 +63,8 @@ function Preview() {
   const snapshot = useStore((s) => s.snapshot);
   const file = snapshot?.files.find((f) => f.path === snapshot.selected);
   if (file?.format === 'bmg') return <TextEditor />;
-  if (file && ['nclr', 'ncgr', 'nscr', 'nsbtx'].includes(file.format)) return <Texture />;
+  if (file && ['nclr', 'ncgr', 'nscr', 'nsbtx', 'ncer', 'nanr'].includes(file.format))
+    return <Texture />;
   return (
     <div className="panel empty">
       <Files size={30} />
@@ -111,7 +113,11 @@ function Dock() {
                 ? 'texture'
                 : workspace === 'Text'
                   ? 'text'
-                  : workspace === 'Model' || workspace === 'Track' ? 'scene' : workspace === 'Test Bench' ? 'bench' : 'placeholder',
+                  : workspace === 'Model' || workspace === 'Track'
+                    ? 'scene'
+                    : workspace === 'Test Bench'
+                      ? 'bench'
+                      : 'placeholder',
         title:
           workspace === 'Overview'
             ? 'Project dashboard'
@@ -125,14 +131,29 @@ function Dock() {
       });
       const left = dock.addPanel({
         id: 'outliner',
-        component: workspace === 'Text' ? 'messages' : workspace === 'Track' || workspace === 'Model' ? 'sceneOutliner' : 'explorer',
-        title: workspace === 'Text' ? 'Messages' : workspace === 'Track' || workspace === 'Model' ? 'Outliner' : 'Explorer',
+        component:
+          workspace === 'Text'
+            ? 'messages'
+            : workspace === 'Track' || workspace === 'Model'
+              ? 'sceneOutliner'
+              : 'explorer',
+        title:
+          workspace === 'Text'
+            ? 'Messages'
+            : workspace === 'Track' || workspace === 'Model'
+              ? 'Outliner'
+              : 'Explorer',
         position: { referencePanel: center.id, direction: 'left' },
         initialWidth: workspace === 'Text' ? 290 : 270,
       });
       const right = dock.addPanel({
         id: 'properties',
-        component: workspace === 'Texture & 2D' ? 'palette' : workspace === 'Model' || workspace === 'Track' ? 'sceneProperties' : 'properties',
+        component:
+          workspace === 'Texture & 2D'
+            ? 'palette'
+            : workspace === 'Model' || workspace === 'Track'
+              ? 'sceneProperties'
+              : 'properties',
         title: workspace === 'Texture & 2D' ? 'Palette' : 'Properties',
         position: { referencePanel: center.id, direction: 'right' },
         initialWidth: workspace === 'Texture & 2D' ? 300 : 260,
@@ -153,9 +174,30 @@ function Dock() {
           initialHeight: 235,
         });
       }
-      if (workspace === 'Model') dock.addPanel({ id: 'timeline', component: 'timeline', title: 'Animation timeline', position: { referencePanel: center.id, direction: 'below' }, initialHeight: 130 });
-      if (workspace === 'Track') dock.addPanel({ id: 'overlays', component: 'overlays', title: 'Overlays', position: { referencePanel: right.id, direction: 'below' }, initialHeight: 380 });
-      if (workspace === 'Test Bench') dock.addPanel({ id: 'logs', component: 'logs', title: 'Game output', position: { referencePanel: center.id, direction: 'below' }, initialHeight: 280 });
+      if (workspace === 'Model')
+        dock.addPanel({
+          id: 'timeline',
+          component: 'timeline',
+          title: 'Animation timeline',
+          position: { referencePanel: center.id, direction: 'below' },
+          initialHeight: 130,
+        });
+      if (workspace === 'Track')
+        dock.addPanel({
+          id: 'overlays',
+          component: 'overlays',
+          title: 'Overlays',
+          position: { referencePanel: right.id, direction: 'below' },
+          initialHeight: 380,
+        });
+      if (workspace === 'Test Bench')
+        dock.addPanel({
+          id: 'logs',
+          component: 'logs',
+          title: 'Game output',
+          position: { referencePanel: center.id, direction: 'below' },
+          initialHeight: 280,
+        });
       if (workspace === 'Overview') {
         dock.addPanel({
           id: 'properties-extra',
@@ -182,6 +224,8 @@ export function App() {
     snapshot,
     workspace,
     settingsOpen,
+    exportOpen,
+    createOpen,
     paletteOpen,
     layoutVersion,
     error,
@@ -203,7 +247,7 @@ export function App() {
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        set({ settingsOpen: false, paletteOpen: false });
+        set({ settingsOpen: false, paletteOpen: false, exportOpen: false, createOpen: false });
         setMenu('');
         setTour(false);
         setCompat(false);
@@ -319,32 +363,52 @@ export function App() {
         >
           <HelpCircle size={15} />
         </button>
-        <button className="play" title="Pack, install and launch in MKDSrust · F5" disabled={!snapshot?.manifest || busy || snapshot?.bench.running} onClick={() => { openWorkspace('Test Bench'); void run({ kind: 'Play', game: useScene.getState().game }); }}>
+        <button
+          className="play"
+          title="Pack, install and launch in MKDSrust · F5"
+          disabled={!snapshot?.manifest || busy || snapshot?.bench.running}
+          onClick={() => {
+            openWorkspace('Test Bench');
+            void run({ kind: 'Play', game: useScene.getState().game });
+          }}
+        >
           <Play size={12} />
           Play
         </button>
-        {snapshot?.bench.running && <button onClick={() => void run({ kind: 'Stop' })}>Stop</button>}
+        {snapshot?.bench.running && (
+          <button onClick={() => void run({ kind: 'Stop' })}>Stop</button>
+        )}
         <div className="compat-anchor">
           <button className="compat-badge" onClick={() => setCompat(!compat)}>
             <ShieldQuestion size={14} />
-            <span>DS</span>
-            <span className="muted">Unknown</span>
+            <span className="muted">
+              {snapshot?.compatibility ?? 'Unknown'}
+              {snapshot?.compatibility === 'PC only' ? ` (${snapshot.issues.length})` : ''}
+            </span>
           </button>
           {compat && (
             <div className="popover">
-              <strong>DS compatibility · Unknown</strong>
+              <strong>DS compatibility · {snapshot?.compatibility ?? 'Unknown'}</strong>
               <p>
-                Full hardware compatibility checks arrive in later stages. Stage 1 packages are
-                exported for PC.
+                Checks cover the current project's formats and DS budgets. Hardware testing remains
+                a separate step.
               </p>
-              <button
-                disabled={!snapshot?.manifest}
-                onClick={() => {
-                  void run({ kind: 'Validate' });
-                  setCompat(false);
-                }}
-              >
-                Validate stage 1 edits
+              {snapshot?.issues.map((issue, i) => (
+                <div className="issue" key={i}>
+                  <button
+                    onClick={() => {
+                      openWorkspace('Explorer');
+                      void run({ kind: 'Select', path: issue.location });
+                    }}
+                  >
+                    {issue.location}
+                  </button>
+                  <p>{issue.message}</p>
+                  <small>{issue.why}</small>
+                </div>
+              ))}
+              <button disabled={!snapshot?.manifest} onClick={() => void run({ kind: 'Validate' })}>
+                Recheck compatibility
               </button>
             </div>
           )}
@@ -356,7 +420,13 @@ export function App() {
         <span>/</span>
         <strong>{workspace}</strong>
         <div className="grow" />
-        {(workspace === 'Model' || workspace === 'Track') && sceneInfo && <span>{sceneInfo.budget.polygons.toLocaleString()} polys · {sceneInfo.budget.vertices.toLocaleString()} verts · {sceneInfo.issues.length} course issues</span>}
+        {(workspace === 'Model' || workspace === 'Track') && sceneInfo && (
+          <span>
+            {sceneInfo.budget.polygons.toLocaleString()} polys ·{' '}
+            {sceneInfo.budget.vertices.toLocaleString()} verts · {sceneInfo.issues.length} course
+            issues
+          </span>
+        )}
         <button onClick={() => set({ paletteOpen: true })}>
           <Search size={12} />
           Search commands<kbd>Ctrl Shift P</kbd>
@@ -419,6 +489,8 @@ export function App() {
         <span className="stage-label">STAGES 2 + 3</span>
       </footer>
       {settingsOpen && <Settings />}
+      {exportOpen && <ExportDialog />}
+      {createOpen && <CreateDialog />}
       {paletteOpen && <CommandPalette />}
     </div>
   );

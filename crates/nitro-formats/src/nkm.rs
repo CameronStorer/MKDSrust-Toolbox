@@ -51,7 +51,7 @@ impl Nkm {
         }
         let version = u16le(b, 4)?;
         let h = u16le(b, 6)? as usize;
-        if h < 8 || (h - 8) % 4 != 0 {
+        if h < 8 || !(h - 8).is_multiple_of(4) {
             return Err(error(6, "invalid NKM header size"));
         }
         slice(b, 0, h)?;

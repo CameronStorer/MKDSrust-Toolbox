@@ -43,6 +43,8 @@ pub fn files() -> BTreeMap<String, Vec<u8>> {
         ("art/studio.nclr".into(), palette),
         ("art/studio.ncgr".into(), tiles),
         ("art/studio.nscr".into(), screen),
+        ("art/studio.ncer".into(), nitro_formats::synthetic::ncer()),
+        ("art/studio.nanr".into(), nitro_formats::synthetic::nanr()),
         ("language/en.bmg".into(), text.write()),
     ]))
     .expect("generated archive")

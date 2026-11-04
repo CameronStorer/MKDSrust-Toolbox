@@ -7,7 +7,10 @@ use toolbox_core::{
 };
 fn main() -> toolbox_core::Result<()> {
     let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let folder = root.join(".cache/demo-project-stage2");
+    let folder = root.join(format!(
+        ".cache/demo-project-{}",
+        &toolbox_core::session::hash(&synthetic::rom())[..12]
+    ));
     std::fs::create_dir_all(&folder)?;
     let session = RomSession::from_bytes(
         synthetic::rom(),
@@ -35,6 +38,19 @@ fn main() -> toolbox_core::Result<()> {
     let out = root.join("app/src/demo.json");
     std::fs::write(out, serde_json::to_vec_pretty(&snapshot)?)?;
     let session = service.session.as_ref().unwrap();
+    let cell = toolbox_core::preview::cell_image(
+        None,
+        session,
+        "data/Studio/demo.carc/art/studio.ncer",
+        None,
+        None,
+        0,
+        0,
+    )?;
+    std::fs::write(
+        root.join("app/public/demo/cell.png"),
+        toolbox_core::preview::png(&cell)?,
+    )?;
     let scene = toolbox_core::scene::CourseScene::load(
         None,
         session,

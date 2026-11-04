@@ -1,55 +1,67 @@
-# Stage 1 status — 2026-11-03
+# Toolbox status — 2026-11-03
 
-Stage 1 is implemented and the combined working tree has been reconciled. The required local commits remain
-blocked: this session has read-only access to `.git`; `git add` and `git commit` fail creating `.git/index.lock`
-with Permission denied. All source, documentation and screenshots therefore remain uncommitted on `main`.
-Nothing was pushed, and the builder repository was not modified.
+## Stage 2 checkpoint
 
-## Done
+Done: NSBMD/GX meshes, bones/materials/skinning, NSBCA joint animation, animation header listings,
+exact NKM section round-trips, KCL triangles/octree; textured/skinned GLB and collision OBJ exports.
+Model and read-only Track have navigation, timeline, overlays, selection, outliner and budgets.
+Test Bench discovers portable installs, installs/replaces/enables packages, launches/stops and captures logs,
+queries/caches courses, supplies race subsets and restarts with Ctrl+R. The tuple type error and onboarding's
+positional command references are fixed. All rule 5 checks and 25 browser tests passed at this checkpoint.
 
-- One bounded format implementation: LZ77 with splice recompression; NARC/CARC with nested directories and
-  metadata-preserving rebuilding; read-only ROM header/FNT/FAT, ARM sections, overlays and banner;
-  NCLR/NCGR/NSCR/BMG readers and writers; read-only NSBTX dictionaries and all seven texture decoders.
-  Duplicate builder parsers and unused format helpers were removed.
-- Rust-owned projects with ROM hashes, editable source deltas, global apply/revert history, nested archive
-  rebuilding, deterministic BSDIFF40/add packages, path/size/content checks and recursive Stage 1 validation.
-  The CLI implements ls, extract, PNG/JSON conversion, pack and validate.
-- Tauri/React shell with four active dockable workspaces, persistent layouts, themes, settings/keybindings,
-  command palette, onboarding, virtualized Explorer/hex, live palette rendering and range adjustments,
-  BMG text/control chips, project metadata/revert/pack and shared history. IPC types are generated from Rust;
-  images and hex bytes use binary transport. OFL fonts and notices are bundled.
-- Windows/Linux CI and 20 regenerated synthetic screenshots in `docs/screenshots/`. Browser fixtures come
-  from the Rust generator, including messages, tile indices and actual synthetic file bytes.
+## Stage 3 checkpoint — done at a basic end-to-end level
 
-## Verification
+- File/Overview Export for DS: ROM and/or BPS pickers, clean-ROM/output collision protection, verified rebuild,
+  changed/in-place/moved files, sizes, warnings and Show in folder. Compatibility issues are listed from Rust
+  validation; packaging retains DS claims only when checks pass. Allow PC-only features defaults off.
+- New Project accepts clean ROM, modded ROM or BPS. Imported bases are stored only as `base.bps` with clean hash
+  and source provenance. Working sessions apply the base in memory; later edits reopen against that base.
+  Final BPS output is verified against the clean ROM. Overview lists added/removed/changed files and code/overlays.
+  Code/removal bases use DS output; MKDSrust packages support filesystem deltas and report unsupported bases.
+- Play targets: configured emulator plus patched ROM in the per-user cache; MKDSrust with course listing,
+  character/kart ids, 1–8 racers, logs/Stop/last-run; remembered flashcart folder export. Reload restarts.
+- NCGR and NSBTX pencil, fill, line, rectangle, eyedropper and select/move, palette indices/direct colour,
+  zoom, pixel/tile grids and project undo/redo. Paint preserves exact indices and does not grow texture files.
+- PNG import uses deterministic median cut and optional error-diffusion dithering, before/after preview,
+  size/VRAM readout, and one undo step for graphics plus palette. Encodes 4/16/256-colour, a3i5, a5i3 and direct
+  textures, including palette creation for direct-only texture containers; repacks pools on format changes.
+  PNG export covers palette, tile, screen, texture, cell and animation-frame previews (default first frame).
+- NCER compositions use companion NCGR/NCLR; NANR frame lists and playback include translation/scale/rotation.
+  Recipes cover menu recolouring, item icon replacement and kart textures. All IPC types are regenerated from Rust.
 
-Passed locally on Windows: `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`,
-`cargo test --workspace`, app lint/typecheck/vitest/production build, and the Tauri `cargo build`.
-There are 28 executed synthetic Rust tests, 5 vitest tests and 25 passing Playwright tests (20 captures plus
-5 workflows). Cargo used `.cache/cargo` offline throughout. `MKDS_ROM` was unset, so the optional retail test
-skipped its body; it is implemented and keeps every ROM-derived byte in memory.
+## Partial / next
 
-The installed builder accepted the generated synthetic manifest and patches through `--pack-mod`. PC exports
-omit the optional `platforms` field, whose contract default is PC, to support older v1 parsers. A DS claim is
-downgraded with a warning. Actual launcher GUI installation and Linux/macOS execution were not exercised here.
+4×4 texture encoding, IPS import and cell-position editing remain the named stretch goals. NSBTA/NSBTP/NSBMA
+list headers only. The cell viewer is a basic fixed-stage preview: external OAM affine matrices, VRAM-transfer
+banks, multi-cell animations and exact NANR loop policies remain partial. PNG imports preserve existing image
+dimensions; painting uses raw tiles rather than an NSCR's reused/flipped view. Converting a texture's palette
+format may require updating its separate model material binding; automatic material repair is later work.
 
-## Run
+DS budgets are conservative format/model-set estimates, not live frame measurements or a hardware certification.
+New top-level ROM files/archive members, full FNT reconstruction and xdelta remain outside the inherited DS
+rebuilder. Its existing-file growth/move path is used here; imported bases retain their own filesystem/code.
+Next: run the opt-in suite against an owned ROM and smoke-test emulator/DS/MKDSrust installs, then the model-import,
+rigging, track-authoring, audio and code roadmap. No real game install or hardware was exercised in this session.
 
-With Rust stable, Node 22 and the Tauri prerequisites installed: `cd app`, `npm ci`, `npm run tauri dev`.
-The current checkout already has npm dependencies. Choose your AMCE revision 0 ROM, then create a project in
-a separate folder. Edits save immediately; Overview packs `build/<id>-<version>.zip`.
-From the repository root, `cargo run -p toolbox-cli -- --help` lists the headless commands.
+## Verification and run
 
-For this cached environment, first set PowerShell `$env:CARGO_HOME="$PWD/.cache/cargo"` and
-`$env:CARGO_NET_OFFLINE='true'` at the repository root. For browser checks in `app/`, set
-`$env:PLAYWRIGHT_BROWSERS_PATH="$PWD/../.cache/playwright"` and `$env:MKDSTB_SCREENSHOT_PREVIEW='1'`, then run
-`npm run test:e2e`. The sandbox denies the ancestor-directory reads needed by Vite's dev dependency optimizer;
-the verified preview mode uses a separate ignored `.cache/screenshots-dist` and leaves the native build intact.
-Normal environments use the default Vite dev capture mode. Full command examples are in `README.md`.
+Passed locally on Windows: `cargo fmt --check`, workspace Clippy with `-D warnings`, workspace tests,
+app lint/typecheck/Vitest/build and the Tauri `cargo build`. Six Vitest and 28 Playwright tests pass;
+synthetic screenshots cover all workspaces in both themes plus export, base changes and PNG painting/import.
+`MKDS_ROM` is unset: opt-in bodies skip. New synthetic tests cover encoders, paint/import history, cells,
+clean-ROM protection and imported-base-plus-edit BPS reproduction. No Nintendo data was added.
 
-## Outside Stage 1 / remaining
+With Rust stable, Node 22 and Tauri prerequisites: in `app/`, `npm ci`, then `npm run tauri dev`.
+Open an AMCE revision 0 dump outside the project; create/open a project. Double-click models/courses/cells in
+Explorer. Texture & 2D offers paint/import/recipes. Overview exports for DS. Configure emulator/install/flashcart
+paths in Settings and choose the Play target in Test Bench. MKDSrust course discovery uses Refresh courses;
+engine class stays disabled because the game does not support it. CLI: `cargo run -p toolbox-cli -- --help`.
 
-PNG palette import/quantization is the optional stretch goal and is not implemented. New top-level files can be
-added through the core API/edits folder; inserting new members into existing archives is unsupported. NSBTX and
-ROMs remain read-only, history is session-local, and 3D/audio/code/Test Bench/full DS checks remain future stages.
-The required local commits, including screenshot commits, still need a session with writable Git metadata.
+Cached PowerShell from repository root: `$env:CARGO_HOME="$PWD/.cache/cargo"`;
+`$env:CARGO_NET_OFFLINE='true'`. Browser tests from `app/`:
+`$env:PLAYWRIGHT_BROWSERS_PATH="$PWD/../.cache/playwright"`; `$env:MKDSTB_SCREENSHOT_PREVIEW='1'`;
+`npm run test:e2e`. Regenerate synthetic assets with `cargo run -p toolbox-core --example demo`.
+For local ROM checks, set `MKDS_ROM` and run `cargo test -p toolbox-core --test retail_opt_in --test stage3`;
+exports use disposable temporary directories outside the repository.
+
+Changes are uncommitted. Nothing was pushed; Git metadata and the builder repository were not modified.

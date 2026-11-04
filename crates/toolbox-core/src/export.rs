@@ -11,17 +11,17 @@ use nitro_formats::{bps, rom_build};
 use serde::Serialize;
 use std::{collections::BTreeMap, path::Path};
 
-#[derive(Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, specta::Type)]
 pub struct ExportResult {
     /// ROM files that changed (archive edits roll up to their archive).
     pub changed: Vec<String>,
     /// Files rewritten in place / moved to the end of the ROM.
     pub in_place: Vec<String>,
     pub moved: Vec<String>,
-    pub rom_size: usize,
+    pub rom_size: u32,
     pub rom_written: Option<String>,
     pub patch_written: Option<String>,
-    pub patch_size: Option<usize>,
+    pub patch_size: Option<u32>,
     /// DS-compatibility and validation notes that didn't stop the export.
     pub warnings: Vec<String>,
 }
@@ -78,12 +78,26 @@ pub fn export_ds(
     {
         return Err(Error::Invalid(format!("fix this first: {}", e.message)));
     }
-    let warnings = issues.iter().map(|i| i.message.clone()).collect();
-    let (rom, report, changed) = build_rom(project, session)?;
-    let patch = bps_out.map(|_| bps::create(session.rom.bytes(), &rom));
+    let mut warnings: Vec<String> = issues.iter().map(|i| i.message.clone()).collect();
+    if let Some(base) = &project.config.base {
+        warnings.push(format!(
+            "Based on {} ({}). Publishing requires the original author's credit or permission.",
+            base.source_name, base.source_sha256
+        ));
+    }
+    if rom_out.is_none() && bps_out.is_none() {
+        return Err(Error::Invalid("choose a ROM and/or BPS output".into()));
+    }
+    let (rom, report, mut changed) = build_rom(project, session)?;
+    for c in crate::base::changes(session)? {
+        if !changed.contains(&c.path) {
+            changed.push(c.path);
+        }
+    }
+    let patch = bps_out.map(|_| bps::create(session.clean_bytes(), &rom));
     if let Some(p) = &patch {
         // the patch must reproduce the ROM exactly from the clean one
-        if bps::apply(session.rom.bytes(), p)? != rom {
+        if bps::apply(session.clean_bytes(), p)? != rom {
             return Err(Error::Invalid(
                 "internal error: the BPS patch does not reproduce the build".into(),
             ));
@@ -91,11 +105,25 @@ pub fn export_ds(
     }
     for (out, what) in [(rom_out, "ROM"), (bps_out, "patch")] {
         if let Some(path) = out {
-            if path.canonicalize().ok() == session.path.canonicalize().ok() {
+            if path
+                .canonicalize()
+                .is_ok_and(|p| session.path.canonicalize().is_ok_and(|s| p == s))
+            {
                 return Err(Error::Invalid(format!(
                     "the {what} would overwrite your clean ROM; choose another file"
                 )));
             }
+        }
+    }
+    if let (Some(a), Some(b)) = (rom_out, bps_out) {
+        let resolve = |p: &Path| -> Result<std::path::PathBuf> {
+            Ok(p.parent().unwrap_or(Path::new(".")).canonicalize()?.join(
+                p.file_name()
+                    .ok_or_else(|| Error::Invalid("missing output name".into()))?,
+            ))
+        };
+        if resolve(a)? == resolve(b)? {
+            return Err(Error::Invalid("ROM and patch outputs must differ".into()));
         }
     }
     if let Some(path) = rom_out {
@@ -108,10 +136,10 @@ pub fn export_ds(
         changed,
         in_place: report.in_place,
         moved: report.moved,
-        rom_size: report.size,
+        rom_size: report.size as u32,
         rom_written: rom_out.map(|p| p.display().to_string()),
         patch_written: bps_out.map(|p| p.display().to_string()),
-        patch_size: patch.as_ref().map(Vec::len),
+        patch_size: patch.as_ref().map(|p| p.len() as u32),
         warnings,
     })
 }

@@ -42,9 +42,13 @@ impl Kcl {
         let n = u32le(b, 4)? as usize;
         let t = u32le(b, 8)? as usize + 16;
         let o = u32le(b, 12)? as usize;
-        if !(60 <= p && p <= n && n <= t && t <= o && o <= b.len())
-            || (n - p) % 12 != 0
-            || (o - t) % 16 != 0
+        if !(60 <= p
+            && p <= n
+            && n <= t
+            && t <= o
+            && o <= b.len()
+            && (n - p).is_multiple_of(12)
+            && (o - t).is_multiple_of(16))
             || (t - n) % 6 > 2
         {
             return Err(error(0, "invalid KCL table offsets"));
