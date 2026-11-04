@@ -5,7 +5,14 @@ fn course_glb_embeds_texture_skin_animation_and_collision() {
     let scene = CourseScene::load(None, &s, "data/Course/studio.carc/course_map.nkm").unwrap();
     assert_eq!(scene.info.budget.polygons, 4);
     assert_eq!(scene.info.budget.texture_bytes, 128);
-    assert!(scene.info.issues.is_empty(), "{:?}", scene.info.issues);
+    // the synthetic course is a minimal NKM, not a raceable track: only section-count notes are expected
+    let other: Vec<_> = scene
+        .info
+        .issues
+        .iter()
+        .filter(|i| !i.contains("requires at least"))
+        .collect();
+    assert!(other.is_empty(), "{other:?}");
     let glb = scene.glb(true).unwrap();
     assert_eq!(&glb[..4], b"glTF");
     assert_eq!(

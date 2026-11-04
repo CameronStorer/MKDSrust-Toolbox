@@ -151,7 +151,9 @@ pub fn rebuild(
             None
         };
         if let Some((old, overlay)) = special {
-            let compressed = overlay.and_then(|_|crate::blz::compress(data,0)).filter(|b|b.len()<=old.len());
+            let compressed = overlay
+                .and_then(|_| crate::blz::compress(data, 0))
+                .filter(|b| b.len() <= old.len());
             let stored = compressed.as_deref().unwrap_or(data);
             let next = starts
                 .iter()
@@ -183,7 +185,16 @@ pub fn rebuild(
                     return Err(error(table, "overlay loaded size changed"));
                 }
                 // A modified overlay cannot retain the original hash-verification flag.
-                put(&mut out, table + 28, (o.flags & 0xfc00_0000) | if compressed.is_some() {0x0100_0000 | stored.len() as u32}else{0});
+                put(
+                    &mut out,
+                    table + 28,
+                    (o.flags & 0xfc00_0000)
+                        | if compressed.is_some() {
+                            0x0100_0000 | stored.len() as u32
+                        } else {
+                            0
+                        },
+                );
             } else {
                 put(&mut out, 0x20, at as u32);
                 put(&mut out, 0x2c, data.len() as u32);
@@ -231,7 +242,8 @@ pub fn rebuild(
         .max()
         .unwrap_or(0)
         .max(section_end);
-    if new_used > used {
+    // only grow the used-size field when something was placed past it (an unchanged build stays byte-identical)
+    if (!report.moved.is_empty() || section_end > used) && new_used > used {
         put(&mut out, 0x80, new_used as u32);
     }
     let mut cap = out[0x14];
@@ -261,8 +273,18 @@ pub fn rebuild(
             check.file(path)
         };
         let decoded = if path.starts_with("system/overlay9/") {
-            actual.map(|b| if b.len() == data.len() {Ok(b.to_vec())}else{crate::blz::decompress(b)}).transpose()?
-        } else { None };
+            actual
+                .map(|b| {
+                    if b.len() == data.len() {
+                        Ok(b.to_vec())
+                    } else {
+                        crate::blz::decompress(b)
+                    }
+                })
+                .transpose()?
+        } else {
+            None
+        };
         if decoded.as_deref().or(actual) != Some(data.as_slice()) {
             return Err(error(0, format!("rebuilt ROM does not read back {path}")));
         }

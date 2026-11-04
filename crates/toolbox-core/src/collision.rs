@@ -19,7 +19,15 @@ impl Default for AttributeTable {
             floor: mkds_data::collision_attribute(0, false, true),
             wall: mkds_data::collision_attribute(8, true, false),
             floor_angle_degrees: 50.,
-            materials: vec![("boost".into(),mkds_data::collision_attribute(18,false,true)),("wading".into(),mkds_data::collision_attribute(3,false,true)),
+            materials: vec![
+                (
+                    "boost".into(),
+                    mkds_data::collision_attribute(18, false, true),
+                ),
+                (
+                    "wading".into(),
+                    mkds_data::collision_attribute(3, false, true),
+                ),
                 (
                     "road".into(),
                     mkds_data::collision_attribute(0, false, true),

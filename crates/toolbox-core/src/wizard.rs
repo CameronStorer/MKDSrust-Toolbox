@@ -76,8 +76,18 @@ pub enum Action {
         vertices: Vec<u32>,
         bone: u32,
     },
-    RigPaint {path:String,part:u32,triangles:Vec<u32>,bone:u32},
-    Checkpoint {path:String,index:u32,left:[f32;2],right:[f32;2]},
+    RigPaint {
+        path: String,
+        part: u32,
+        triangles: Vec<u32>,
+        bone: u32,
+    },
+    Checkpoint {
+        path: String,
+        index: u32,
+        left: [f32; 2],
+        right: [f32; 2],
+    },
     Table {
         overlay: Option<u32>,
         address: u32,
@@ -159,19 +169,44 @@ pub fn apply(p: &mut Project, s: &RomSession, action: Action) -> Result<Report> 
             draft.edit(&path, m.write()?, "Paint bone assignment", s)?;
             Report::default()
         }
-        Action::RigPaint {path,part,triangles,bone} => {
-            let mut model=loaded(&draft,s,&path)?;
-            let m=model.models.first_mut().ok_or_else(||invalid("empty model"))?;
-            let mesh=m.meshes.get(part as usize).ok_or_else(||invalid("choose a model part"))?;
-            let mut vertices=vec![];
-            for triangle in triangles {let at=triangle as usize*3;let ids=mesh.indices.get(at..at+3).ok_or_else(||invalid("triangle outside model"))?;vertices.extend_from_slice(ids);}
-            reassign(m,part as usize,&vertices,bone as usize)?;
-            draft.edit(&path,model.write()?,"Paint bone assignments",s)?;Report::default()
+        Action::RigPaint {
+            path,
+            part,
+            triangles,
+            bone,
+        } => {
+            let mut model = loaded(&draft, s, &path)?;
+            let m = model
+                .models
+                .first_mut()
+                .ok_or_else(|| invalid("empty model"))?;
+            let mesh = m
+                .meshes
+                .get(part as usize)
+                .ok_or_else(|| invalid("choose a model part"))?;
+            let mut vertices = vec![];
+            for triangle in triangles {
+                let at = triangle as usize * 3;
+                let ids = mesh
+                    .indices
+                    .get(at..at + 3)
+                    .ok_or_else(|| invalid("triangle outside model"))?;
+                vertices.extend_from_slice(ids);
+            }
+            reassign(m, part as usize, &vertices, bone as usize)?;
+            draft.edit(&path, model.write()?, "Paint bone assignments", s)?;
+            Report::default()
         }
-        Action::Checkpoint {path,index,left,right} => {
-            let mut n=nitro_formats::nkm::Nkm::parse(draft.bytes(s,&path)?)?;
-            crate::track_wizard::move_checkpoint(&mut n,index as usize,left,right)?;
-            draft.edit(&path,n.write()?,"Move checkpoint gate",s)?;Report::default()
+        Action::Checkpoint {
+            path,
+            index,
+            left,
+            right,
+        } => {
+            let mut n = nitro_formats::nkm::Nkm::parse(draft.bytes(s, &path)?)?;
+            crate::track_wizard::move_checkpoint(&mut n, index as usize, left, right)?;
+            draft.edit(&path, n.write()?, "Move checkpoint gate", s)?;
+            Report::default()
         }
         Action::Table {
             overlay,
@@ -606,14 +641,31 @@ pub fn kart_from(
         let path = existing_model_path(s, &format!("kart/{dir}/kart_{slot}.nsbmd"), menu)?;
         edits.insert(path.replace(".nsbmd", ".nsbtx"), tx.write());
         edits.insert(path, bytes.clone());
-        let shadow_suffix=format!("kart/shadow/sh_{slot}.nsbmd");
-        if let Ok(shadow_path)=existing_model_path(s,&shadow_suffix,menu) {
-            let mut shadow=loaded(p,s,&shadow_path)?;
-            let sm=shadow.models.first_mut().ok_or_else(||invalid("base shadow is empty"))?;
-            let (lo,hi)=bounds(&m)?;
-            let mesh=nitro_formats::model::Mesh {name:"footprint".into(),positions:vec![[lo[0],0.,lo[2]],[hi[0],0.,lo[2]],[hi[0],0.,hi[2]],[lo[0],0.,hi[2]]],indices:vec![0,2,1,0,3,2],material:0,..Default::default()};
-            sm.meshes=vec![mesh];sm.materials.truncate(1);sm.bones.truncate(1);sm.matrix_count=1;
-            edits.insert(shadow_path,shadow.write()?);
+        let shadow_suffix = format!("kart/shadow/sh_{slot}.nsbmd");
+        if let Ok(shadow_path) = existing_model_path(s, &shadow_suffix, menu) {
+            let mut shadow = loaded(p, s, &shadow_path)?;
+            let sm = shadow
+                .models
+                .first_mut()
+                .ok_or_else(|| invalid("base shadow is empty"))?;
+            let (lo, hi) = bounds(&m)?;
+            let mesh = nitro_formats::model::Mesh {
+                name: "footprint".into(),
+                positions: vec![
+                    [lo[0], 0., lo[2]],
+                    [hi[0], 0., lo[2]],
+                    [hi[0], 0., hi[2]],
+                    [lo[0], 0., hi[2]],
+                ],
+                indices: vec![0, 2, 1, 0, 3, 2],
+                material: 0,
+                ..Default::default()
+            };
+            sm.meshes = vec![mesh];
+            sm.materials.truncate(1);
+            sm.bones.truncate(1);
+            sm.matrix_count = 1;
+            edits.insert(shadow_path, shadow.write()?);
         }
     }
     for archive in ["KartModelMainA", "KartModelMenu"] {

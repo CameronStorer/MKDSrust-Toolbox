@@ -42,7 +42,9 @@ fn vec(b: &mut [u8], at: usize, p: [f32; 3]) -> Result<()> {
     Ok(())
 }
 pub fn resample(line: &[[f32; 3]], count: usize) -> Result<Vec<[f32; 3]>> {
-    if line.len() < 3 || !(16..=128).contains(&count) || line.iter().flatten().any(|v| !v.is_finite())
+    if line.len() < 3
+        || !(16..=128).contains(&count)
+        || line.iter().flatten().any(|v| !v.is_finite())
     {
         return Err(err("draw a closed line with at least three finite points"));
     }
@@ -268,17 +270,53 @@ pub fn validate(n: &Nkm) -> Vec<String> {
     }
     errors
 }
-pub fn move_checkpoint(n: &mut Nkm,index: usize,left: [f32;2],right: [f32;2]) -> Result<()> {
-    let section=n.sections.iter_mut().find(|s|s.kind=="CPOI").ok_or_else(||err("no checkpoints"))?;
-    let record=section.entries.get_mut(index).ok_or_else(||err("checkpoint index outside section"))?;
-    let dx=left[0]-right[0];let dz=left[1]-right[1];let length=dx.hypot(dz);
-    if !length.is_finite() || length<0.01 {return Err(err("checkpoint gate must have a finite nonzero width"));}
-    for (k,v) in [left[0],left[1],right[0],right[1],-dz/length,dx/length].iter().enumerate() {fx(record,k*4,*v)?;}
+pub fn move_checkpoint(n: &mut Nkm, index: usize, left: [f32; 2], right: [f32; 2]) -> Result<()> {
+    let section = n
+        .sections
+        .iter_mut()
+        .find(|s| s.kind == "CPOI")
+        .ok_or_else(|| err("no checkpoints"))?;
+    let record = section
+        .entries
+        .get_mut(index)
+        .ok_or_else(|| err("checkpoint index outside section"))?;
+    let dx = left[0] - right[0];
+    let dz = left[1] - right[1];
+    let length = dx.hypot(dz);
+    if !length.is_finite() || length < 0.01 {
+        return Err(err("checkpoint gate must have a finite nonzero width"));
+    }
+    for (k, v) in [
+        left[0],
+        left[1],
+        right[0],
+        right[1],
+        -dz / length,
+        dx / length,
+    ]
+    .iter()
+    .enumerate()
+    {
+        fx(record, k * 4, *v)?;
+    }
     for i in 0..section.entries.len() {
-        let a=&section.entries[i];let b=&section.entries[(i+1)%section.entries.len()];
-        let goto=i16::from_le_bytes(a[28..30].try_into().unwrap());
-        let center=|b: &[u8]| -> Result<[f32;2]> {Ok([(nitro_formats::nkm::fx(b,0)?+nitro_formats::nkm::fx(b,8)?)*0.5,(nitro_formats::nkm::fx(b,4)?+nitro_formats::nkm::fx(b,12)?)*0.5])};
-        let ca=center(a)?;let cb=center(b)?;let distance=if goto==-1 {(ca[0]-cb[0]).hypot(ca[1]-cb[1])}else{-1.};fx(&mut section.entries[i],24,distance)?;
+        let a = &section.entries[i];
+        let b = &section.entries[(i + 1) % section.entries.len()];
+        let goto = i16::from_le_bytes(a[28..30].try_into().unwrap());
+        let center = |b: &[u8]| -> Result<[f32; 2]> {
+            Ok([
+                (nitro_formats::nkm::fx(b, 0)? + nitro_formats::nkm::fx(b, 8)?) * 0.5,
+                (nitro_formats::nkm::fx(b, 4)? + nitro_formats::nkm::fx(b, 12)?) * 0.5,
+            ])
+        };
+        let ca = center(a)?;
+        let cb = center(b)?;
+        let distance = if goto == -1 {
+            (ca[0] - cb[0]).hypot(ca[1] - cb[1])
+        } else {
+            -1.
+        };
+        fx(&mut section.entries[i], 24, distance)?;
     }
     Ok(())
 }
