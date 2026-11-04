@@ -4,6 +4,10 @@ pub const ARM9: &str = "system/arm9.bin";
 pub fn overlay_path(id: u32) -> String {
     format!("system/overlay9/{id}.bin")
 }
+/// Project-only export policy; never emitted as a ROM member.
+pub fn overlay_policy(id: u32) -> String {
+    format!("system/overlay9/{id}.uncompressed")
+}
 pub fn module_params(bytes: &[u8]) -> Option<usize> {
     bytes[..bytes.len().min(0x8000)]
         .windows(8)

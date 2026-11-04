@@ -843,6 +843,46 @@ impl Service {
         Ok(())
     }
     pub fn binary(&self, r: BinaryRequest) -> Result<Vec<u8>> {
+        if r.mode == "seated-reference" {
+            let s = self.session()?;
+            if r.bank > 36 || r.texture > 12 {
+                return Err(Error::Invalid("choose a kart and character slot".into()));
+            }
+            let mut scene = crate::scene::CourseScene::load(self.project.as_ref(), s, &r.path)?;
+            let path = "data/KartModelMainA.carc/kartoffsetdata.bin";
+            let data = match &self.project {
+                Some(p) => p.bytes(s, path)?,
+                None => s.file(path)?,
+            };
+            let seat = nitro_formats::nkm::vec3(
+                data,
+                r.bank as usize * 224 + 68 + r.texture as usize * 12,
+            )?;
+            let sign = if r.path.contains("/character/") {
+                1.
+            } else {
+                -1.
+            };
+            if let Some(container) = &mut scene.model {
+                for model in &mut container.models {
+                    for bone in &mut model.bones {
+                        if bone.parent.is_none() {
+                            for (k, v) in seat.iter().enumerate() {
+                                bone.translation[k] += v * sign;
+                            }
+                        }
+                    }
+                    for mesh in &mut model.meshes {
+                        for p in &mut mesh.positions {
+                            for (k, v) in seat.iter().enumerate() {
+                                p[k] += v * sign;
+                            }
+                        }
+                    }
+                }
+            }
+            return crate::model::glb(scene.model.as_ref(), scene.textures.as_ref(), &[], None);
+        }
         if r.mode == "audio-wav" {
             let s = self.session()?;
             let bytes = match &self.project {

@@ -1,7 +1,7 @@
 {
   "parts": [
     {
-      "name": "platform",
+      "name": "shape0",
       "triangles": 4,
       "material": 0
     }
@@ -1181,13 +1181,17 @@
   ],
   "budget": {
     "polygons": 4,
-    "vertices": 8,
+    "vertices": 12,
     "texture_bytes": 128,
     "palette_bytes": 8,
     "matrices": 1,
     "reasons": []
   },
-  "issues": [],
+  "issues": [
+    "KTP2: requires at least 1 records",
+    "KTPJ: requires at least 2 records",
+    "CPOI: requires at least 16 records"
+  ],
   "collision_types": [
     0,
     1

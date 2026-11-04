@@ -86,6 +86,13 @@ pub struct CourseSlot {
 pub struct Catalog {
     pub courses: Vec<CourseSlot>,
     pub cups: Vec<Vec<u32>>,
+    pub karts: Vec<KartStats>,
+}
+#[derive(Clone, Debug, Serialize, Type)]
+pub struct KartStats {
+    pub id: u32,
+    pub speed: f32,
+    pub acceleration: f32,
 }
 pub fn catalog(p: Option<&Project>, s: &RomSession) -> Result<Catalog> {
     let bytes = match p {
@@ -131,7 +138,25 @@ pub fn catalog(p: Option<&Project>, s: &RomSession) -> Result<Catalog> {
                 .collect::<Result<_>>()?,
         );
     }
-    Ok(Catalog { courses, cups })
+    let path = "data/KartModelMainA.carc/kartphysicalparam.bin";
+    let data = match p {
+        Some(p) => p.bytes(s, path)?,
+        None => s.file(path)?,
+    };
+    let karts = (0..37)
+        .map(|id| {
+            Ok(KartStats {
+                id,
+                speed: nitro_formats::nkm::fx(data, id as usize * 152 + 16)?,
+                acceleration: nitro_formats::nkm::fx(data, id as usize * 152 + 20)?,
+            })
+        })
+        .collect::<Result<Vec<_>>>()?;
+    Ok(Catalog {
+        courses,
+        cups,
+        karts,
+    })
 }
 /// Decode the actual ARM branch and MOV-immediate instead of embedding retail table bytes.
 pub fn music_record(bytes: &[u8], course: u32) -> Result<u32> {

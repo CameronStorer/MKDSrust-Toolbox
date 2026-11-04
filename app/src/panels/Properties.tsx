@@ -67,6 +67,28 @@ export function Properties() {
           <div className="issue" key={n}>
             <strong>{i.message}</strong>
             <p>{i.why}</p>
+            {i.fix === 'track-routes' && (
+              <button
+                onClick={() =>
+                  void useStore
+                    .getState()
+                    .run({ kind: 'Wizard', action: { kind: 'RepairTrack', path: i.location } })
+                }
+              >
+                Fix missing sections and routes
+              </button>
+            )}
+            {i.fix === 'collision-budget' && (
+              <button
+                onClick={() =>
+                  void useStore
+                    .getState()
+                    .run({ kind: 'Wizard', action: { kind: 'CompactCollision', path: i.location } })
+                }
+              >
+                Compact collision tree
+              </button>
+            )}
           </div>
         ))
       ) : (

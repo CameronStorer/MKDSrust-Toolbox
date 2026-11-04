@@ -276,7 +276,7 @@ fn owned_rom_wizards_export_and_reopen_without_writing_game_bytes() {
         &mut p,
         &s,
         &track_wizard::TrackOptions {
-            course: 22,
+            course: 20,
             source: String::new(),
             line: vec![[0.2, 0.2], [0.8, 0.2], [0.8, 0.8], [0.2, 0.8]],
             width: 100.,
@@ -286,6 +286,13 @@ fn owned_rom_wizards_export_and_reopen_without_writing_game_bytes() {
         source(),
     )
     .unwrap();
+    let limits = track_wizard::file_budgets(&s).unwrap();
+    for path in &report.files {
+        track_wizard::check_file_size(path, p.bytes(&s, path).unwrap(), &limits).unwrap();
+        if path.ends_with(".kcl") {
+            assert!(p.bytes(&s, path).unwrap().len() <= nitro_formats::kcl::MAX_BYTES);
+        }
+    }
     let (bytes, _, _) = toolbox_core::export::build_rom(&p, &s).unwrap();
     let r = RomSession::from_bytes(bytes, s.path.clone()).unwrap();
     for path in &report.files {

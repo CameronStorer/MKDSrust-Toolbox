@@ -5,6 +5,9 @@ use crate::{
     nkm::{fx, vec3},
     slice, u16le, u32le, Result,
 };
+/// Course collision lives in a fixed DS heap, independently of ROM capacity.
+pub const WARN_BYTES: usize = 150_000;
+pub const MAX_BYTES: usize = 215_000;
 #[derive(Clone, Debug)]
 pub struct Prism {
     pub height: f32,
@@ -129,16 +132,26 @@ impl Kcl {
             }
             bounds.push((lo, hi));
         }
-        let span = (0..3)
-            .map(|k| (maximum[k] - minimum[k]).ceil() as u32)
-            .max()
-            .unwrap()
-            .max(1);
-        let cube = span
-            .checked_next_power_of_two()
-            .ok_or_else(|| error(0, "collision bounds overflow"))?;
-        if cube > 524288 {
-            return Err(error(0, "collision bounds exceed DS range"));
+        // Retail addresses a grid of cubic roots with x | y << shiftY | z << shiftZ.
+        // Do not turn the whole map into one root: the coordinate shift is the
+        // cube edge exponent, not the map's largest extent.
+        let cube = 1024u32;
+        let mut counts = [0u32; 3];
+        for k in 0..3 {
+            let span = (maximum[k] - minimum[k]).ceil() as u32;
+            if span > 524288 {
+                return Err(error(0, "collision bounds exceed DS range"));
+            }
+            counts[k] = span.div_ceil(cube).max(1).next_power_of_two();
+        }
+        // Give even a tiny map a real x stride (and nonzero y/z shifts).
+        counts[0] = counts[0].max(2);
+        let roots = counts.iter().map(|&v| v as usize).product::<usize>();
+        if roots * 4 > MAX_BYTES {
+            return Err(error(
+                0,
+                "KCL root grid exceeds 215 KB; reduce the map bounds",
+            ));
         }
         let mut b = vec![0; 60];
         put32(&mut b, 0, 60);
@@ -175,13 +188,22 @@ impl Kcl {
         put32(&mut b, 56, 25 * 4096);
         for (k, value) in minimum.iter().enumerate() {
             put32(&mut b, 20 + k * 4, fx32(*value)? as u32);
-            put32(&mut b, 32 + k * 4, !(cube - 1));
+            put32(&mut b, 32 + k * 4, !(cube * counts[k] - 1));
         }
         put32(&mut b, 44, cube.ilog2());
+        put32(&mut b, 48, counts[0].ilog2());
+        put32(&mut b, 52, counts[0].ilog2() + counts[1].ilog2());
+        if b.len() + roots * 4 > MAX_BYTES {
+            return Err(error(0, format!("KCL geometry needs {} bytes before its tree; limit is {MAX_BYTES} bytes (215 KB). Simplify collision", b.len())));
+        }
         struct Tree<'a> {
             bytes: Vec<u8>,
             bounds: &'a [([f32; 3], [f32; 3])],
             work: usize,
+            leaf_size: f32,
+            leaf_count: usize,
+            limit: usize,
+            lists: BTreeMap<Vec<u16>, usize>,
         }
         impl Tree<'_> {
             fn node(
@@ -199,14 +221,8 @@ impl Kcl {
                 self.work += ids.len() + 1;
                 // Coarse leaves keep the file small: the game loads the KCL into a fixed course heap, and a 499 KB
                 // octree for a flat 2000-unit map crashed the race on load (retail courses stay under ~215 KB).
-                if ids.len() <= 32 || size <= 256. || depth >= 5 {
-                    let data = self.bytes.len();
-                    crate::put32(&mut self.bytes, at, 0x80000000 | ((data - 2 - base) as u32));
-                    for &id in ids {
-                        self.bytes.extend((id + 1).to_le_bytes());
-                    }
-                    self.bytes.extend(0u16.to_le_bytes());
-                    return Ok(());
+                if ids.len() <= self.leaf_count || size <= self.leaf_size || depth >= 5 {
+                    return self.leaf(base, at, ids);
                 }
                 let half = size / 2.;
                 let children = (0..8)
@@ -226,39 +242,91 @@ impl Kcl {
                     })
                     .collect::<Vec<_>>();
                 if children.iter().map(|(_, ids)| ids.len()).sum::<usize>() >= ids.len() * 6 {
-                    let data = self.bytes.len();
-                    crate::put32(&mut self.bytes, at, 0x80000000 | ((data - 2 - base) as u32));
-                    for &id in ids {
-                        self.bytes.extend((id + 1).to_le_bytes());
-                    }
-                    self.bytes.extend(0u16.to_le_bytes());
-                    return Ok(());
+                    return self.leaf(base, at, ids);
                 }
                 crate::g3d::align(&mut self.bytes, 4);
                 let target = self.bytes.len();
                 crate::put32(&mut self.bytes, at, (target - base) as u32);
                 self.bytes.resize(target + 32, 0);
+                self.check_size()?;
                 for (i, (child, list)) in children.iter().enumerate() {
                     self.node(target, target + i * 4, *child, half, list, depth + 1)?;
                 }
                 Ok(())
             }
+            fn check_size(&self) -> Result<()> {
+                if self.bytes.len() > self.limit {
+                    return Err(error(0, "KCL tree exceeds remaining course heap budget"));
+                }
+                Ok(())
+            }
+            fn leaf(&mut self, base: usize, at: usize, ids: &[u16]) -> Result<()> {
+                // A leaf pointer is unsigned relative to its parent's table. Only
+                // reuse a list when it is forward-addressable from this parent.
+                let data = self.lists.get(ids).copied().filter(|&p| p >= base + 2);
+                let data = if let Some(data) = data {
+                    data
+                } else {
+                    let data = self.bytes.len();
+                    for &id in ids {
+                        self.bytes.extend((id + 1).to_le_bytes());
+                    }
+                    self.bytes.extend(0u16.to_le_bytes());
+                    self.lists.insert(ids.to_vec(), data);
+                    data
+                };
+                self.check_size()?;
+                crate::put32(&mut self.bytes, at, 0x80000000 | ((data - 2 - base) as u32));
+                Ok(())
+            }
         }
-        let mut tree = Tree {
-            bytes: vec![0; 4],
-            bounds: &bounds,
-            work: 0,
-        };
-        tree.node(
-            0,
-            0,
-            minimum,
-            cube as f32,
-            &(0..triangles.len() as u16).collect::<Vec<_>>(),
-            0,
-        )?;
-        b.extend(tree.bytes);
-        Self::parse(&b)
+        // Coarsen candidate lists before refusing. This preserves every prism
+        // and every intersecting cell; it trades query speed for bounded RAM.
+        for (leaf_size, leaf_count) in [(256., 32), (512., 64), (1024., usize::MAX)] {
+            let mut tree = Tree {
+                bytes: vec![0; roots * 4],
+                bounds: &bounds,
+                work: 0,
+                leaf_size,
+                leaf_count,
+                limit: MAX_BYTES - b.len(),
+                lists: BTreeMap::new(),
+            };
+            let build = (|| -> Result<()> {
+                for z in 0..counts[2] {
+                    for y in 0..counts[1] {
+                        for x in 0..counts[0] {
+                            let cell = [x, y, z];
+                            let lo = std::array::from_fn(|k| minimum[k] + (cell[k] * cube) as f32);
+                            let ids = bounds
+                                .iter()
+                                .enumerate()
+                                .filter(|(_, (min, max))| {
+                                    (0..3).all(|k| min[k] <= lo[k] + cube as f32 && max[k] >= lo[k])
+                                })
+                                .map(|(id, _)| id as u16)
+                                .collect::<Vec<_>>();
+                            let at = (x + counts[0] * (y + counts[1] * z)) as usize * 4;
+                            tree.node(0, at, lo, cube as f32, &ids, 0)?;
+                        }
+                    }
+                }
+                Ok(())
+            })();
+            if build.is_ok() {
+                b.extend(tree.bytes);
+                return Self::parse(&b);
+            }
+        }
+        Err(error(0, format!("KCL exceeds {MAX_BYTES} bytes (215 KB), even with coarse leaves; simplify collision or reduce map bounds")))
+    }
+    pub fn budget_warning(&self) -> Option<String> {
+        (self.raw.len() > WARN_BYTES).then(|| {
+            format!(
+                "KCL uses {} bytes; above the 150 KB warning budget (215 KB maximum)",
+                self.raw.len()
+            )
+        })
     }
     /// Attribute edits preserve geometry and the original spatial tree.
     pub fn repaint(&mut self, triangles: &[usize], attribute: u16) -> Result<()> {

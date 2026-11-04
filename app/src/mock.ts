@@ -3,6 +3,7 @@ import demo from './demo.json';
 import assets from './demo-assets.json';
 import sceneData from './demo-scene.json';
 import audioData from './demo-audio.json';
+import wizardData from './demo-wizards.json';
 let sceneState = structuredClone(sceneData);
 import type { SceneInfo } from './bindings';
 export async function scene(path: string): Promise<SceneInfo> {
@@ -23,6 +24,11 @@ import { rgb555 } from './colors';
 import type { Request, Snapshot, BinaryRequest, TextToken } from './bindings';
 const clone = <T>(v: T): T => structuredClone(v);
 const state = clone(demo) as Snapshot;
+state.wizard_catalog = clone(wizardData.catalog);
+state.names = clone(wizardData.names);
+state.files.push(
+  ...clone(wizardData.files).filter((f) => !state.files.some((old) => old.path === f.path)),
+);
 state.bench.games = [
   { id: 'studio', name: 'Synthetic native game', path: '/MKDSrust/games/studio' },
 ];
@@ -33,6 +39,10 @@ const original = [...colors];
 const messages = clone(assets.messages) as Record<string, typeof state.preview.messages>;
 const originalMessages = clone(messages);
 interface Edit {
+  oldCatalog: Snapshot['wizard_catalog'];
+  newCatalog: Snapshot['wizard_catalog'];
+  oldNames: Snapshot['names'];
+  newNames: Snapshot['names'];
   oldScene: typeof sceneState;
   newScene: typeof sceneState;
   oldAudio: typeof state.audio_resources;
@@ -89,6 +99,8 @@ function updatePreview() {
   state.can_redo = cursor < history.length;
 }
 export async function dispatch(r: Request): Promise<Snapshot> {
+  const oldCatalog = clone(state.wizard_catalog),
+    oldNames = clone(state.names);
   const oldPixels = clone(pixels);
   const oldScene = clone(sceneState),
     oldAudio = clone(state.audio_resources);
@@ -99,6 +111,64 @@ export async function dispatch(r: Request): Promise<Snapshot> {
   let editedPath = '';
   let title = '';
   switch (r.kind) {
+    case 'Wizard': {
+      const a = r.action;
+      title = 'Beginner recipe';
+      let files: string[] = [];
+      if (a.kind === 'Character')
+        files = state.files
+          .filter((f) => f.path.includes('/character/') && /\.nsb(md|tx|ca)$/.test(f.path))
+          .slice(0, 10)
+          .map((f) => f.path);
+      else if (a.kind === 'Kart')
+        files = state.files
+          .filter((f) => f.path.includes('/kart/') && f.path.endsWith('.nsbmd'))
+          .slice(0, 4)
+          .map((f) => f.path);
+      else if (a.kind === 'Track')
+        files = state.files
+          .filter(
+            (f) =>
+              f.path.includes(`/studio${a.options.course}.carc/`) ||
+              f.path.includes(`/studio${a.options.course}Tex.carc/`),
+          )
+          .map((f) => f.path);
+      else if (a.kind === 'Cup') {
+        state.wizard_catalog.cups[a.slot] = a.courses;
+        files = ['system/arm9.bin'];
+      } else if (a.kind === 'KartStats') {
+        state.wizard_catalog.karts[a.slot] = {
+          id: a.slot,
+          speed: a.speed,
+          acceleration: a.acceleration,
+        };
+        files = ['data/KartModelMainA.carc/kartphysicalparam.bin'];
+      } else if (a.kind === 'Music') {
+        files = ['data/Sound/sound_data.sdat', 'system/arm9.bin'];
+        state.song_report = { ram_bytes: 8192, route: 'sampled', loop_sample: 0 };
+      } else if (a.kind === 'Icon' || a.kind === 'Portrait') files = [a.tiles];
+      else if (a.kind === 'Name') {
+        const name = state.names.find((n) => n.path === a.path && n.index === a.index);
+        if (name) name.text = a.text;
+        files = [a.path];
+      } else if (a.kind === 'Table') files = ['system/arm9.bin'];
+      else if (a.kind === 'SetWheels')
+        files = [
+          'data/KartModelMainA.carc/kartoffsetdata.bin',
+          'data/KartModelMenu.carc/kartoffsetdata.bin',
+        ];
+      else files = [a.path];
+      for (const f of files) if (!state.edited.includes(f)) state.edited.push(f);
+      state.wizard_report = {
+        files,
+        polygons: 6,
+        warnings:
+          a.kind === 'Track'
+            ? ['Generated track files checked against synthetic size limits.']
+            : [],
+      };
+      break;
+    }
     case 'Model':
       title = r.action.kind === 'Import' ? 'Import model' : r.action.kind + ' model';
       editedPath = r.path;
@@ -259,6 +329,9 @@ export async function dispatch(r: Request): Promise<Snapshot> {
         Object.assign(messages, clone(h.oldMessages));
         state.edited = clone(h.oldEdited);
         state.manifest = clone(h.oldManifest);
+        state.names = clone(h.oldNames);
+        state.wizard_catalog = clone(h.oldCatalog);
+        state.wizard_report = null;
       }
       break;
     case 'Redo':
@@ -271,6 +344,9 @@ export async function dispatch(r: Request): Promise<Snapshot> {
         Object.assign(messages, clone(h.newMessages));
         state.edited = clone(h.newEdited);
         state.manifest = clone(h.newManifest);
+        state.names = clone(h.newNames);
+        state.wizard_catalog = clone(h.newCatalog);
+        state.wizard_report = null;
       }
       break;
     case 'Settings':
@@ -319,6 +395,10 @@ export async function dispatch(r: Request): Promise<Snapshot> {
   if (title) {
     history = history.slice(0, cursor);
     history.push({
+      oldCatalog,
+      newCatalog: clone(state.wizard_catalog),
+      oldNames,
+      newNames: clone(state.names),
       title,
       oldScene,
       newScene: clone(sceneState),
@@ -342,7 +422,7 @@ export async function dispatch(r: Request): Promise<Snapshot> {
 }
 export async function binary(r: BinaryRequest): Promise<ArrayBuffer> {
   if (r.mode === 'audio-wav') return (await fetch('/demo/tone.wav')).arrayBuffer();
-  if (r.mode === 'glb' || r.mode === 'course-glb')
+  if (r.mode === 'glb' || r.mode === 'course-glb' || r.mode === 'seated-reference')
     return (await fetch(`/demo/${r.mode === 'glb' ? 'model' : 'course'}.glb`)).arrayBuffer();
   if (r.mode === 'palette-colors') return Uint16Array.from(colors).buffer;
   if (r.mode === 'paint-data') {

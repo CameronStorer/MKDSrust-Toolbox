@@ -1,7 +1,8 @@
 {
   "wizard_catalog": {
     "courses": [],
-    "cups": []
+    "cups": [],
+    "karts": []
   },
   "wizard_report": null,
   "names": [],
@@ -14,14 +15,20 @@
   "compatibility": "DS OK",
   "bench": {
     "courses": [],
-    "games": [],
+    "games": [
+      {
+        "id": "MKDSrust",
+        "name": "Native game",
+        "path": "C:\\Users\\cam\\Desktop\\MKDSrust-windows-x64(2)\\games\\MKDSrust"
+      }
+    ],
     "running": false,
     "logs": [],
     "last_run": null
   },
   "rom_path": "/user/roms/synthetic.nds",
   "game": "AMCE",
-  "rom_hash": "500c1175166499f57760e444c59a1c9253426f8fea4096ba154eccb4170c8ab1",
+  "rom_hash": "c05679cdb4015084ff43c2e9261c18f7a52bae59dc5905fe86e97759662d5138",
   "project_path": "/projects/colour-study",
   "manifest": {
     "id": "studio.colour-study",
@@ -40,7 +47,7 @@
       "name": "studio.carc",
       "format": "carc",
       "category": "Archive",
-      "size": 1260,
+      "size": 1352,
       "offset": 656,
       "compressed": true,
       "archive": true,
@@ -84,7 +91,7 @@
       "name": "course_model.nsbmd",
       "format": "nsbmd",
       "category": "Model",
-      "size": 520,
+      "size": 1040,
       "offset": 1596,
       "compressed": false,
       "archive": false,
@@ -96,7 +103,7 @@
       "format": "nsbtx",
       "category": "Texture",
       "size": 300,
-      "offset": 2116,
+      "offset": 2636,
       "compressed": false,
       "archive": false,
       "parent": "data/Course/studio.carc"
@@ -107,7 +114,7 @@
       "format": "carc",
       "category": "Archive",
       "size": 11368,
-      "offset": 1916,
+      "offset": 2008,
       "compressed": true,
       "archive": true,
       "parent": null
@@ -195,7 +202,7 @@
       "format": "bmg",
       "category": "Text",
       "size": 192,
-      "offset": 13284,
+      "offset": 13376,
       "compressed": false,
       "archive": false,
       "parent": null
@@ -206,7 +213,7 @@
       "format": "nsbtx",
       "category": "Texture",
       "size": 300,
-      "offset": 13476,
+      "offset": 13568,
       "compressed": false,
       "archive": false,
       "parent": null
@@ -215,7 +222,12 @@
   "edited": [
     "data/Studio/demo.carc/art/studio.nclr"
   ],
-  "history": [],
+  "history": [
+    {
+      "title": "Shift palette toward lavender",
+      "applied": true
+    }
+  ],
   "selected": "data/Studio/demo.carc/art/studio.nclr",
   "preview": {
     "cells": [],
@@ -488,7 +500,7 @@
   "settings": {
     "allow_pc_only": false,
     "play_target": "emulator",
-    "emulator_path": "",
+    "emulator_path": "C:\\Users\\cam\\Desktop\\MKDSrust-windows-x64(2)\\MKDSrust.exe",
     "flashcart_path": "",
     "race": {
       "course": null,
@@ -496,8 +508,8 @@
       "kart": null,
       "racers": null
     },
-    "rom_path": "",
-    "install_path": "",
+    "rom_path": "C:\\Users\\cam\\Desktop\\gamefile.nds",
+    "install_path": "C:\\Users\\cam\\Desktop\\MKDSrust-windows-x64(2)",
     "theme": "dark",
     "navigation": "Blender",
     "camera_speed": 1.0,
@@ -506,6 +518,6 @@
   "warnings": [],
   "issues": [],
   "pack": null,
-  "can_undo": false,
+  "can_undo": true,
   "can_redo": false
 }

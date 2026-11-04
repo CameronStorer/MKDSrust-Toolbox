@@ -9,6 +9,10 @@ fn put(b: &mut [u8], at: usize, n: u32) {
     b[at..at + 4].copy_from_slice(&n.to_le_bytes());
 }
 pub fn files() -> BTreeMap<String, Vec<u8>> {
+    let authored_model = nitro_formats::model::Nsbmd::parse(&nitro_formats::synthetic::nsbmd())
+        .unwrap()
+        .write()
+        .unwrap();
     let colors = (0..256)
         .map(|i| ((i % 32) | ((i / 8 % 32) << 5) | ((31 - i / 8 % 32) << 10)) as u16)
         .collect::<Vec<_>>();
@@ -55,10 +59,7 @@ pub fn files() -> BTreeMap<String, Vec<u8>> {
             "data/Course/studio.carc".into(),
             nitro_formats::compress(
                 &Narc::new(BTreeMap::from([
-                    (
-                        "course_model.nsbmd".into(),
-                        nitro_formats::synthetic::nsbmd(),
-                    ),
+                    ("course_model.nsbmd".into(), authored_model),
                     ("course_model.nsbtx".into(), texture_fixture()),
                     (
                         "course_model.nsbca".into(),
@@ -163,6 +164,50 @@ pub fn wizard_rom() -> Vec<u8> {
     let mut files = files();
     let model = nitro_formats::synthetic::nsbmd();
     let tx = texture_fixture();
+    let portrait_tiles = Ncgr::new(
+        16,
+        16,
+        4,
+        false,
+        (0..128 * 128).map(|i| (i % 255 + 1) as u8).collect(),
+    )
+    .unwrap()
+    .write();
+    let portrait_palette = Nclr::new(
+        &(0..256).map(|i| i as u16 * 100 % 32768).collect::<Vec<_>>(),
+        true,
+        false,
+    )
+    .write();
+    for (archive, members) in [
+        (
+            "Scene/Race_us",
+            BTreeMap::from([("race_s_o.NCGR".into(), portrait_tiles.clone())]),
+        ),
+        (
+            "Scene/Race",
+            BTreeMap::from([
+                ("race_s_o.NCLR".into(), portrait_palette.clone()),
+                ("race_s.NCER".into(), nitro_formats::synthetic::ncer()),
+            ]),
+        ),
+    ] {
+        files.insert(
+            format!("data/{archive}.carc"),
+            Narc::new(members).unwrap().write(),
+        );
+    }
+    let mut item = nitro_formats::model::Nsbmd::parse(&model).unwrap();
+    item.textures = Some(nitro_formats::texture::Nsbtx::parse(&tx).unwrap());
+    files.insert(
+        "data/MainRace.carc".into(),
+        Narc::new(BTreeMap::from([(
+            "Item/it_studio.nsbmd".into(),
+            item.write().unwrap(),
+        )]))
+        .unwrap()
+        .write(),
+    );
     let mut archives: BTreeMap<String, BTreeMap<String, Vec<u8>>> = BTreeMap::new();
     for (id, (code, dir)) in mkds_data::CHARACTERS.iter().enumerate() {
         for archive in [
@@ -224,14 +269,113 @@ pub fn wizard_rom() -> Vec<u8> {
     let refs: Vec<_> = names.iter().map(String::as_str).collect();
     files.insert(
         "data/Main2D_us.carc".into(),
-        Narc::new(BTreeMap::from([(
-            "common.bmg".into(),
-            Bmg::new(&refs).write(),
-        )]))
+        Narc::new(BTreeMap::from([
+            ("common.bmg".into(), Bmg::new(&refs).write()),
+            ("player_character_L.nce.ncgr".into(), portrait_tiles),
+            ("player_character_L_o.NCLR".into(), portrait_palette),
+            (
+                "player_character_L.nce.ncer".into(),
+                nitro_formats::synthetic::ncer(),
+            ),
+        ]))
         .unwrap()
         .write(),
     );
-    files.insert("data/Sound/sound_data.sdat".into(), sound_fixture());
+    let mut sound = nitro_formats::audio::Sdat::parse(&sound_fixture()).unwrap();
+    sound.info[2].resize(16, sound.info[2][0].clone());
+    let mut events = vec![];
+    let mut entries = vec![];
+    for character in 0..13 {
+        let offset = events.len() as u32;
+        events.extend([60 + character, 100, 1, 255]);
+        for _ in 0..14 {
+            entries.push(nitro_formats::audio::SequenceArchiveEntry {
+                offset: Some(offset),
+                bank: 3 + character as u16,
+                volume: 100,
+                priorities: [64, 64, 0],
+            });
+        }
+    }
+    let id = sound.files.len() as u32;
+    sound.files.push(
+        nitro_formats::audio::Ssar::new(entries, events)
+            .unwrap()
+            .write()
+            .unwrap(),
+    );
+    sound.info[1].resize(3, None);
+    sound.info[1][2] = Some(id.to_le_bytes().to_vec());
+    files.insert("data/Sound/sound_data.sdat".into(), sound.write().unwrap());
+    // Authored reference course for synthetic budget checks. It has realistic
+    // capacities without embedding a single byte from a retail course.
+    let mut reference = nitro_formats::model::Nsbmd::parse(&model).unwrap();
+    let mut mesh = nitro_formats::model::Mesh {
+        name: "reference".into(),
+        ..Default::default()
+    };
+    for z in 0..32 {
+        for x in 0..32 {
+            let i = mesh.positions.len() as u32;
+            let x = x as f32 * 60.;
+            let z = z as f32 * 60.;
+            mesh.positions.extend([
+                [x, 0., z],
+                [x + 60., 0., z],
+                [x, 0., z + 60.],
+                [x + 60., 0., z + 60.],
+            ]);
+            mesh.indices.extend([i, i + 2, i + 1, i + 1, i + 2, i + 3]);
+        }
+    }
+    reference.models[0].meshes = vec![mesh];
+    let collision = crate::collision::generate(
+        &reference.models[0],
+        &crate::collision::AttributeTable::default(),
+    )
+    .unwrap();
+    let route = crate::track_wizard::generate_nkm(
+        20,
+        3,
+        &[
+            [0., 0., 0.],
+            [1800., 0., 0.],
+            [1800., 0., 1800.],
+            [0., 0., 1800.],
+        ],
+        150.,
+        32,
+    )
+    .unwrap();
+    files.insert(
+        "data/Course/reference.carc".into(),
+        Narc::new(BTreeMap::from([
+            ("course_model.nsbmd".into(), reference.write().unwrap()),
+            ("course_collision.kcl".into(), collision.write()),
+            ("course_map.nkm".into(), route.write().unwrap()),
+        ]))
+        .unwrap()
+        .write(),
+    );
+    files.insert(
+        "data/Course/referenceTex.carc".into(),
+        Narc::new(BTreeMap::from([
+            (
+                "Map2D/local.NCGR".into(),
+                Ncgr::new(32, 32, 4, false, vec![0; 65536]).unwrap().write(),
+            ),
+            (
+                "Map2D/local.NCLR".into(),
+                Nclr::new(&vec![0; 256], true, false).write(),
+            ),
+            (
+                "Map2D/local2.NSCR".into(),
+                Nscr::new(256, 256, &vec![0; 1024]).unwrap().write(),
+            ),
+        ]))
+        .unwrap()
+        .write(),
+    );
     for stem in ["studio22", "studio20", "studio20D"] {
         files.insert(
             format!("data/Course/{stem}.carc"),

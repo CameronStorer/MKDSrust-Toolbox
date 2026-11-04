@@ -102,6 +102,23 @@ impl Nkm {
     }
     /// Fixed-size replacement records are writable without losing noncanonical layout/padding.
     pub fn write(&self) -> Result<Vec<u8>> {
+        let original = Self::parse(&self.raw)?;
+        if original.version != self.version
+            || original.sections.len() != self.sections.len()
+            || original.sections.iter().zip(&self.sections).any(|(a, b)| {
+                a.kind != b.kind || a.entries.len() != b.entries.len() || a.at != b.at
+            })
+        {
+            return Self::new_version(
+                self.version,
+                &self
+                    .sections
+                    .iter()
+                    .map(|s| (s.kind.as_str(), s.entries.clone()))
+                    .collect::<Vec<_>>(),
+            )?
+            .write();
+        }
         let mut b = self.raw.clone();
         for s in &self.sections {
             for (i, e) in s.entries.iter().enumerate() {
@@ -120,17 +137,24 @@ impl Nkm {
     }
     /// Construct synthetic or author-owned records in the current (v37) layout.
     pub fn new(sections: &[(&str, Vec<Vec<u8>>)]) -> Result<Self> {
+        Self::new_version(37, sections)
+    }
+    pub fn new_version(version: u16, sections: &[(&str, Vec<Vec<u8>>)]) -> Result<Self> {
         let h = 8 + sections.len() * 4;
         if h > u16::MAX as usize {
             return Err(error(0, "too many NKM sections"));
         }
         let mut b = vec![0; h];
         b[..4].copy_from_slice(b"NKMD");
-        b[4..6].copy_from_slice(&37u16.to_le_bytes());
+        b[4..6].copy_from_slice(&version.to_le_bytes());
         b[6..8].copy_from_slice(&(h as u16).to_le_bytes());
         for (i, (kind, entries)) in sections.iter().enumerate() {
             if kind.len() != 4 {
                 return Err(error(0, "invalid section name"));
+            }
+            let size = stride(kind, version).ok_or_else(|| error(0, "unknown NKM section"))?;
+            if entries.iter().any(|e| e.len() != size) || (*kind == "STAG" && entries.len() != 1) {
+                return Err(error(0, "invalid NKM record size/count"));
             }
             let offset = (b.len() - h) as u32;
             put32(&mut b, 8 + i * 4, offset);

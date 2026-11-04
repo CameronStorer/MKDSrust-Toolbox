@@ -14,6 +14,11 @@ export const layerDefaults = {
 };
 export type Layer = keyof typeof layerDefaults;
 interface SceneState {
+  reference: string;
+  referenceKart: number;
+  referenceCharacter: number;
+  pickWheels: boolean;
+  wheelCenters: [number, number, number][];
   part: number;
   triangle: number;
   gizmo: 'off' | 'translate' | 'rotate' | 'scale';
@@ -34,6 +39,11 @@ interface SceneState {
   set: (state: Partial<Omit<SceneState, 'set'>>) => void;
 }
 export const useScene = create<SceneState>((set) => ({
+  reference: '',
+  referenceKart: 0,
+  referenceCharacter: 0,
+  pickWheels: false,
+  wheelCenters: [],
   part: 0,
   triangle: 0,
   gizmo: 'off',

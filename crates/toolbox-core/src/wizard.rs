@@ -40,6 +40,39 @@ pub struct Report {
 #[derive(Clone, Debug, Deserialize, Type)]
 #[serde(tag = "kind")]
 pub enum Action {
+    CompactCollision {
+        path: String,
+    },
+    AlignModel {
+        path: String,
+        ground: bool,
+        center: bool,
+    },
+    SetWheels {
+        slot: u32,
+        wheels: [[f32; 3]; 4],
+    },
+    Portrait {
+        model: String,
+        tiles: String,
+        palette: String,
+        cells: String,
+        index: u32,
+    },
+    KartStats {
+        slot: u32,
+        speed: f32,
+        acceleration: f32,
+    },
+    RepairTrack {
+        path: String,
+    },
+    PlaceObject {
+        path: String,
+        donor: Option<String>,
+        index: u32,
+        position: [f32; 3],
+    },
     Character {
         options: CharacterOptions,
     },
@@ -106,6 +139,125 @@ pub fn apply(p: &mut Project, s: &RomSession, action: Action) -> Result<Report> 
     let mut draft = Project::in_memory(s, p.config.manifest.clone(), p.edits.clone())?;
     let before = draft.edits.clone();
     let mut report = match action {
+        Action::CompactCollision { path } => {
+            let kcl = nitro_formats::kcl::Kcl::parse(&preview::plain(draft.bytes(s, &path)?)?)?;
+            let compact = nitro_formats::kcl::Kcl::from_triangles(&kcl.triangles()?)?;
+            draft.edit(&path, compact.write(), "Compact collision tree", s)?;
+            Report {
+                warnings: compact.budget_warning().into_iter().collect(),
+                ..Report::default()
+            }
+        }
+        Action::AlignModel {
+            path,
+            ground,
+            center,
+        } => {
+            let mut model = loaded(&draft, s, &path)?;
+            let m = model
+                .models
+                .first_mut()
+                .ok_or_else(|| invalid("empty model"))?;
+            let (lo, hi) = bounds(m)?;
+            let translation = [
+                if center { -(lo[0] + hi[0]) / 2. } else { 0. },
+                if ground { -lo[1] } else { 0. },
+                if center { -(lo[2] + hi[2]) / 2. } else { 0. },
+            ];
+            for mesh in &mut m.meshes {
+                nitro_formats::model::transform(
+                    mesh,
+                    math::trs(translation, [0., 0., 0., 1.], [1.; 3]),
+                )?;
+            }
+            draft.edit(&path, model.write()?, "Align model", s)?;
+            Report::default()
+        }
+        Action::SetWheels { slot, wheels } => {
+            if slot > 36 {
+                return Err(invalid("choose kart 0..36"));
+            }
+            for archive in ["KartModelMainA", "KartModelMenu"] {
+                let path = format!("data/{archive}.carc/kartoffsetdata.bin");
+                let mut bytes = draft.bytes(s, &path)?.to_vec();
+                for (i, wheel) in wheels.into_iter().enumerate() {
+                    crate::tables::write(
+                        &mut bytes,
+                        0,
+                        slot * 224 + 20 + i as u32 * 12,
+                        &wheel.map(crate::tables::Value::Fx32),
+                    )?;
+                }
+                draft.edit(&path, bytes, "Place kart wheels", s)?;
+            }
+            Report::default()
+        }
+        Action::Portrait {
+            model,
+            tiles,
+            palette,
+            cells,
+            index,
+        } => {
+            let m = loaded(&draft, s, &model)?;
+            let image =
+                crate::icon::portrait(m.models.first().ok_or_else(|| invalid("model is empty"))?)?;
+            crate::icon::edit(&mut draft, s, &tiles, &palette, &cells, index, &image)?;
+            Report::default()
+        }
+        Action::KartStats {
+            slot,
+            speed,
+            acceleration,
+        } => {
+            if slot > 36
+                || !speed.is_finite()
+                || !(0.1..=30.).contains(&speed)
+                || !acceleration.is_finite()
+                || !(0.0001..=2.).contains(&acceleration)
+            {
+                return Err(invalid(
+                    "choose a kart 0..36, speed 0.1..30 and acceleration 0.0001..2",
+                ));
+            }
+            for (archive, stride) in [("KartModelMainA", 152), ("KartModelMenu", 148)] {
+                let path = format!("data/{archive}.carc/kartphysicalparam.bin");
+                let mut bytes = draft.bytes(s, &path)?.to_vec();
+                crate::tables::write(
+                    &mut bytes,
+                    0,
+                    slot * stride + 16,
+                    &[
+                        crate::tables::Value::Fx32(speed),
+                        crate::tables::Value::Fx32(acceleration),
+                    ],
+                )?;
+                draft.edit(&path, bytes, "Edit kart speed and acceleration", s)?;
+            }
+            Report::default()
+        }
+        Action::PlaceObject {
+            path,
+            donor,
+            index,
+            position,
+        } => {
+            crate::track_wizard::place_object(
+                &mut draft,
+                s,
+                &path,
+                donor.as_deref(),
+                index as usize,
+                position,
+            )?;
+            Report::default()
+        }
+        Action::RepairTrack { path } => {
+            let mut n = nitro_formats::nkm::Nkm::parse(&preview::plain(draft.bytes(s, &path)?)?)?;
+            crate::track_wizard::repair(&mut n)?;
+            draft.edit(&path, n.write()?, "Repair track routes", s)?;
+            Report::default()
+        }
         Action::Character { options } => character(&mut draft, s, &options)?,
         Action::Kart { options } => kart(&mut draft, s, &options)?,
         Action::Track { options } => crate::track_wizard::track(&mut draft, s, &options)?,
@@ -215,13 +367,26 @@ pub fn apply(p: &mut Project, s: &RomSession, action: Action) -> Result<Report> 
             uncompressed,
         } => {
             crate::tables::edit(&mut draft, s, overlay, address, &values)?;
-            if overlay.is_none() && uncompressed {
+            if let Some(id) = overlay {
+                draft.edit(
+                    &nitro_formats::executable::overlay_policy(id),
+                    vec![u8::from(uncompressed)],
+                    "Overlay storage policy",
+                    s,
+                )?;
+            }
+            if overlay.is_none() {
                 let path = nitro_formats::executable::ARM9;
                 let mut bytes = draft.bytes(s, path)?.to_vec();
                 let at = nitro_formats::executable::module_params(&bytes)
                     .ok_or_else(|| invalid("module parameters not found"))?;
-                bytes[at + 20..at + 24].fill(0);
-                draft.edit(path, bytes, "Store ARM9 uncompressed", s)?;
+                let end = if uncompressed {
+                    0
+                } else {
+                    mkds_data::ARM9_BASE + s.rom.arm9.len() as u32
+                };
+                bytes[at + 20..at + 24].copy_from_slice(&end.to_le_bytes());
+                draft.edit(path, bytes, "ARM9 storage policy", s)?;
             }
             Report::default()
         }
@@ -494,8 +659,22 @@ pub fn character_from(
         .first()
         .ok_or_else(|| invalid("source has no model"))?
         .clone();
+    let rotation = if o.rotation == [0.; 4] {
+        let (lo, hi) = bounds(&m)?;
+        let axis = (0..3)
+            .max_by(|&a, &b| (hi[a] - lo[a]).total_cmp(&(hi[b] - lo[b])))
+            .unwrap();
+        let h = std::f32::consts::FRAC_1_SQRT_2;
+        match axis {
+            0 => [0., 0., h, h],
+            2 => [-h, 0., 0., h],
+            _ => [0., 0., 0., 1.],
+        }
+    } else {
+        o.rotation
+    };
     for mesh in &mut m.meshes {
-        nitro_formats::model::transform(mesh, math::trs([0.; 3], o.rotation, [1.; 3]))?;
+        nitro_formats::model::transform(mesh, math::trs([0.; 3], rotation, [1.; 3]))?;
     }
     if o.hips > 0. {
         let (lo, hi) = bounds(&m)?;
@@ -567,17 +746,59 @@ pub fn character_from(
         }
         edits.insert(path, bytes);
     }
+    if o.base != o.slot {
+        let path = "data/Sound/sound_data.sdat";
+        let mut sound = nitro_formats::audio::Sdat::parse(p.bytes(s, path)?)?;
+        copy_voice(&mut sound, o.slot as usize, o.base as usize)?;
+        edits.insert(path.into(), sound.write()?);
+    }
     let report = Report {
         files: edits.keys().cloned().collect(),
         polygons: m.meshes.iter().map(|m| m.indices.len() as u32 / 3).sum(),
-        warnings: if o.base != o.slot {
-            vec!["Voice remains selected by the destination character id; donor voice routing is not yet verified".into()]
-        } else {
-            vec![]
-        },
+        warnings: vec![],
     };
     p.edit_many(edits, "New character", s)?;
     Ok(report)
+}
+/// AMCE voice playback indexes sequence archive 2 by character * 14 + event.
+/// Keep the destination bank id (used by preloading), but give it the donor's
+/// bank/wave references and event records. No executable instructions are copied.
+pub fn copy_voice(sound: &mut nitro_formats::audio::Sdat, slot: usize, base: usize) -> Result<()> {
+    if slot >= 13 || base >= 13 {
+        return Err(invalid("voice character outside 0..12"));
+    }
+    let file = sound.resource_file(1, 2)?;
+    let mut voices = nitro_formats::audio::Ssar::parse(&sound.files[file])?;
+    if voices.entries.len() != 13 * 14 {
+        return Err(invalid("unrecognized character voice archive"));
+    }
+    let donor = voices.entries[base * 14..base * 14 + 14].to_vec();
+    let dest_bank = voices.entries[slot * 14].bank;
+    let donor_bank = donor[0].bank;
+    if donor.iter().any(|e| e.bank != donor_bank)
+        || voices.entries[slot * 14..slot * 14 + 14]
+            .iter()
+            .any(|e| e.bank != dest_bank)
+    {
+        return Err(invalid("character voice events use unexpected banks"));
+    }
+    let bank = sound.info[2]
+        .get(donor_bank as usize)
+        .and_then(Clone::clone)
+        .ok_or_else(|| invalid("donor voice bank absent"))?;
+    let dest = sound.info[2]
+        .get_mut(dest_bank as usize)
+        .ok_or_else(|| invalid("destination voice bank absent"))?;
+    *dest = Some(bank);
+    for (target, mut source) in voices.entries[slot * 14..slot * 14 + 14]
+        .iter_mut()
+        .zip(donor)
+    {
+        source.bank = dest_bank;
+        *target = source;
+    }
+    sound.files[file] = voices.write()?;
+    Ok(())
 }
 pub fn kart(p: &mut Project, s: &RomSession, o: &KartOptions) -> Result<Report> {
     let source = crate::model_import::import(std::path::Path::new(&o.source))?;

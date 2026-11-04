@@ -74,6 +74,50 @@ fn check_file(path: &str, bytes: &[u8], depth: usize, budget: &mut usize) -> Vec
     if let Err(e) = parsed {
         return invalid(path, e.to_string());
     }
+    if bytes.starts_with(b"NKMD") {
+        let n = nitro_formats::nkm::Nkm::parse(bytes).expect("validated above");
+        // Mission/battle maps have different requirements. Race wizard and
+        // retail race maps use checkpoints and CPU routes.
+        if n.section("CPOI").is_some_and(|s| !s.entries.is_empty())
+            || n.section("EPOI").is_some_and(|s| !s.entries.is_empty())
+        {
+            for message in crate::track_wizard::validate(&n) {
+                issues.push(Issue {
+                    severity: Severity::Error,
+                    location: path.into(),
+                    message,
+                    why: "A race needs closed routes, checkpoints, starts and respawns".into(),
+                    fix: Some("track-routes".into()),
+                });
+            }
+        }
+    }
+    if path.to_ascii_lowercase().ends_with(".kcl") {
+        if bytes.len() > nitro_formats::kcl::MAX_BYTES {
+            return vec![Issue {
+                severity: Severity::Error,
+                location: path.into(),
+                message: format!(
+                    "KCL uses {} bytes; maximum is 215 KB. Compact the tree or simplify collision",
+                    bytes.len()
+                ),
+                why: "Course collision must fit the fixed DS course heap".into(),
+                fix: Some("collision-budget".into()),
+            }];
+        }
+        if bytes.len() > nitro_formats::kcl::WARN_BYTES {
+            issues.push(Issue {
+                severity: Severity::Warning,
+                location: path.into(),
+                message: format!(
+                    "KCL uses {} bytes; above the 150 KB warning budget",
+                    bytes.len()
+                ),
+                why: "Course collision must fit the fixed DS course heap".into(),
+                fix: Some("collision-budget".into()),
+            });
+        }
+    }
     let mut add = |message: String, why: &str| {
         issues.push(Issue {
             severity: Severity::Warning,
@@ -206,9 +250,30 @@ pub fn validate(project: &Project, session: &RomSession) -> Vec<Issue> {
             }
         }
     }
+    let track_limits = project
+        .edits
+        .keys()
+        .any(|p| crate::track_wizard::file_role(p).is_some())
+        .then(|| crate::track_wizard::file_budgets(session));
     for path in project.edits.keys() {
+        if path.starts_with("system/overlay9/") && path.ends_with(".uncompressed") {
+            continue;
+        }
         match project.bytes(session, path) {
-            Ok(b) => out.extend(Stage1Check.check(path, b)),
+            Ok(b) => {
+                out.extend(Stage1Check.check(path, b));
+                if crate::track_wizard::file_role(path).is_some() {
+                    if let Some(limits) = &track_limits {
+                        let check = match limits {
+                            Ok(limits) => crate::track_wizard::check_file_size(path, b, limits),
+                            Err(e) => Err(crate::Error::Invalid(e.to_string())),
+                        };
+                        if let Err(e) = check {
+                            out.extend(invalid(path, e.to_string()));
+                        }
+                    }
+                }
+            }
             Err(e) => out.push(Issue {
                 severity: Severity::Error,
                 location: path.clone(),

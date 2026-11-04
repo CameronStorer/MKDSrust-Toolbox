@@ -1,12 +1,37 @@
 import { useState } from 'react';
-import { pickFile } from '../backend';
+import { inspectScene, pickFile } from '../backend';
 import { useStore } from '../store';
 import { useScene } from '../scene-view';
-import type { ModelAction, MeshSelection } from '../bindings';
+import type { ModelAction, MeshSelection, SceneEntry } from '../bindings';
 
 export function RigTools() {
   const { info, bone, rigBrush, set } = useScene();
-  return <div className="engine-tools"><div className="section-label">RIGID BONE ASSIGNMENT</div><p>Drag over triangles to assign their vertices to one bone. Preview the base clips in the timeline.</p><label>Assign to bone<select aria-label="Rig bone" value={bone} onChange={(e) => set({ bone: Number(e.target.value) })}>{info?.bones.map((b, i) => <option key={i} value={i}>{i} · {b}</option>)}</select></label><button aria-pressed={rigBrush} onClick={() => set({ rigBrush: !rigBrush })}>{rigBrush ? 'Stop painting weights' : 'Paint bone assignments'}</button></div>;
+  return (
+    <div className="engine-tools">
+      <div className="section-label">RIGID BONE ASSIGNMENT</div>
+      <p>
+        Drag over triangles to assign their vertices to one bone. Preview the base clips in the
+        timeline.
+      </p>
+      <label>
+        Assign to bone
+        <select
+          aria-label="Rig bone"
+          value={bone}
+          onChange={(e) => set({ bone: Number(e.target.value) })}
+        >
+          {info?.bones.map((b, i) => (
+            <option key={i} value={i}>
+              {i} · {b}
+            </option>
+          ))}
+        </select>
+      </label>
+      <button aria-pressed={rigBrush} onClick={() => set({ rigBrush: !rigBrush })}>
+        {rigBrush ? 'Stop painting weights' : 'Paint bone assignments'}
+      </button>
+    </div>
+  );
 }
 
 export function ModelTools() {
@@ -20,6 +45,12 @@ export function ModelTools() {
   const [selection, setSelection] = useState('Part');
   const [bounds, setBounds] = useState('-1,-1,-1,1,1,1');
   const path = info?.model_path;
+  const files = useStore((s) => s.snapshot?.files);
+  const references =
+    files?.filter(
+      (f) => f.format === 'nsbmd' && (f.path.includes('/character/') || f.path.includes('/kart/')),
+    ) ?? [];
+  const placement = useScene();
   const current = info?.parts[part];
   const apply = (action: ModelAction) => {
     if (path) void useStore.getState().run({ kind: 'Model', path, action });
@@ -82,6 +113,106 @@ export function ModelTools() {
         <p className="muted">
           Drag the gizmo to apply one undoable transform. Click a triangle to select a part.
         </p>
+        <div className="engine-buttons">
+          <button
+            onClick={() => {
+              if (path)
+                void useStore.getState().run({
+                  kind: 'Wizard',
+                  action: { kind: 'AlignModel', path, ground: true, center: false },
+                });
+            }}
+          >
+            Snap to ground
+          </button>
+          <button
+            onClick={() => {
+              if (path)
+                void useStore.getState().run({
+                  kind: 'Wizard',
+                  action: { kind: 'AlignModel', path, ground: false, center: true },
+                });
+            }}
+          >
+            Centre under driver
+          </button>
+        </div>
+        <label>
+          Seated reference
+          <select
+            aria-label="Seated reference"
+            value={placement.reference}
+            onChange={(e) => placement.set({ reference: e.target.value })}
+          >
+            <option value="">None</option>
+            {references.map((f) => (
+              <option key={f.path} value={f.path}>
+                {f.path}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Kart slot
+          <input
+            aria-label="Placement kart slot"
+            type="number"
+            min={0}
+            max={36}
+            value={placement.referenceKart}
+            onChange={(e) => placement.set({ referenceKart: Number(e.target.value) })}
+          />
+        </label>
+        <label>
+          Character slot
+          <input
+            aria-label="Placement character slot"
+            type="number"
+            min={0}
+            max={12}
+            value={placement.referenceCharacter}
+            onChange={(e) => placement.set({ referenceCharacter: Number(e.target.value) })}
+          />
+        </label>
+        <button
+          aria-pressed={placement.pickWheels}
+          onClick={() => placement.set({ pickWheels: !placement.pickWheels, wheelCenters: [] })}
+        >
+          {placement.pickWheels ? 'Stop picking wheel centres' : 'Pick four wheel centres'}
+        </button>
+        {placement.pickWheels && (
+          <>
+            <p>
+              Click front left, front right, rear left, rear right. Rotate the view to reach each
+              centre. Positions: {placement.wheelCenters.length} / 4.
+            </p>
+            <textarea
+              aria-label="Picked wheel centres"
+              readOnly
+              value={JSON.stringify(placement.wheelCenters)}
+            />
+            <button
+              disabled={placement.wheelCenters.length !== 4}
+              onClick={() =>
+                void useStore.getState().run({
+                  kind: 'Wizard',
+                  action: {
+                    kind: 'SetWheels',
+                    slot: placement.referenceKart,
+                    wheels: placement.wheelCenters as [
+                      [number, number, number],
+                      [number, number, number],
+                      [number, number, number],
+                      [number, number, number],
+                    ],
+                  },
+                })
+              }
+            >
+              Apply wheel centres
+            </button>
+          </>
+        )}
         <label>
           Target triangles: {Math.min(target, current?.triangles ?? target)} /{' '}
           {current?.triangles ?? 0}
@@ -177,6 +308,11 @@ export function CollisionTools() {
   const { info, brush, attribute, set } = useScene();
   const busy = useStore((s) => s.busy);
   const project = useStore((s) => !!s.snapshot?.project_path);
+  const files = useStore((s) => s.snapshot?.files);
+  const [donor, setDonor] = useState('');
+  const [objects, setObjects] = useState<SceneEntry[]>([]);
+  const [object, setObject] = useState(0);
+  const [position, setPosition] = useState<[number, number, number]>([0, 20, 0]);
   return (
     <div className="engine-tools">
       <div className="section-label">COLLISION TOOLS</div>
@@ -257,6 +393,102 @@ export function CollisionTools() {
           {brush ? 'Brush active' : 'Paint collision'}
         </button>
         <p className="muted">Drag across collision triangles. Each stroke is one undo step.</p>
+        <div className="section-label">OBJECT PALETTE</div>
+        <label>
+          Object family
+          <select
+            aria-label="Object family"
+            value={donor}
+            onChange={(e) => {
+              const path = e.target.value;
+              setDonor(path);
+              setObject(0);
+              setObjects([]);
+              if (path)
+                void inspectScene(path)
+                  .then((scene) =>
+                    setObjects(
+                      scene.entries.filter(
+                        (e) => e.section === 'OBJI' && e.raw[38] === 255 && e.raw[39] === 255,
+                      ),
+                    ),
+                  )
+                  .catch((e: unknown) => useStore.getState().set({ error: String(e) }));
+            }}
+          >
+            <option value="">Item box · global, safe anywhere</option>
+            {files
+              ?.filter((f) => f.path.startsWith('data/Course/') && f.name === 'course_map.nkm')
+              .map((f) => (
+                <option key={f.path} value={f.path}>
+                  {f.path.split('/').at(-2)}
+                </option>
+              ))}
+          </select>
+        </label>
+        {donor && (
+          <label>
+            Donor object
+            <select
+              aria-label="Donor object"
+              value={object}
+              onChange={(e) => setObject(Number(e.target.value))}
+            >
+              {objects.map((o) => (
+                <option key={o.index} value={o.index}>
+                  #{o.index} · type {o.raw[36] | (o.raw[37] << 8)}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+        <div className="wizard-grid">
+          {position.map((v, i) => (
+            <label key={i}>
+              {['X', 'Y', 'Z'][i]}
+              <input
+                aria-label={`Object ${['X', 'Y', 'Z'][i]}`}
+                type="number"
+                value={v}
+                onChange={(e) =>
+                  setPosition(
+                    position.map((p, j) => (i === j ? Number(e.target.value) : p)) as [
+                      number,
+                      number,
+                      number,
+                    ],
+                  )
+                }
+              />
+            </label>
+          ))}
+        </div>
+        <button
+          disabled={!info?.nkm_path || (!!donor && !objects.length)}
+          onClick={() => {
+            if (info?.nkm_path)
+              void useStore.getState().run({
+                kind: 'Wizard',
+                action: {
+                  kind: 'PlaceObject',
+                  path: info.nkm_path,
+                  donor: donor || null,
+                  index: donor
+                    ? objects.some((o) => o.index === object)
+                      ? object
+                      : objects[0].index
+                    : 0,
+                  position,
+                },
+              });
+          }}
+        >
+          Place object
+        </button>
+        <p>
+          Donor objects bring their course model, texture and animation family. Routed objects
+          require their routes first.
+        </p>
       </fieldset>
     </div>
   );

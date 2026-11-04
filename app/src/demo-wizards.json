@@ -1,0 +1,5353 @@
+{
+  "catalog": {
+    "courses": [
+      {
+        "id": 1,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio1",
+        "variants": false
+      },
+      {
+        "id": 2,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio2",
+        "variants": false
+      },
+      {
+        "id": 3,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio3",
+        "variants": false
+      },
+      {
+        "id": 4,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio4",
+        "variants": false
+      },
+      {
+        "id": 5,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio5",
+        "variants": false
+      },
+      {
+        "id": 6,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio6",
+        "variants": false
+      },
+      {
+        "id": 7,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio7",
+        "variants": false
+      },
+      {
+        "id": 8,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio8",
+        "variants": false
+      },
+      {
+        "id": 9,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio9",
+        "variants": false
+      },
+      {
+        "id": 10,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio10",
+        "variants": false
+      },
+      {
+        "id": 11,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio11",
+        "variants": false
+      },
+      {
+        "id": 12,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio12",
+        "variants": false
+      },
+      {
+        "id": 13,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio13",
+        "variants": false
+      },
+      {
+        "id": 14,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio14",
+        "variants": false
+      },
+      {
+        "id": 15,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio15",
+        "variants": false
+      },
+      {
+        "id": 16,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio16",
+        "variants": false
+      },
+      {
+        "id": 17,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio17",
+        "variants": false
+      },
+      {
+        "id": 18,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio18",
+        "variants": false
+      },
+      {
+        "id": 19,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio19",
+        "variants": false
+      },
+      {
+        "id": 20,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio20",
+        "variants": true
+      },
+      {
+        "id": 21,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio21",
+        "variants": false
+      },
+      {
+        "id": 22,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio22",
+        "variants": false
+      },
+      {
+        "id": 23,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio23",
+        "variants": false
+      },
+      {
+        "id": 24,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio24",
+        "variants": false
+      },
+      {
+        "id": 25,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio25",
+        "variants": false
+      },
+      {
+        "id": 26,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio26",
+        "variants": false
+      },
+      {
+        "id": 27,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio27",
+        "variants": false
+      },
+      {
+        "id": 28,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio28",
+        "variants": false
+      },
+      {
+        "id": 29,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio29",
+        "variants": false
+      },
+      {
+        "id": 30,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio30",
+        "variants": false
+      },
+      {
+        "id": 31,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio31",
+        "variants": false
+      },
+      {
+        "id": 32,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio32",
+        "variants": false
+      },
+      {
+        "id": 33,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio33",
+        "variants": false
+      },
+      {
+        "id": 34,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio34",
+        "variants": false
+      },
+      {
+        "id": 35,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio35",
+        "variants": false
+      },
+      {
+        "id": 36,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio36",
+        "variants": false
+      },
+      {
+        "id": 37,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio37",
+        "variants": false
+      },
+      {
+        "id": 38,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio38",
+        "variants": false
+      },
+      {
+        "id": 39,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio39",
+        "variants": false
+      },
+      {
+        "id": 40,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio40",
+        "variants": false
+      },
+      {
+        "id": 41,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio41",
+        "variants": false
+      },
+      {
+        "id": 42,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio42",
+        "variants": false
+      },
+      {
+        "id": 43,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio43",
+        "variants": false
+      },
+      {
+        "id": 44,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio44",
+        "variants": false
+      },
+      {
+        "id": 45,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio45",
+        "variants": false
+      },
+      {
+        "id": 46,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio46",
+        "variants": false
+      },
+      {
+        "id": 47,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio47",
+        "variants": false
+      },
+      {
+        "id": 48,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio48",
+        "variants": false
+      },
+      {
+        "id": 49,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio49",
+        "variants": false
+      },
+      {
+        "id": 50,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio50",
+        "variants": false
+      },
+      {
+        "id": 51,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio51",
+        "variants": false
+      },
+      {
+        "id": 52,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio52",
+        "variants": false
+      },
+      {
+        "id": 53,
+        "music_record": 0,
+        "sequence": 0,
+        "stem": "studio53",
+        "variants": false
+      },
+      {
+        "id": 54,
+        "music_record": null,
+        "sequence": null,
+        "stem": "studio54",
+        "variants": false
+      }
+    ],
+    "cups": [
+      [
+        20,
+        22,
+        20,
+        22
+      ],
+      [
+        20,
+        22,
+        20,
+        22
+      ],
+      [
+        20,
+        22,
+        20,
+        22
+      ],
+      [
+        20,
+        22,
+        20,
+        22
+      ],
+      [
+        20,
+        22,
+        20,
+        22
+      ],
+      [
+        20,
+        22,
+        20,
+        22
+      ],
+      [
+        20,
+        22,
+        20,
+        22
+      ],
+      [
+        20,
+        22,
+        20,
+        22
+      ]
+    ],
+    "karts": [
+      {
+        "acceleration": 0.0,
+        "id": 0,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 1,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 2,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 3,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 4,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 5,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 6,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 7,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 8,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 9,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 10,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 11,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 12,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 13,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 14,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 15,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 16,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 17,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 18,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 19,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 20,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 21,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 22,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 23,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 24,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 25,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 26,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 27,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 28,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 29,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 30,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 31,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 32,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 33,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 34,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 35,
+        "speed": 0.0
+      },
+      {
+        "acceleration": 0.0,
+        "id": 36,
+        "speed": 0.0
+      }
+    ]
+  },
+  "files": [
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "reference.carc",
+      "offset": 54392,
+      "parent": null,
+      "path": "data/Course/reference.carc",
+      "size": 327476
+    },
+    {
+      "archive": false,
+      "category": "Collision",
+      "compressed": false,
+      "format": "kcl",
+      "name": "course_collision.kcl",
+      "offset": 132,
+      "parent": "data/Course/reference.carc",
+      "path": "data/Course/reference.carc/course_collision.kcl",
+      "size": 57206
+    },
+    {
+      "archive": false,
+      "category": "Course",
+      "compressed": false,
+      "format": "nkm",
+      "name": "course_map.nkm",
+      "offset": 57340,
+      "parent": "data/Course/reference.carc",
+      "path": "data/Course/reference.carc/course_map.nkm",
+      "size": 11552
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "course_model.nsbmd",
+      "offset": 68892,
+      "parent": "data/Course/reference.carc",
+      "path": "data/Course/reference.carc/course_model.nsbmd",
+      "size": 258584
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "referenceTex.carc",
+      "offset": 381868,
+      "parent": null,
+      "path": "data/Course/referenceTex.carc",
+      "size": 68348
+    },
+    {
+      "archive": false,
+      "category": "Tiles",
+      "compressed": false,
+      "format": "ncgr",
+      "name": "local.NCGR",
+      "offset": 128,
+      "parent": "data/Course/referenceTex.carc",
+      "path": "data/Course/referenceTex.carc/Map2D/local.NCGR",
+      "size": 65584
+    },
+    {
+      "archive": false,
+      "category": "Palette",
+      "compressed": false,
+      "format": "nclr",
+      "name": "local.NCLR",
+      "offset": 65712,
+      "parent": "data/Course/referenceTex.carc",
+      "path": "data/Course/referenceTex.carc/Map2D/local.NCLR",
+      "size": 552
+    },
+    {
+      "archive": false,
+      "category": "Screen",
+      "compressed": false,
+      "format": "nscr",
+      "name": "local2.NSCR",
+      "offset": 66264,
+      "parent": "data/Course/referenceTex.carc",
+      "path": "data/Course/referenceTex.carc/Map2D/local2.NSCR",
+      "size": 2084
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": true,
+      "format": "carc",
+      "name": "studio.carc",
+      "offset": 450216,
+      "parent": null,
+      "path": "data/Course/studio.carc",
+      "size": 1352
+    },
+    {
+      "archive": false,
+      "category": "Collision",
+      "compressed": false,
+      "format": "kcl",
+      "name": "course_collision.kcl",
+      "offset": 188,
+      "parent": "data/Course/studio.carc",
+      "path": "data/Course/studio.carc/course_collision.kcl",
+      "size": 174
+    },
+    {
+      "archive": false,
+      "category": "Course",
+      "compressed": false,
+      "format": "nkm",
+      "name": "course_map.nkm",
+      "offset": 364,
+      "parent": "data/Course/studio.carc",
+      "path": "data/Course/studio.carc/course_map.nkm",
+      "size": 872
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "course_model.nsbca",
+      "offset": 1236,
+      "parent": "data/Course/studio.carc",
+      "path": "data/Course/studio.carc/course_model.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "course_model.nsbmd",
+      "offset": 1596,
+      "parent": "data/Course/studio.carc",
+      "path": "data/Course/studio.carc/course_model.nsbmd",
+      "size": 1040
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "course_model.nsbtx",
+      "offset": 2636,
+      "parent": "data/Course/studio.carc",
+      "path": "data/Course/studio.carc/course_model.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "studio20.carc",
+      "offset": 451568,
+      "parent": null,
+      "path": "data/Course/studio20.carc",
+      "size": 1700
+    },
+    {
+      "archive": false,
+      "category": "Collision",
+      "compressed": false,
+      "format": "kcl",
+      "name": "course_collision.kcl",
+      "offset": 132,
+      "parent": "data/Course/studio20.carc",
+      "path": "data/Course/studio20.carc/course_collision.kcl",
+      "size": 174
+    },
+    {
+      "archive": false,
+      "category": "Course",
+      "compressed": false,
+      "format": "nkm",
+      "name": "course_map.nkm",
+      "offset": 308,
+      "parent": "data/Course/studio20.carc",
+      "path": "data/Course/studio20.carc/course_map.nkm",
+      "size": 872
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "course_model.nsbmd",
+      "offset": 1180,
+      "parent": "data/Course/studio20.carc",
+      "path": "data/Course/studio20.carc/course_model.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "studio20D.carc",
+      "offset": 453268,
+      "parent": null,
+      "path": "data/Course/studio20D.carc",
+      "size": 1700
+    },
+    {
+      "archive": false,
+      "category": "Collision",
+      "compressed": false,
+      "format": "kcl",
+      "name": "course_collision.kcl",
+      "offset": 132,
+      "parent": "data/Course/studio20D.carc",
+      "path": "data/Course/studio20D.carc/course_collision.kcl",
+      "size": 174
+    },
+    {
+      "archive": false,
+      "category": "Course",
+      "compressed": false,
+      "format": "nkm",
+      "name": "course_map.nkm",
+      "offset": 308,
+      "parent": "data/Course/studio20D.carc",
+      "path": "data/Course/studio20D.carc/course_map.nkm",
+      "size": 872
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "course_model.nsbmd",
+      "offset": 1180,
+      "parent": "data/Course/studio20D.carc",
+      "path": "data/Course/studio20D.carc/course_model.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "studio20DTex.carc",
+      "offset": 454968,
+      "parent": null,
+      "path": "data/Course/studio20DTex.carc",
+      "size": 1160
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "course_model.nsbtx",
+      "offset": 156,
+      "parent": "data/Course/studio20DTex.carc",
+      "path": "data/Course/studio20DTex.carc/course_model.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Tiles",
+      "compressed": false,
+      "format": "ncgr",
+      "name": "local.NCGR",
+      "offset": 456,
+      "parent": "data/Course/studio20DTex.carc",
+      "path": "data/Course/studio20DTex.carc/Map2D/local.NCGR",
+      "size": 112
+    },
+    {
+      "archive": false,
+      "category": "Palette",
+      "compressed": false,
+      "format": "nclr",
+      "name": "local.NCLR",
+      "offset": 568,
+      "parent": "data/Course/studio20DTex.carc",
+      "path": "data/Course/studio20DTex.carc/Map2D/local.NCLR",
+      "size": 552
+    },
+    {
+      "archive": false,
+      "category": "Screen",
+      "compressed": false,
+      "format": "nscr",
+      "name": "local2.NSCR",
+      "offset": 1120,
+      "parent": "data/Course/studio20DTex.carc",
+      "path": "data/Course/studio20DTex.carc/Map2D/local2.NSCR",
+      "size": 38
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "studio20Tex.carc",
+      "offset": 456128,
+      "parent": null,
+      "path": "data/Course/studio20Tex.carc",
+      "size": 1160
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "course_model.nsbtx",
+      "offset": 156,
+      "parent": "data/Course/studio20Tex.carc",
+      "path": "data/Course/studio20Tex.carc/course_model.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Tiles",
+      "compressed": false,
+      "format": "ncgr",
+      "name": "local.NCGR",
+      "offset": 456,
+      "parent": "data/Course/studio20Tex.carc",
+      "path": "data/Course/studio20Tex.carc/Map2D/local.NCGR",
+      "size": 112
+    },
+    {
+      "archive": false,
+      "category": "Palette",
+      "compressed": false,
+      "format": "nclr",
+      "name": "local.NCLR",
+      "offset": 568,
+      "parent": "data/Course/studio20Tex.carc",
+      "path": "data/Course/studio20Tex.carc/Map2D/local.NCLR",
+      "size": 552
+    },
+    {
+      "archive": false,
+      "category": "Screen",
+      "compressed": false,
+      "format": "nscr",
+      "name": "local2.NSCR",
+      "offset": 1120,
+      "parent": "data/Course/studio20Tex.carc",
+      "path": "data/Course/studio20Tex.carc/Map2D/local2.NSCR",
+      "size": 38
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "studio22.carc",
+      "offset": 457288,
+      "parent": null,
+      "path": "data/Course/studio22.carc",
+      "size": 1700
+    },
+    {
+      "archive": false,
+      "category": "Collision",
+      "compressed": false,
+      "format": "kcl",
+      "name": "course_collision.kcl",
+      "offset": 132,
+      "parent": "data/Course/studio22.carc",
+      "path": "data/Course/studio22.carc/course_collision.kcl",
+      "size": 174
+    },
+    {
+      "archive": false,
+      "category": "Course",
+      "compressed": false,
+      "format": "nkm",
+      "name": "course_map.nkm",
+      "offset": 308,
+      "parent": "data/Course/studio22.carc",
+      "path": "data/Course/studio22.carc/course_map.nkm",
+      "size": 872
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "course_model.nsbmd",
+      "offset": 1180,
+      "parent": "data/Course/studio22.carc",
+      "path": "data/Course/studio22.carc/course_model.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "studio22Tex.carc",
+      "offset": 458988,
+      "parent": null,
+      "path": "data/Course/studio22Tex.carc",
+      "size": 1160
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "course_model.nsbtx",
+      "offset": 156,
+      "parent": "data/Course/studio22Tex.carc",
+      "path": "data/Course/studio22Tex.carc/course_model.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Tiles",
+      "compressed": false,
+      "format": "ncgr",
+      "name": "local.NCGR",
+      "offset": 456,
+      "parent": "data/Course/studio22Tex.carc",
+      "path": "data/Course/studio22Tex.carc/Map2D/local.NCGR",
+      "size": 112
+    },
+    {
+      "archive": false,
+      "category": "Palette",
+      "compressed": false,
+      "format": "nclr",
+      "name": "local.NCLR",
+      "offset": 568,
+      "parent": "data/Course/studio22Tex.carc",
+      "path": "data/Course/studio22Tex.carc/Map2D/local.NCLR",
+      "size": 552
+    },
+    {
+      "archive": false,
+      "category": "Screen",
+      "compressed": false,
+      "format": "nscr",
+      "name": "local2.NSCR",
+      "offset": 1120,
+      "parent": "data/Course/studio22Tex.carc",
+      "path": "data/Course/studio22Tex.carc/Map2D/local2.NSCR",
+      "size": 38
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": true,
+      "format": "carc",
+      "name": "KartModelMainA.carc",
+      "offset": 1096,
+      "parent": null,
+      "path": "data/KartModelMainA.carc",
+      "size": 10364
+    },
+    {
+      "archive": false,
+      "category": "Binary",
+      "compressed": false,
+      "format": "bin",
+      "name": "kartAIparam.bin",
+      "offset": 2892,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kartAIparam.bin",
+      "size": 8000
+    },
+    {
+      "archive": false,
+      "category": "Binary",
+      "compressed": false,
+      "format": "bin",
+      "name": "kartmenuparam.bin",
+      "offset": 10892,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kartmenuparam.bin",
+      "size": 600
+    },
+    {
+      "archive": false,
+      "category": "Binary",
+      "compressed": false,
+      "format": "bin",
+      "name": "kartoffsetdata.bin",
+      "offset": 11492,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kartoffsetdata.bin",
+      "size": 11200
+    },
+    {
+      "archive": false,
+      "category": "Binary",
+      "compressed": false,
+      "format": "bin",
+      "name": "kartphysicalparam.bin",
+      "offset": 22692,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kartphysicalparam.bin",
+      "size": 7600
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_DS.nsbmd",
+      "offset": 30292,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/daisy/E_DS.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_DS.nsbtx",
+      "offset": 30812,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/daisy/E_DS.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_DK.nsbmd",
+      "offset": 31112,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/donkey/E_DK.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_DK.nsbtx",
+      "offset": 31632,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/donkey/E_DK.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_HH.nsbmd",
+      "offset": 31932,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/heyho/E_HH.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_HH.nsbtx",
+      "offset": 32452,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/heyho/E_HH.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_KA.nsbmd",
+      "offset": 32752,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/karon/E_KA.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_KA.nsbtx",
+      "offset": 33272,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/karon/E_KA.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_KO.nsbmd",
+      "offset": 33572,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/kinopio/E_KO.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_KO.nsbtx",
+      "offset": 34092,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/kinopio/E_KO.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_KP.nsbmd",
+      "offset": 34392,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/koopa/E_KP.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_KP.nsbtx",
+      "offset": 34912,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/koopa/E_KP.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_LG.nsbmd",
+      "offset": 35212,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/luigi/E_LG.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_LG.nsbtx",
+      "offset": 35732,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/luigi/E_LG.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_MR.nsbmd",
+      "offset": 36032,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/mario/E_MR.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_MR.nsbtx",
+      "offset": 36552,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/mario/E_MR.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_PC.nsbmd",
+      "offset": 36852,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/peach/E_PC.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_PC.nsbtx",
+      "offset": 37372,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/peach/E_PC.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_RB.nsbmd",
+      "offset": 37672,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/robo/E_RB.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_RB.nsbtx",
+      "offset": 38192,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/robo/E_RB.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_WL.nsbmd",
+      "offset": 38492,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/waluigi/E_WL.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_WL.nsbtx",
+      "offset": 39012,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/waluigi/E_WL.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_WR.nsbmd",
+      "offset": 39312,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/wario/E_WR.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_WR.nsbtx",
+      "offset": 39832,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/wario/E_WR.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "E_YS.nsbmd",
+      "offset": 40132,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/yoshi/E_YS.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "E_YS.nsbtx",
+      "offset": 40652,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/character/yoshi/E_YS.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_DS_b.nsbmd",
+      "offset": 40952,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/daisy/kart_DS_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_DS_b.nsbtx",
+      "offset": 41472,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/daisy/kart_DS_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_DS_c.nsbmd",
+      "offset": 41772,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/daisy/kart_DS_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_DS_c.nsbtx",
+      "offset": 42292,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/daisy/kart_DS_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_DK_b.nsbmd",
+      "offset": 42592,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/donkey/kart_DK_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_DK_b.nsbtx",
+      "offset": 43112,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/donkey/kart_DK_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_DK_c.nsbmd",
+      "offset": 43412,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/donkey/kart_DK_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_DK_c.nsbtx",
+      "offset": 43932,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/donkey/kart_DK_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KA_b.nsbmd",
+      "offset": 44232,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/karon/kart_KA_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KA_b.nsbtx",
+      "offset": 44752,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/karon/kart_KA_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KA_c.nsbmd",
+      "offset": 45052,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/karon/kart_KA_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KA_c.nsbtx",
+      "offset": 45572,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/karon/kart_KA_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KO_b.nsbmd",
+      "offset": 45872,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/kinopio/kart_KO_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KO_b.nsbtx",
+      "offset": 46392,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/kinopio/kart_KO_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KO_c.nsbmd",
+      "offset": 46692,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/kinopio/kart_KO_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KO_c.nsbtx",
+      "offset": 47212,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/kinopio/kart_KO_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KP_b.nsbmd",
+      "offset": 47512,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/koopa/kart_KP_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KP_b.nsbtx",
+      "offset": 48032,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/koopa/kart_KP_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KP_c.nsbmd",
+      "offset": 48332,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/koopa/kart_KP_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KP_c.nsbtx",
+      "offset": 48852,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/koopa/kart_KP_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_LG_b.nsbmd",
+      "offset": 49152,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/luigi/kart_LG_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_LG_b.nsbtx",
+      "offset": 49672,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/luigi/kart_LG_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_LG_c.nsbmd",
+      "offset": 49972,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/luigi/kart_LG_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_LG_c.nsbtx",
+      "offset": 50492,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/luigi/kart_LG_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_MR_a.nsbmd",
+      "offset": 50792,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_a.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_MR_a.nsbtx",
+      "offset": 51312,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_a.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_MR_b.nsbmd",
+      "offset": 51612,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_MR_b.nsbtx",
+      "offset": 52132,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_MR_c.nsbmd",
+      "offset": 52432,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_MR_c.nsbtx",
+      "offset": 52952,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_PC_b.nsbmd",
+      "offset": 53252,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/peach/kart_PC_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_PC_b.nsbtx",
+      "offset": 53772,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/peach/kart_PC_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_PC_c.nsbmd",
+      "offset": 54072,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/peach/kart_PC_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_PC_c.nsbtx",
+      "offset": 54592,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/peach/kart_PC_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_RB_b.nsbmd",
+      "offset": 54892,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/robo/kart_RB_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_RB_b.nsbtx",
+      "offset": 55412,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/robo/kart_RB_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_RB_c.nsbmd",
+      "offset": 55712,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/robo/kart_RB_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_RB_c.nsbtx",
+      "offset": 56232,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/robo/kart_RB_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_DK_b.nsbmd",
+      "offset": 56532,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_DK_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_DK_c.nsbmd",
+      "offset": 57052,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_DK_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_DS_b.nsbmd",
+      "offset": 57572,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_DS_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_DS_c.nsbmd",
+      "offset": 58092,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_DS_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KA_b.nsbmd",
+      "offset": 58612,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KA_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KA_c.nsbmd",
+      "offset": 59132,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KA_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KO_b.nsbmd",
+      "offset": 59652,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KO_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KO_c.nsbmd",
+      "offset": 60172,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KO_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KP_b.nsbmd",
+      "offset": 60692,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KP_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KP_c.nsbmd",
+      "offset": 61212,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KP_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_LG_b.nsbmd",
+      "offset": 61732,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_LG_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_LG_c.nsbmd",
+      "offset": 62252,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_LG_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_MR_a.nsbmd",
+      "offset": 62772,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_MR_a.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_MR_b.nsbmd",
+      "offset": 63292,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_MR_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_MR_c.nsbmd",
+      "offset": 63812,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_MR_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_PC_b.nsbmd",
+      "offset": 64332,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_PC_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_PC_c.nsbmd",
+      "offset": 64852,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_PC_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_RB_b.nsbmd",
+      "offset": 65372,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_RB_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_RB_c.nsbmd",
+      "offset": 65892,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_RB_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_WL_b.nsbmd",
+      "offset": 66412,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_WL_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_WL_c.nsbmd",
+      "offset": 66932,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_WL_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_WR_b.nsbmd",
+      "offset": 67452,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_WR_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_WR_c.nsbmd",
+      "offset": 67972,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_WR_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_YS_b.nsbmd",
+      "offset": 68492,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_YS_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_YS_c.nsbmd",
+      "offset": 69012,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_YS_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_WL_b.nsbmd",
+      "offset": 69532,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/waluigi/kart_WL_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_WL_b.nsbtx",
+      "offset": 70052,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/waluigi/kart_WL_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_WL_c.nsbmd",
+      "offset": 70352,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/waluigi/kart_WL_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_WL_c.nsbtx",
+      "offset": 70872,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/waluigi/kart_WL_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_WR_b.nsbmd",
+      "offset": 71172,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/wario/kart_WR_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_WR_b.nsbtx",
+      "offset": 71692,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/wario/kart_WR_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_WR_c.nsbmd",
+      "offset": 71992,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/wario/kart_WR_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_WR_c.nsbtx",
+      "offset": 72512,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/wario/kart_WR_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_YS_b.nsbmd",
+      "offset": 72812,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/yoshi/kart_YS_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_YS_b.nsbtx",
+      "offset": 73332,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/yoshi/kart_YS_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_YS_c.nsbmd",
+      "offset": 73632,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/yoshi/kart_YS_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_YS_c.nsbtx",
+      "offset": 74152,
+      "parent": "data/KartModelMainA.carc",
+      "path": "data/KartModelMainA.carc/kart/yoshi/kart_YS_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": true,
+      "format": "carc",
+      "name": "KartModelMainB.carc",
+      "offset": 11460,
+      "parent": null,
+      "path": "data/KartModelMainB.carc",
+      "size": 1004
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_HH.nsbmd",
+      "offset": 228,
+      "parent": "data/KartModelMainB.carc",
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_HH.nsbtx",
+      "offset": 748,
+      "parent": "data/KartModelMainB.carc",
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_HH_drive.nsbca",
+      "offset": 1048,
+      "parent": "data/KartModelMainB.carc",
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_HH_lose.nsbca",
+      "offset": 1408,
+      "parent": "data/KartModelMainB.carc",
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_HH_spin.nsbca",
+      "offset": 1768,
+      "parent": "data/KartModelMainB.carc",
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_HH_win.nsbca",
+      "offset": 2128,
+      "parent": "data/KartModelMainB.carc",
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": true,
+      "format": "carc",
+      "name": "KartModelMenu.carc",
+      "offset": 12464,
+      "parent": null,
+      "path": "data/KartModelMenu.carc",
+      "size": 13476
+    },
+    {
+      "archive": false,
+      "category": "Binary",
+      "compressed": false,
+      "format": "bin",
+      "name": "kartAIparam.bin",
+      "offset": 4140,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kartAIparam.bin",
+      "size": 8000
+    },
+    {
+      "archive": false,
+      "category": "Binary",
+      "compressed": false,
+      "format": "bin",
+      "name": "kartmenuparam.bin",
+      "offset": 12140,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kartmenuparam.bin",
+      "size": 600
+    },
+    {
+      "archive": false,
+      "category": "Binary",
+      "compressed": false,
+      "format": "bin",
+      "name": "kartoffsetdata.bin",
+      "offset": 12740,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kartoffsetdata.bin",
+      "size": 11200
+    },
+    {
+      "archive": false,
+      "category": "Binary",
+      "compressed": false,
+      "format": "bin",
+      "name": "kartphysicalparam.bin",
+      "offset": 23940,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kartphysicalparam.bin",
+      "size": 7400
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_DS.nsbmd",
+      "offset": 31340,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_DS.nsbtx",
+      "offset": 31860,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DS_drive.nsbca",
+      "offset": 32160,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DS_lose.nsbca",
+      "offset": 32520,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DS_spin.nsbca",
+      "offset": 32880,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DS_win.nsbca",
+      "offset": 33240,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_DK.nsbmd",
+      "offset": 33600,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_DK.nsbtx",
+      "offset": 34120,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DK_drive.nsbca",
+      "offset": 34420,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DK_lose.nsbca",
+      "offset": 34780,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DK_spin.nsbca",
+      "offset": 35140,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DK_win.nsbca",
+      "offset": 35500,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_HH.nsbmd",
+      "offset": 35860,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_HH.nsbtx",
+      "offset": 36380,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_HH_drive.nsbca",
+      "offset": 36680,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_HH_lose.nsbca",
+      "offset": 37040,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_HH_spin.nsbca",
+      "offset": 37400,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_HH_win.nsbca",
+      "offset": 37760,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_KA.nsbmd",
+      "offset": 38120,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/karon/P_KA.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_KA.nsbtx",
+      "offset": 38640,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/karon/P_KA.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KA_drive.nsbca",
+      "offset": 38940,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/karon/P_KA_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KA_lose.nsbca",
+      "offset": 39300,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/karon/P_KA_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KA_spin.nsbca",
+      "offset": 39660,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/karon/P_KA_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KA_win.nsbca",
+      "offset": 40020,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/karon/P_KA_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_KO.nsbmd",
+      "offset": 40380,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_KO.nsbtx",
+      "offset": 40900,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KO_drive.nsbca",
+      "offset": 41200,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KO_lose.nsbca",
+      "offset": 41560,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KO_spin.nsbca",
+      "offset": 41920,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KO_win.nsbca",
+      "offset": 42280,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_KP.nsbmd",
+      "offset": 42640,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_KP.nsbtx",
+      "offset": 43160,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KP_drive.nsbca",
+      "offset": 43460,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KP_lose.nsbca",
+      "offset": 43820,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KP_spin.nsbca",
+      "offset": 44180,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KP_win.nsbca",
+      "offset": 44540,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_LG.nsbmd",
+      "offset": 44900,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_LG.nsbtx",
+      "offset": 45420,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_LG_drive.nsbca",
+      "offset": 45720,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_LG_lose.nsbca",
+      "offset": 46080,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_LG_spin.nsbca",
+      "offset": 46440,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_LG_win.nsbca",
+      "offset": 46800,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_MR.nsbmd",
+      "offset": 47160,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/mario/P_MR.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_MR.nsbtx",
+      "offset": 47680,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/mario/P_MR.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_MR_drive.nsbca",
+      "offset": 47980,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/mario/P_MR_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_MR_lose.nsbca",
+      "offset": 48340,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/mario/P_MR_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_MR_spin.nsbca",
+      "offset": 48700,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/mario/P_MR_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_MR_win.nsbca",
+      "offset": 49060,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/mario/P_MR_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_PC.nsbmd",
+      "offset": 49420,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/peach/P_PC.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_PC.nsbtx",
+      "offset": 49940,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/peach/P_PC.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_PC_drive.nsbca",
+      "offset": 50240,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/peach/P_PC_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_PC_lose.nsbca",
+      "offset": 50600,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/peach/P_PC_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_PC_spin.nsbca",
+      "offset": 50960,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/peach/P_PC_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_PC_win.nsbca",
+      "offset": 51320,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/peach/P_PC_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_RB.nsbmd",
+      "offset": 51680,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/robo/P_RB.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_RB.nsbtx",
+      "offset": 52200,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/robo/P_RB.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_RB_drive.nsbca",
+      "offset": 52500,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/robo/P_RB_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_RB_lose.nsbca",
+      "offset": 52860,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/robo/P_RB_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_RB_spin.nsbca",
+      "offset": 53220,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/robo/P_RB_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_RB_win.nsbca",
+      "offset": 53580,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/robo/P_RB_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_WL.nsbmd",
+      "offset": 53940,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_WL.nsbtx",
+      "offset": 54460,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WL_drive.nsbca",
+      "offset": 54760,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WL_lose.nsbca",
+      "offset": 55120,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WL_spin.nsbca",
+      "offset": 55480,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WL_win.nsbca",
+      "offset": 55840,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_WR.nsbmd",
+      "offset": 56200,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/wario/P_WR.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_WR.nsbtx",
+      "offset": 56720,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/wario/P_WR.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WR_drive.nsbca",
+      "offset": 57020,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/wario/P_WR_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WR_lose.nsbca",
+      "offset": 57380,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/wario/P_WR_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WR_spin.nsbca",
+      "offset": 57740,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/wario/P_WR_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WR_win.nsbca",
+      "offset": 58100,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/wario/P_WR_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_YS.nsbmd",
+      "offset": 58460,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_YS.nsbtx",
+      "offset": 58980,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_YS_drive.nsbca",
+      "offset": 59280,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_YS_lose.nsbca",
+      "offset": 59640,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_YS_spin.nsbca",
+      "offset": 60000,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_YS_win.nsbca",
+      "offset": 60360,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_DS_b.nsbmd",
+      "offset": 60720,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/daisy/kart_DS_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_DS_b.nsbtx",
+      "offset": 61240,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/daisy/kart_DS_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_DS_c.nsbmd",
+      "offset": 61540,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/daisy/kart_DS_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_DS_c.nsbtx",
+      "offset": 62060,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/daisy/kart_DS_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_DK_b.nsbmd",
+      "offset": 62360,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/donkey/kart_DK_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_DK_b.nsbtx",
+      "offset": 62880,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/donkey/kart_DK_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_DK_c.nsbmd",
+      "offset": 63180,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/donkey/kart_DK_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_DK_c.nsbtx",
+      "offset": 63700,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/donkey/kart_DK_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KA_b.nsbmd",
+      "offset": 64000,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/karon/kart_KA_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KA_b.nsbtx",
+      "offset": 64520,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/karon/kart_KA_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KA_c.nsbmd",
+      "offset": 64820,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/karon/kart_KA_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KA_c.nsbtx",
+      "offset": 65340,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/karon/kart_KA_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KO_b.nsbmd",
+      "offset": 65640,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/kinopio/kart_KO_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KO_b.nsbtx",
+      "offset": 66160,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/kinopio/kart_KO_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KO_c.nsbmd",
+      "offset": 66460,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/kinopio/kart_KO_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KO_c.nsbtx",
+      "offset": 66980,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/kinopio/kart_KO_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KP_b.nsbmd",
+      "offset": 67280,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/koopa/kart_KP_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KP_b.nsbtx",
+      "offset": 67800,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/koopa/kart_KP_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_KP_c.nsbmd",
+      "offset": 68100,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/koopa/kart_KP_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_KP_c.nsbtx",
+      "offset": 68620,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/koopa/kart_KP_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_LG_b.nsbmd",
+      "offset": 68920,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/luigi/kart_LG_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_LG_b.nsbtx",
+      "offset": 69440,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/luigi/kart_LG_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_LG_c.nsbmd",
+      "offset": 69740,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/luigi/kart_LG_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_LG_c.nsbtx",
+      "offset": 70260,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/luigi/kart_LG_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_MR_a.nsbmd",
+      "offset": 70560,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_a.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_MR_a.nsbtx",
+      "offset": 71080,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_a.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_MR_b.nsbmd",
+      "offset": 71380,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_MR_b.nsbtx",
+      "offset": 71900,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_MR_c.nsbmd",
+      "offset": 72200,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_MR_c.nsbtx",
+      "offset": 72720,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_PC_b.nsbmd",
+      "offset": 73020,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/peach/kart_PC_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_PC_b.nsbtx",
+      "offset": 73540,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/peach/kart_PC_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_PC_c.nsbmd",
+      "offset": 73840,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/peach/kart_PC_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_PC_c.nsbtx",
+      "offset": 74360,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/peach/kart_PC_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_RB_b.nsbmd",
+      "offset": 74660,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/robo/kart_RB_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_RB_b.nsbtx",
+      "offset": 75180,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/robo/kart_RB_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_RB_c.nsbmd",
+      "offset": 75480,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/robo/kart_RB_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_RB_c.nsbtx",
+      "offset": 76000,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/robo/kart_RB_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_DK_b.nsbmd",
+      "offset": 76300,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_DK_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_DK_c.nsbmd",
+      "offset": 76820,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_DK_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_DS_b.nsbmd",
+      "offset": 77340,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_DS_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_DS_c.nsbmd",
+      "offset": 77860,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_DS_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KA_b.nsbmd",
+      "offset": 78380,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KA_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KA_c.nsbmd",
+      "offset": 78900,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KA_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KO_b.nsbmd",
+      "offset": 79420,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KO_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KO_c.nsbmd",
+      "offset": 79940,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KO_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KP_b.nsbmd",
+      "offset": 80460,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KP_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_KP_c.nsbmd",
+      "offset": 80980,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KP_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_LG_b.nsbmd",
+      "offset": 81500,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_LG_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_LG_c.nsbmd",
+      "offset": 82020,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_LG_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_MR_a.nsbmd",
+      "offset": 82540,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_MR_a.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_MR_b.nsbmd",
+      "offset": 83060,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_MR_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_MR_c.nsbmd",
+      "offset": 83580,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_MR_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_PC_b.nsbmd",
+      "offset": 84100,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_PC_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_PC_c.nsbmd",
+      "offset": 84620,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_PC_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_RB_b.nsbmd",
+      "offset": 85140,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_RB_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_RB_c.nsbmd",
+      "offset": 85660,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_RB_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_WL_b.nsbmd",
+      "offset": 86180,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_WL_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_WL_c.nsbmd",
+      "offset": 86700,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_WL_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_WR_b.nsbmd",
+      "offset": 87220,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_WR_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_WR_c.nsbmd",
+      "offset": 87740,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_WR_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_YS_b.nsbmd",
+      "offset": 88260,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_YS_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "sh_YS_c.nsbmd",
+      "offset": 88780,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_YS_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_WL_b.nsbmd",
+      "offset": 89300,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/waluigi/kart_WL_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_WL_b.nsbtx",
+      "offset": 89820,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/waluigi/kart_WL_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_WL_c.nsbmd",
+      "offset": 90120,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/waluigi/kart_WL_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_WL_c.nsbtx",
+      "offset": 90640,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/waluigi/kart_WL_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_WR_b.nsbmd",
+      "offset": 90940,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/wario/kart_WR_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_WR_b.nsbtx",
+      "offset": 91460,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/wario/kart_WR_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_WR_c.nsbmd",
+      "offset": 91760,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/wario/kart_WR_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_WR_c.nsbtx",
+      "offset": 92280,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/wario/kart_WR_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_YS_b.nsbmd",
+      "offset": 92580,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/yoshi/kart_YS_b.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_YS_b.nsbtx",
+      "offset": 93100,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/yoshi/kart_YS_b.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "kart_YS_c.nsbmd",
+      "offset": 93400,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/yoshi/kart_YS_c.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "kart_YS_c.nsbtx",
+      "offset": 93920,
+      "parent": "data/KartModelMenu.carc",
+      "path": "data/KartModelMenu.carc/kart/yoshi/kart_YS_c.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": true,
+      "format": "carc",
+      "name": "KartModelSub.carc",
+      "offset": 25940,
+      "parent": null,
+      "path": "data/KartModelSub.carc",
+      "size": 4896
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_DS.nsbmd",
+      "offset": 1892,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/daisy/P_DS.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_DS.nsbtx",
+      "offset": 2412,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/daisy/P_DS.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DS_drive.nsbca",
+      "offset": 2712,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/daisy/P_DS_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DS_lose.nsbca",
+      "offset": 3072,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/daisy/P_DS_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DS_spin.nsbca",
+      "offset": 3432,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/daisy/P_DS_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DS_win.nsbca",
+      "offset": 3792,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/daisy/P_DS_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_DK.nsbmd",
+      "offset": 4152,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/donkey/P_DK.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_DK.nsbtx",
+      "offset": 4672,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/donkey/P_DK.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DK_drive.nsbca",
+      "offset": 4972,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/donkey/P_DK_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DK_lose.nsbca",
+      "offset": 5332,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/donkey/P_DK_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DK_spin.nsbca",
+      "offset": 5692,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/donkey/P_DK_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_DK_win.nsbca",
+      "offset": 6052,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/donkey/P_DK_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_KA.nsbmd",
+      "offset": 6412,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/karon/P_KA.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_KA.nsbtx",
+      "offset": 6932,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/karon/P_KA.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KA_drive.nsbca",
+      "offset": 7232,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/karon/P_KA_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KA_lose.nsbca",
+      "offset": 7592,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/karon/P_KA_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KA_spin.nsbca",
+      "offset": 7952,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/karon/P_KA_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KA_win.nsbca",
+      "offset": 8312,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/karon/P_KA_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_KO.nsbmd",
+      "offset": 8672,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_KO.nsbtx",
+      "offset": 9192,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KO_drive.nsbca",
+      "offset": 9492,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KO_lose.nsbca",
+      "offset": 9852,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KO_spin.nsbca",
+      "offset": 10212,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KO_win.nsbca",
+      "offset": 10572,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_KP.nsbmd",
+      "offset": 10932,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/koopa/P_KP.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_KP.nsbtx",
+      "offset": 11452,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/koopa/P_KP.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KP_drive.nsbca",
+      "offset": 11752,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/koopa/P_KP_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KP_lose.nsbca",
+      "offset": 12112,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/koopa/P_KP_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KP_spin.nsbca",
+      "offset": 12472,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/koopa/P_KP_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_KP_win.nsbca",
+      "offset": 12832,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/koopa/P_KP_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_LG.nsbmd",
+      "offset": 13192,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/luigi/P_LG.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_LG.nsbtx",
+      "offset": 13712,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/luigi/P_LG.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_LG_drive.nsbca",
+      "offset": 14012,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/luigi/P_LG_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_LG_lose.nsbca",
+      "offset": 14372,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/luigi/P_LG_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_LG_spin.nsbca",
+      "offset": 14732,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/luigi/P_LG_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_LG_win.nsbca",
+      "offset": 15092,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/luigi/P_LG_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_MR.nsbmd",
+      "offset": 15452,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/mario/P_MR.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_MR.nsbtx",
+      "offset": 15972,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/mario/P_MR.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_MR_drive.nsbca",
+      "offset": 16272,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/mario/P_MR_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_MR_lose.nsbca",
+      "offset": 16632,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/mario/P_MR_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_MR_spin.nsbca",
+      "offset": 16992,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/mario/P_MR_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_MR_win.nsbca",
+      "offset": 17352,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/mario/P_MR_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_PC.nsbmd",
+      "offset": 17712,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/peach/P_PC.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_PC.nsbtx",
+      "offset": 18232,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/peach/P_PC.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_PC_drive.nsbca",
+      "offset": 18532,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/peach/P_PC_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_PC_lose.nsbca",
+      "offset": 18892,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/peach/P_PC_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_PC_spin.nsbca",
+      "offset": 19252,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/peach/P_PC_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_PC_win.nsbca",
+      "offset": 19612,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/peach/P_PC_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_RB.nsbmd",
+      "offset": 19972,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/robo/P_RB.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_RB.nsbtx",
+      "offset": 20492,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/robo/P_RB.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_RB_drive.nsbca",
+      "offset": 20792,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/robo/P_RB_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_RB_lose.nsbca",
+      "offset": 21152,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/robo/P_RB_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_RB_spin.nsbca",
+      "offset": 21512,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/robo/P_RB_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_RB_win.nsbca",
+      "offset": 21872,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/robo/P_RB_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_WL.nsbmd",
+      "offset": 22232,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_WL.nsbtx",
+      "offset": 22752,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WL_drive.nsbca",
+      "offset": 23052,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WL_lose.nsbca",
+      "offset": 23412,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WL_spin.nsbca",
+      "offset": 23772,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WL_win.nsbca",
+      "offset": 24132,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_WR.nsbmd",
+      "offset": 24492,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/wario/P_WR.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_WR.nsbtx",
+      "offset": 25012,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/wario/P_WR.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WR_drive.nsbca",
+      "offset": 25312,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/wario/P_WR_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WR_lose.nsbca",
+      "offset": 25672,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/wario/P_WR_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WR_spin.nsbca",
+      "offset": 26032,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/wario/P_WR_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_WR_win.nsbca",
+      "offset": 26392,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/wario/P_WR_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "P_YS.nsbmd",
+      "offset": 26752,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS.nsbmd",
+      "size": 520
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "P_YS.nsbtx",
+      "offset": 27272,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS.nsbtx",
+      "size": 300
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_YS_drive.nsbca",
+      "offset": 27572,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS_drive.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_YS_lose.nsbca",
+      "offset": 27932,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS_lose.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_YS_spin.nsbca",
+      "offset": 28292,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS_spin.nsbca",
+      "size": 360
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nsbca",
+      "name": "P_YS_win.nsbca",
+      "offset": 28652,
+      "parent": "data/KartModelSub.carc",
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS_win.nsbca",
+      "size": 360
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "Main2D_us.carc",
+      "offset": 30836,
+      "parent": null,
+      "path": "data/Main2D_us.carc",
+      "size": 22136
+    },
+    {
+      "archive": false,
+      "category": "Text",
+      "compressed": false,
+      "format": "bmg",
+      "name": "common.bmg",
+      "offset": 180,
+      "parent": "data/Main2D_us.carc",
+      "path": "data/Main2D_us.carc/common.bmg",
+      "size": 4896
+    },
+    {
+      "archive": false,
+      "category": "Cells",
+      "compressed": false,
+      "format": "ncer",
+      "name": "player_character_L.nce.ncer",
+      "offset": 5076,
+      "parent": "data/Main2D_us.carc",
+      "path": "data/Main2D_us.carc/player_character_L.nce.ncer",
+      "size": 76
+    },
+    {
+      "archive": false,
+      "category": "Tiles",
+      "compressed": false,
+      "format": "ncgr",
+      "name": "player_character_L.nce.ncgr",
+      "offset": 5152,
+      "parent": "data/Main2D_us.carc",
+      "path": "data/Main2D_us.carc/player_character_L.nce.ncgr",
+      "size": 16432
+    },
+    {
+      "archive": false,
+      "category": "Palette",
+      "compressed": false,
+      "format": "nclr",
+      "name": "player_character_L_o.NCLR",
+      "offset": 21584,
+      "parent": "data/Main2D_us.carc",
+      "path": "data/Main2D_us.carc/player_character_L_o.NCLR",
+      "size": 552
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "MainRace.carc",
+      "offset": 52972,
+      "parent": null,
+      "path": "data/MainRace.carc",
+      "size": 1420
+    },
+    {
+      "archive": false,
+      "category": "Model",
+      "compressed": false,
+      "format": "nsbmd",
+      "name": "it_studio.nsbmd",
+      "offset": 96,
+      "parent": "data/MainRace.carc",
+      "path": "data/MainRace.carc/Item/it_studio.nsbmd",
+      "size": 1324
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "Race.carc",
+      "offset": 460148,
+      "parent": null,
+      "path": "data/Scene/Race.carc",
+      "size": 724
+    },
+    {
+      "archive": false,
+      "category": "Cells",
+      "compressed": false,
+      "format": "ncer",
+      "name": "race_s.NCER",
+      "offset": 96,
+      "parent": "data/Scene/Race.carc",
+      "path": "data/Scene/Race.carc/race_s.NCER",
+      "size": 76
+    },
+    {
+      "archive": false,
+      "category": "Palette",
+      "compressed": false,
+      "format": "nclr",
+      "name": "race_s_o.NCLR",
+      "offset": 172,
+      "parent": "data/Scene/Race.carc",
+      "path": "data/Scene/Race.carc/race_s_o.NCLR",
+      "size": 552
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
+      "name": "Race_us.carc",
+      "offset": 460872,
+      "parent": null,
+      "path": "data/Scene/Race_us.carc",
+      "size": 16508
+    },
+    {
+      "archive": false,
+      "category": "Tiles",
+      "compressed": false,
+      "format": "ncgr",
+      "name": "race_s_o.NCGR",
+      "offset": 76,
+      "parent": "data/Scene/Race_us.carc",
+      "path": "data/Scene/Race_us.carc/race_s_o.NCGR",
+      "size": 16432
+    },
+    {
+      "archive": false,
+      "category": "Audio",
+      "compressed": false,
+      "format": "sdat",
+      "name": "sound_data.sdat",
+      "offset": 477380,
+      "parent": null,
+      "path": "data/Sound/sound_data.sdat",
+      "size": 19296
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": true,
+      "format": "carc",
+      "name": "demo.carc",
+      "offset": 496676,
+      "parent": null,
+      "path": "data/Studio/demo.carc",
+      "size": 11368
+    },
+    {
+      "archive": false,
+      "category": "Animation",
+      "compressed": false,
+      "format": "nanr",
+      "name": "studio.nanr",
+      "offset": 244,
+      "parent": "data/Studio/demo.carc",
+      "path": "data/Studio/demo.carc/art/studio.nanr",
+      "size": 84
+    },
+    {
+      "archive": false,
+      "category": "Cells",
+      "compressed": false,
+      "format": "ncer",
+      "name": "studio.ncer",
+      "offset": 328,
+      "parent": "data/Studio/demo.carc",
+      "path": "data/Studio/demo.carc/art/studio.ncer",
+      "size": 76
+    },
+    {
+      "archive": false,
+      "category": "Tiles",
+      "compressed": false,
+      "format": "ncgr",
+      "name": "studio.ncgr",
+      "offset": 404,
+      "parent": "data/Studio/demo.carc",
+      "path": "data/Studio/demo.carc/art/studio.ncgr",
+      "size": 16432
+    },
+    {
+      "archive": false,
+      "category": "Palette",
+      "compressed": false,
+      "format": "nclr",
+      "name": "studio.nclr",
+      "offset": 16836,
+      "parent": "data/Studio/demo.carc",
+      "path": "data/Studio/demo.carc/art/studio.nclr",
+      "size": 552
+    },
+    {
+      "archive": false,
+      "category": "Screen",
+      "compressed": false,
+      "format": "nscr",
+      "name": "studio.nscr",
+      "offset": 17388,
+      "parent": "data/Studio/demo.carc",
+      "path": "data/Studio/demo.carc/art/studio.nscr",
+      "size": 548
+    },
+    {
+      "archive": false,
+      "category": "Audio",
+      "compressed": false,
+      "format": "sdat",
+      "name": "sound_data.sdat",
+      "offset": 17936,
+      "parent": "data/Studio/demo.carc",
+      "path": "data/Studio/demo.carc/audio/sound_data.sdat",
+      "size": 16736
+    },
+    {
+      "archive": false,
+      "category": "Text",
+      "compressed": false,
+      "format": "bmg",
+      "name": "en.bmg",
+      "offset": 34672,
+      "parent": "data/Studio/demo.carc",
+      "path": "data/Studio/demo.carc/language/en.bmg",
+      "size": 352
+    },
+    {
+      "archive": false,
+      "category": "Text",
+      "compressed": false,
+      "format": "bmg",
+      "name": "readout.bmg",
+      "offset": 508044,
+      "parent": null,
+      "path": "data/Studio/readout.bmg",
+      "size": 192
+    },
+    {
+      "archive": false,
+      "category": "Texture",
+      "compressed": false,
+      "format": "nsbtx",
+      "name": "texture.nsbtx",
+      "offset": 508236,
+      "parent": null,
+      "path": "data/Studio/texture.nsbtx",
+      "size": 300
+    }
+  ],
+  "names": [
+    {
+      "group": "Cups",
+      "index": 37,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 37"
+    },
+    {
+      "group": "Cups",
+      "index": 38,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 38"
+    },
+    {
+      "group": "Cups",
+      "index": 39,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 39"
+    },
+    {
+      "group": "Cups",
+      "index": 40,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 40"
+    },
+    {
+      "group": "Cups",
+      "index": 41,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 41"
+    },
+    {
+      "group": "Cups",
+      "index": 42,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 42"
+    },
+    {
+      "group": "Cups",
+      "index": 43,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 43"
+    },
+    {
+      "group": "Cups",
+      "index": 44,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 44"
+    },
+    {
+      "group": "Courses",
+      "index": 45,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 45"
+    },
+    {
+      "group": "Courses",
+      "index": 46,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 46"
+    },
+    {
+      "group": "Courses",
+      "index": 47,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 47"
+    },
+    {
+      "group": "Courses",
+      "index": 48,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 48"
+    },
+    {
+      "group": "Courses",
+      "index": 49,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 49"
+    },
+    {
+      "group": "Courses",
+      "index": 50,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 50"
+    },
+    {
+      "group": "Courses",
+      "index": 51,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 51"
+    },
+    {
+      "group": "Courses",
+      "index": 52,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 52"
+    },
+    {
+      "group": "Courses",
+      "index": 53,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 53"
+    },
+    {
+      "group": "Courses",
+      "index": 54,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 54"
+    },
+    {
+      "group": "Courses",
+      "index": 55,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 55"
+    },
+    {
+      "group": "Courses",
+      "index": 56,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 56"
+    },
+    {
+      "group": "Courses",
+      "index": 57,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 57"
+    },
+    {
+      "group": "Courses",
+      "index": 58,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 58"
+    },
+    {
+      "group": "Courses",
+      "index": 59,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 59"
+    },
+    {
+      "group": "Courses",
+      "index": 60,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 60"
+    },
+    {
+      "group": "Courses",
+      "index": 61,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 61"
+    },
+    {
+      "group": "Courses",
+      "index": 62,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 62"
+    },
+    {
+      "group": "Courses",
+      "index": 63,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 63"
+    },
+    {
+      "group": "Courses",
+      "index": 64,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 64"
+    },
+    {
+      "group": "Courses",
+      "index": 65,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 65"
+    },
+    {
+      "group": "Courses",
+      "index": 66,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 66"
+    },
+    {
+      "group": "Courses",
+      "index": 67,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 67"
+    },
+    {
+      "group": "Courses",
+      "index": 68,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 68"
+    },
+    {
+      "group": "Courses",
+      "index": 69,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 69"
+    },
+    {
+      "group": "Courses",
+      "index": 70,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 70"
+    },
+    {
+      "group": "Courses",
+      "index": 71,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 71"
+    },
+    {
+      "group": "Courses",
+      "index": 72,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 72"
+    },
+    {
+      "group": "Courses",
+      "index": 73,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 73"
+    },
+    {
+      "group": "Courses",
+      "index": 74,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 74"
+    },
+    {
+      "group": "Courses",
+      "index": 75,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 75"
+    },
+    {
+      "group": "Courses",
+      "index": 76,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "text": "Studio name 76"
+    }
+  ]
+}

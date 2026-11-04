@@ -108,7 +108,8 @@ fn every_engine_persists_undoes_repacks_and_exports_for_ds() {
     assert!(wav.starts_with(b"RIFF"));
     let p = service.project.as_ref().unwrap();
     let s = service.session.as_ref().unwrap();
-    assert!(toolbox_core::validation::validate(p, s).is_empty());
+    let issues = toolbox_core::validation::validate(p, s);
+    assert!(issues.is_empty(), "{issues:?}");
     let reopened = Project::open(&p.root, s).unwrap();
     let m = Nsbmd::parse(&toolbox_core::preview::plain(reopened.bytes(s, model).unwrap()).unwrap())
         .unwrap();

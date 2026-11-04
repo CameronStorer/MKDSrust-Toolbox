@@ -144,7 +144,8 @@ export function SceneViewport() {
   const geometryRevision = useStore(
     (s) => s.snapshot?.history.map((h) => `${h.title}:${h.applied}`).join('|') ?? '',
   );
-  const { mode, grid, set, frameRequest } = useScene();
+  const { mode, grid, set, frameRequest, reference, referenceKart, referenceCharacter } =
+    useScene();
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
   const track = workspace === 'Track';
@@ -285,12 +286,21 @@ export function SceneViewport() {
     };
     const paint = (e: PointerEvent) => {
       const state = useScene.getState();
-      if (!track && state.rigBrush && content && useStore.getState().workspace === 'Rig & Animate') {
+      if (
+        !track &&
+        state.rigBrush &&
+        content &&
+        useStore.getState().workspace === 'Rig & Animate'
+      ) {
         cast(e);
-        const hit = raycaster.intersectObject(content, true).find((hit) => typeof hit.object.userData.part === 'number');
+        const hit = raycaster
+          .intersectObject(content, true)
+          .find((hit) => typeof hit.object.userData.part === 'number');
         if (hit && hit.faceIndex !== undefined && hit.faceIndex !== null) {
           const part = hit.object.userData.part as number;
-          const faces = rigStroke.get(part) ?? new Set<number>(); faces.add(hit.faceIndex); rigStroke.set(part, faces);
+          const faces = rigStroke.get(part) ?? new Set<number>();
+          faces.add(hit.faceIndex);
+          rigStroke.set(part, faces);
         }
         return;
       }
@@ -327,8 +337,22 @@ export function SceneViewport() {
     const pointerup = (e: PointerEvent) => {
       if (e.button === 0 && rigStroke.size) {
         const state = useScene.getState();
-        if (state.info?.model_path) for (const [part, triangles] of rigStroke) void useStore.getState().run({ kind: 'Wizard', action: { kind: 'RigPaint', path: state.info.model_path, part, triangles: [...triangles], bone: state.bone } });
-        rigStroke.clear(); return;
+        if (state.info?.model_path)
+          for (const [part, triangles] of rigStroke)
+            void useStore
+              .getState()
+              .run({
+                kind: 'Wizard',
+                action: {
+                  kind: 'RigPaint',
+                  path: state.info.model_path,
+                  part,
+                  triangles: [...triangles],
+                  bone: state.bone,
+                },
+              });
+        rigStroke.clear();
+        return;
       }
       if (e.button === 0 && stroke.size) {
         const state = useScene.getState();
@@ -348,6 +372,14 @@ export function SceneViewport() {
         const hit = raycaster
           .intersectObject(content, true)
           .find((hit) => typeof hit.object.userData.part === 'number');
+        if (hit && useScene.getState().pickWheels) {
+          const centers = useScene.getState().wheelCenters;
+          if (centers.length < 4)
+            useScene.setState({
+              wheelCenters: [...centers, [hit.point.x * 16, hit.point.y * 16, hit.point.z * 16]],
+            });
+          return;
+        }
         if (hit)
           useScene.setState({
             part: hit.object.userData.part as number,
@@ -389,15 +421,32 @@ export function SceneViewport() {
         texture: 0,
         bank: 0,
       }),
+      reference && !track
+        ? binary({
+            path: reference,
+            mode: 'seated-reference',
+            start: 0,
+            length: 0,
+            palette: null,
+            screen: null,
+            texture: referenceCharacter,
+            bank: referenceKart,
+          })
+        : Promise.resolve(null),
     ])
-      .then(async ([info, data]) => {
+      .then(async ([info, data, referenceData]) => {
         const gltf = await new GLTFLoader().parseAsync(data, '');
+        const referenceScene = referenceData
+          ? (await new GLTFLoader().parseAsync(referenceData, '')).scene
+          : null;
         if (cancelled) {
           dispose(gltf.scene);
+          if (referenceScene) dispose(referenceScene);
           return;
         }
         content = gltf.scene;
         scene.add(content);
+        if (referenceScene) scene.add(referenceScene);
         clips = gltf.animations;
         mixer = new THREE.AnimationMixer(content);
         if (track) {
@@ -528,6 +577,9 @@ export function SceneViewport() {
     valid,
     track,
     geometryRevision,
+    reference,
+    referenceKart,
+    referenceCharacter,
     settings?.theme,
     settings?.navigation,
     settings?.camera_speed,
@@ -650,7 +702,13 @@ export function SceneProperties() {
   const budget = info?.budget;
   return (
     <div className="panel properties">
-      {workspace === 'Rig & Animate' ? <RigTools /> : workspace === 'Model' ? <ModelTools /> : <CollisionTools />}
+      {workspace === 'Rig & Animate' ? (
+        <RigTools />
+      ) : workspace === 'Model' ? (
+        <ModelTools />
+      ) : (
+        <CollisionTools />
+      )}
       <div className="section-label">DS BUDGET · GEOMETRY ESTIMATE</div>
       {budget && (
         <>
@@ -676,12 +734,16 @@ export function SceneProperties() {
           ))}
         </>
       )}
-      <div className="section-label">
-        {entry ? `${entry.section} ${entry.index}` : 'SELECTION'}
-      </div>
+      <div className="section-label">{entry ? `${entry.section} ${entry.index}` : 'SELECTION'}</div>
       {entry ? (
         <>
-          {info?.nkm_path && <TrackPoint key={`${selected}:${entry.raw.join()}`} entry={entry} path={info.nkm_path} />}
+          {info?.nkm_path && (
+            <TrackPoint
+              key={`${selected}:${entry.raw.join()}`}
+              entry={entry}
+              path={info.nkm_path}
+            />
+          )}
           <dl>
             {entry.fields.map(([name, value]) => (
               <div className="budget-row" key={name}>

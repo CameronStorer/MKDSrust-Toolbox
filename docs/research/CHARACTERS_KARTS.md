@@ -228,10 +228,10 @@ Replace in KartModelMainA or B (and the same file in KartModelMenu):
 The kart model must **not** contain wheel nodes; the tire model is instanced at the 4 offset positions and steered and spun by the game. The user supplies wheel positions only if auto detection fails.
 
 ## 9. Open questions
-1. Exact world scale of `kartoffsetdata` versus NSBMD units (about 10 to 16x; not traced).
+1. Placement calibration (2026-11-04): use 16 kart-object units per NSBMD unit for picked wheel centres. The owned standard kart's baked wheel bounds give X/Z ratios about 15.87..16.14 (rear X exactly 16); differences include the low-detail tire shape. Drawing also reduces world translation by four bits before GX output. Seat offsets are already in model units and are not multiplied by 16. Recheck wheel centring visually after choosing a different tire size.
 2. Meaning of the extra 14 entries of `kartphysicalparam.bin`, and the named weight classes 0..2.
 3. Exact meaning of `kart_appear.ktbl` values 1..4, and where the unlock limit comes from.
 4. Where the baked `kart_tire` mesh is drawn (menu or far LOD) and whether it can be removed.
-5. Which sdat sequences are the per-character voices.
+5. Resolved for race voices (2026-11-04): SSAR/SEQARC index 2 contains 182 records = 13 characters x 14 events. Playback at 0x0210AF40 / 0x0210B198 indexes character*14+event. The owned ROM confirms each group uses bank 3+character. Copy the donor event records while retaining the destination bank id, and copy the donor BANK INFO record (file and wave references) into that destination bank slot. `sound_get_driver_group` at 0x0211127C is a result-classification helper, not a character voice routing table. Menu/other voice variations still need an audible boot check.
 6. Adding a 14th character: tables are hard-sized to 13 (name table, offset table, ktbl columns, save stride 13, charphysical/charmenu params). It needs code patches or a plugin; replacing an existing slot (for example Shy Guy, id 12) is the safe route.
 7. Safe geometry/VRAM limits beyond the retail maxima.

@@ -129,6 +129,12 @@ pub fn rebuild(
     let mut report = BuildReport::default();
     let mut section_end = used;
     for (path, data) in changes {
+        if path.starts_with("system/overlay9/") && path.ends_with(".uncompressed") {
+            if data != &[0] && data != &[1] {
+                return Err(error(0, "invalid overlay storage policy"));
+            }
+            continue;
+        }
         let special = if path == crate::executable::ARM9 {
             Some((rom.arm9.clone(), None))
         } else if let Some(id) = path
@@ -152,6 +158,11 @@ pub fn rebuild(
         };
         if let Some((old, overlay)) = special {
             let compressed = overlay
+                .filter(|(_, o)| {
+                    changes
+                        .get(&crate::executable::overlay_policy(o.id))
+                        .is_none_or(|v| v != &[1])
+                })
                 .and_then(|_| crate::blz::compress(data, 0))
                 .filter(|b| b.len() <= old.len());
             let stored = compressed.as_deref().unwrap_or(data);
@@ -256,6 +267,9 @@ pub fn rebuild(
     // the result must read back with every changed file intact
     let check = Rom::parse(&out)?;
     for (path, data) in changes {
+        if path.starts_with("system/overlay9/") && path.ends_with(".uncompressed") {
+            continue;
+        }
         let actual = if path == crate::executable::ARM9 {
             Some(&out[check.arm9.clone()])
         } else if path.starts_with("system/overlay9/") {

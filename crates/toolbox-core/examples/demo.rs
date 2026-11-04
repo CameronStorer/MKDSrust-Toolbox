@@ -37,6 +37,16 @@ fn main() -> toolbox_core::Result<()> {
     snapshot.rom_path = "/user/roms/synthetic.nds".into();
     let out = root.join("app/src/demo.json");
     std::fs::write(out, serde_json::to_vec_pretty(&snapshot)?)?;
+    let wizard =
+        RomSession::from_bytes(synthetic::wizard_rom(), "/user/roms/synthetic.nds".into())?;
+    std::fs::write(
+        root.join("app/src/demo-wizards.json"),
+        serde_json::to_vec_pretty(&serde_json::json!({
+            "catalog": toolbox_core::tables::catalog(None, &wizard)?,
+            "names": toolbox_core::names::list(None, &wizard)?,
+            "files": wizard.nodes,
+        }))?,
+    )?;
     let session = service.session.as_ref().unwrap();
     let cell = toolbox_core::preview::cell_image(
         None,

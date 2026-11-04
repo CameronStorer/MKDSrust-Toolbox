@@ -375,9 +375,24 @@ Minimum viable "extra slots" without UI changes: keep 32 cup positions but allow
 
 1. Meaning of the aux byte (byte 2) of the music record, and exact final-lap mechanism (tempo variable vs second sequence).
 2. Table that maps NKM object id to class/model files (only handler tables 0x0216B94C / 0x0216B9AC found); names/semantics of ids other than 0x65.
-3. Minimap world-to-pixel transform.
+3. Resolved for the generated local layer (2026-11-04): `minimap_course_corners` at 0x020B6A18 reads the 55 x 4 signed-short rectangle table at RAM 0x0216890C, indexed by course*8. The second rectangle table starts at 0x02168754. The wizard fits the source XZ bounds inside the first rectangle and rasterizes `(x-left)/(right-left)` and `(z-top)/(bottom-top)` into its 256x256 local layer. Existing global/second layers are retained; verify those overlays on the selected course in game. Heights and overpasses require manual route inspection.
 4. Exact meaning of KCL attribute bits 0-4 and 13 (0x2000); which type is lava.
 5. Which tiles of `cup_mark`/`trophy_icon`/`select_cup_*` correspond to each cup; where the in-race course-name banner text comes from.
 6. Sound heap behaviour above ~300 KB per song and whether sound mode 2 is the race mode: needs a boot test.
 7. Overlay references to the course/cup tables (overlays are compressed, not scanned).
 8. Save-data layout per course (fields not inspected here).
+
+## 9. Generated track heap limits (2026-11-04)
+
+The maintainer observed a 499 KB generated KCL crash on race load; coarsening it to
+55 KB booted. Generated KCL now uses a grid of 1024-unit cubic roots (coordinate
+shift 10, nonzero Y/Z index shifts), conservative expanded-AABB candidates, shared
+leaf lists and bounded coarsening. It warns above 150,000 bytes and refuses above
+215,000 bytes. These conservative generated-file caps apply even though the maximum
+across all 59 retail course archives (including battle/unused courses) is 287,602 bytes.
+
+Every generated member also stays at or below the largest expanded retail member
+with that exact relative path, measured from the user's ROM in memory. Observed
+maxima: course model 124,952 B, textures 129,780 B, NKM 21,960 B, local NCGR 65,600 B,
+local NCLR 570 B, local2/local3 NSCR 8,228 B each. The KCL cap is additionally enforced
+by export validation. Sizes are metadata only; no retail content is stored here.

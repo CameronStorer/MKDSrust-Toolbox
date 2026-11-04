@@ -352,7 +352,27 @@ pub fn replace_effect(
         .waves
         .get_mut(sample as usize)
         .ok_or_else(|| Error::Invalid("sample index outside archive".into()))?;
-    *target = song.waves.waves[0].clone();
+    let capacity = match encoding {
+        0 => target.data.len(),
+        1 => target.data.len() / 2,
+        2 => target.data.len().saturating_sub(4) * 2 + 1,
+        _ => return Err(Error::Invalid("choose PCM8, PCM16 or ADPCM".into())),
+    };
+    let mut samples = song.waves.waves[0].samples()?;
+    samples.truncate(capacity);
+    if samples.is_empty() {
+        return Err(Error::Invalid("effect allocation is empty".into()));
+    }
+    let loop_start = target
+        .looped
+        .then(|| target.loop_sample().min(samples.len() - 1));
+    let replacement = nitro_formats::audio::Swav::from_pcm(&samples, rate, encoding, loop_start)?;
+    if replacement.data.len() > target.data.len() {
+        return Err(Error::Invalid(
+            "effect exceeds its sample allocation; reduce encoding quality".into(),
+        ));
+    }
+    *target = replacement;
     sdat.files[id] = swar.write()?;
     p.edit(
         path,

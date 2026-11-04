@@ -1,76 +1,82 @@
-# Toolbox status — 2026-11-03
+# Toolbox status — 2026-11-04
 
-Stage 4 A–E work at a basic end-to-end engine level. Stages 1–3 (projects,
-archive edits, text/2D tools, packages, BPS/DS export and Play targets) remain available.
+Stage 5 A–E have basic end-to-end authoring paths. F has automated export/readback
+and synthetic screenshots; current-output boot verification remains with the maintainer.
+Stages 1–4 remain available. Changes are uncommitted.
 
 ## Done
 
-- Retail correctness: resource-specific dictionaries (also during texture replacement),
-  compact PCMP palettes, legacy zero-BOM NCGR lengths and CLI test environment isolation.
-  The owned ROM was read in place. Local tests round-trip 286 archives, 92 BMGs,
-  433 NCLRs, 672 NCGRs, 470 NSCRs and 124 NKMs; parse 766 NSBMDs, 335 NSBTXs,
-  136 NSBCAs and 59 KCLs. Counts print with `--nocapture`.
-- Models: GLB/glTF and OBJ import; transforms, quadric decimation, interpolated plane
-  cuts, part/material/connected/box deletion, seam-aware merging and normal recomputation.
-  Authored NSBMD writes bones, inverse binds, weighted matrices, materials, GX triangles
-  or connected strips, lookup trees and optional embedded textures. PNG/JPEG textures
-  resize to capped powers of two and use the existing quantizer. Scene and badge
-  validation share the model budget function.
-- Collision: fixed-point prisms, conservative spatial octree, configurable material/slope
-  classification and repainting. A retail rebuild retained all 902 prisms and a valid
-  tree. MKDS type bits now use bits 8–12; observed types 0–22 live in `mkds-data`.
-- Audio: SDAT SYMB/INFO/FAT/FILE, SSEQ, SBNK, SWAR/SWAV, SSAR and STRM readers/writers.
-  The retail SDAT and its 76 sequences, 99 banks, 104 wave archives and 5 sequence
-  archives round-trip; relocation and a short retail sequence preview also pass.
-  WAV resampling, mono/stereo, PCM8/PCM16/IMA-ADPCM, aligned loops, independent sampled
-  song banks, RAM reporting and sample replacement. MIDI imports notes, tempo, programs,
-  volume, pan, pitch bend and loop markers, mapping programs against a chosen bank.
-- App: model import, transform gizmos, part selection, decimation/cut/delete/merge and
-  budgets; Track collision generation, attribute colours and stroke painting; Audio
-  tree, song import options and software playback. Mutations use project history and
-  archive rebuilding. Synthetic tests cover save/reopen, undo/redo, packing and BPS
-  reproduction across all engines. IPC bindings and original demos are regenerated.
+- A: bounded BLZ, ARM9 module parameters, typed RAM-addressed tables, overlay
+  recompression/fallback and an uncompressed option for either binary. Overlay storage
+  policy is project metadata, never a ROM member.
+- B: character slot/base selection, automatic orientation with up-axis override,
+  hip cut, fitting, reduction, donor skeleton/rigid assignment and paint brush,
+  race/menu/E models, donor clips, seats and donor race-voice routing. Seated
+  reference/animation preview; rendered or PNG portraits into a chosen cell.
+- C: kart body/texture/shadow generation, donor stats and all thirteen seats,
+  tires, wheel coordinates/picking, placement gizmos with seated reference,
+  ground/centre helpers and speed/acceleration forms.
+- D: material/slope collision, lighting defaults, closed racing-line generation,
+  terrain-height placement, 64 checkpoints, CPU/item routes, starts, respawns,
+  camera, item rows, minimap and D variants. Editable points, route repair and
+  collision compaction Fix buttons. Unrouted objects copy donor MapObj families.
+- KCL: 1024-unit cubic root grid, coordinate shift 10, nonzero Y/Z strides,
+  conservative candidates, shared lists and bounded coarsening. Warn above
+  **150,000 bytes**, refuse above **215,000 bytes**, including export validation.
+  The 6,272-prism / 2,000-unit dense fixture is **173,740 bytes**; vertex/centroid
+  lookups retain candidates across root boundaries. Larger geometry is refused.
+  Every generated track member also stays within the largest matching expanded
+  retail member, measured in memory; manual edits are checked again at export.
+- E: WAV/MIDI music assignment with RAM reporting, allocation-bounded sound
+  replacement, cup order/name-message updates, HUD cells, embedded item retexturing
+  and searchable grouped names. Each recipe is one undoable command.
+- F: synthetic persistence/undo/BPS and opt-in owned-ROM export/readback tests:
+  character, kart, both course-20 variants (14 files), music, effects, icons,
+  embedded textures, names, cups and uncompressed overlays. Original hash checked.
+  All eight recipe screens captured in both themes: `docs/screenshots/recipe-*`.
 
-## Partial / next
+## Limits / remaining verification
 
-- FBX/DAE are deferred: no suitable importer was cached. Convert in Blender to GLB/glTF/
-  OBJ. glTF requires dense triangles and a TRS skeleton whose rest pose matches its
-  inverse binds. Sparse/Draco accessors, arbitrary bind-pose conversion and OBJ MTL
-  image loading remain future work. PNG/JPEG textures cover the glTF image formats.
-- The writer rejects models above 31 usable matrix slots; automatic splitting and
-  rig fitting remain next work. Cuts are uncapped; decimation can stop above a target
-  when safe collapses are unavailable. KCL candidate lists favour correctness over size.
-- Audio preview is basic, without accurate envelopes or every SSEQ command; unsupported
-  commands report errors. WAV accepts PCM8/PCM16/float32; MIDI accepts formats 0/1 with
-  PPQN timing. Sampled-song allocation is capped at 2 MiB, not a full live RAM budget.
-- Next: Stage 5 research/wizards and emulator/DS boot tests. No hardware or external game
-  install was launched. Inherited limits include 4×4 texture encoding, IPS/xdelta,
-  new top-level ROM files/FNT reconstruction, detailed cell affine/transfer policies
-  and editing non-joint animation formats.
+The maintainer boot-tested earlier slot-0 character/kart outputs and the coarse KCL
+track fix. **The new root grid, donor voices and current exports need boot tests**;
+no DS hardware/emulator verification is claimed. Native-builder dependency resolution
+was attempted with this task's offline CARGO_HOME: `corosensei` is not cached.
+
+Portrait destination/crop is explicit; localized selection/HUD/result cells are not
+all auto-mapped. Tracks supply one camera and no area triggers: inspect intro/goal
+views and retained minimap backgrounds. Height placement uses the highest XZ surface;
+bridges/tunnels need manual edits. Routed donor objects need PATH/POIT wiring.
+Automatic orientation uses the longest source axis. Inherited limits include FBX/DAE,
+arbitrary animation retargeting, 4x4 texture encoding, IPS/xdelta and new top-level
+ROM files. These are not claimed complete.
 
 ## Verification and run
 
-Passed: `cargo fmt --check`, workspace Clippy/all targets with `-D warnings`, workspace
-tests, and `cargo test --workspace --release --no-fail-fast` with `MKDS_ROM` set to the
-external dump in `STAGE4.md`. App lint/typecheck, 6 Vitest tests, production build and
-Tauri `cargo build` pass. All 30 Playwright tests pass, including actual gizmo dragging
-and collision brush strokes. Screenshots use generated fixtures in both themes.
-No Nintendo data was added; the clean ROM was never copied into the workspace.
+Passed: `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`,
+`cargo test --workspace` (**79 tests with MKDS_ROM set**), app lint/typecheck,
+6 Vitest tests, production build, Tauri `cargo build`, and **46 Playwright tests**.
+No Nintendo content was added. The owned ROM was read in place; the new retail tests
+keep rebuilt images in RAM. Demo assets/screenshots are generated synthetic data.
 
-From the repository root in PowerShell, set `$env:CARGO_HOME="$PWD/.cache/cargo"` and
-`$env:CARGO_NET_OFFLINE='true'`. With Rust stable, Node 22 and Tauri prerequisites,
-in `app/` run `npm ci`, then `npm run tauri dev`. Open the external AMCE rev 0 ROM
-and a project. Select an existing model/course/SDAT and use Model, Track or Audio.
-Imports replace selected resources; undo and export work as before. Audio loop fields
-use source sample numbers; MIDI loop markers are `loopStart` and `loopEnd`.
+PowerShell from root: set `$env:CARGO_HOME="$PWD/.cache/cargo"` and
+`$env:CARGO_NET_OFFLINE='true'`. In `app/`, run `npm run tauri dev`; open the external
+AMCE revision-0 ROM and a project, then **Beginner recipes**. Apply, inspect and export
+outside the repository. Set `MKDS_ROM` from `docs/STAGE4.md` for local tests.
+Regenerate demos: `cargo run -p toolbox-core --example demo`. For browser checks,
+in `app/` set `PLAYWRIGHT_BROWSERS_PATH=<repo>/.cache/playwright` and
+`MKDSTB_SCREENSHOT_PREVIEW=1`, then `npm run test:e2e`.
 
-Local counts: set `MKDS_ROM`, then run
-`cargo test -p toolbox-core --release --test retail_opt_in -- --nocapture`.
-Regenerate original demos: `cargo run -p toolbox-core --example demo`.
-For browser checks in `app/`, set `PLAYWRIGHT_BROWSERS_PATH=<repo>/.cache/playwright`
-and `MKDSTB_SCREENSHOT_PREVIEW=1`, then run `npm run test:e2e`.
-The only added crate is `jpeg-decoder` 0.3.2 (MIT OR Apache-2.0), without default
-features or transitive dependencies. It is cached; all final builds ran offline.
+For each patched output, the maintainer's exact MKDSrust boot-test sequence is:
 
-Changes are uncommitted. Nothing was pushed; Git metadata/remotes and the builder
-repository were not modified.
+```text
+mkds_builder <patched.nds> --build --allow-unverified --out <dir>
+<dir>/game.exe --assets <dir>/assets --race course=20,character=0,kart=0,racers=8 --frames 1500
+```
+
+Use an empty output directory outside this repository. Repeat for character, kart,
+track, music/effects and items. For cups/names also run
+`<dir>/game.exe --assets <dir>/assets --list-courses` and inspect the renamed cup and
+race order in the game menu. Automated tests independently check tables/messages;
+a course listing alone does not verify every localized string.
+
+No Git metadata/remotes or builder sources were modified; nothing was pushed.

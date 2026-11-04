@@ -82,6 +82,10 @@ impl RomSession {
             };
             s.files
                 .insert(nitro_formats::executable::overlay_path(overlay.id), bytes);
+            s.files.insert(
+                nitro_formats::executable::overlay_policy(overlay.id),
+                vec![0],
+            );
         }
         Ok(s)
     }

@@ -29,6 +29,40 @@ pub struct TrackOptions {
 fn err(s: &str) -> Error {
     Error::Invalid(s.into())
 }
+/// Runtime (expanded) file sizes, measured in memory from the owned clean ROM.
+/// Keys include subdirectories: a Map2D member must not borrow a model's budget.
+pub fn file_budgets(s: &RomSession) -> Result<BTreeMap<String, usize>> {
+    if let Some(clean) = &s.clean {
+        return file_budgets(&RomSession::from_bytes(clean.clone(), s.path.clone())?);
+    }
+    let mut limits = BTreeMap::<String, usize>::new();
+    for n in &s.nodes {
+        if let Some(role) = file_role(&n.path) {
+            let bytes = crate::preview::plain(s.file(&n.path)?)?;
+            let limit = limits.entry(role).or_default();
+            *limit = (*limit).max(bytes.len());
+        }
+    }
+    Ok(limits)
+}
+pub fn file_role(path: &str) -> Option<String> {
+    path.strip_prefix("data/Course/")?
+        .split_once(".carc/")
+        .map(|(_, role)| role.to_ascii_lowercase())
+}
+pub fn check_file_size(path: &str, bytes: &[u8], limits: &BTreeMap<String, usize>) -> Result<()> {
+    let Some(role) = file_role(path) else {
+        return Ok(());
+    };
+    let limit = limits
+        .get(&role)
+        .ok_or_else(|| err(&format!("{path}: no retail size budget is available")))?;
+    let size = crate::preview::plain(bytes)?.len();
+    if size > *limit {
+        return Err(err(&format!("{path}: {size} bytes exceeds the largest retail {role} ({limit} bytes); simplify the mesh, reduce textures or route/object counts")));
+    }
+    Ok(())
+}
 fn u16at(b: &mut [u8], at: usize, v: u16) {
     b[at..at + 2].copy_from_slice(&v.to_le_bytes());
 }
@@ -262,13 +296,94 @@ pub fn validate(n: &Nkm) -> Vec<String> {
     for tag in ["CPAT", "IPAT", "EPAT"] {
         if let Some(s) = n.section(tag) {
             for r in &s.entries {
-                if r[4] == 255 || r[7] == 255 {
+                if r[4] == 255
+                    || r[7] == 255
+                    || r[4] as usize >= s.entries.len()
+                    || r[7] as usize >= s.entries.len()
+                {
                     errors.push(format!("{tag}: route is not closed"));
+                }
+                let points = n
+                    .section(match tag {
+                        "CPAT" => "CPOI",
+                        "IPAT" => "IPOI",
+                        _ => "EPOI",
+                    })
+                    .map_or(0, |s| s.entries.len());
+                let start = u16::from_le_bytes([r[0], r[1]]) as usize;
+                let count = u16::from_le_bytes([r[2], r[3]]) as usize;
+                if count == 0 || start + count > points {
+                    errors.push(format!("{tag}: point range is invalid"));
                 }
             }
         }
     }
     errors
+}
+/// Repairs only missing/undersized required sections and broken route tables.
+/// Existing valid points, objects and camera records remain untouched.
+pub fn repair(n: &mut Nkm) -> Result<()> {
+    let route = n
+        .section("EPOI")
+        .or_else(|| n.section("IPOI"))
+        .filter(|s| s.entries.len() >= 3)
+        .ok_or_else(|| err("draw at least three CPU or item route points before repairing"))?;
+    let points = route
+        .entries
+        .iter()
+        .map(|b| nitro_formats::nkm::vec3(b, 0))
+        .collect::<nitro_formats::Result<Vec<_>>>()?;
+    let stag = n.section("STAG").and_then(|s| s.entries.first());
+    let course = stag.map_or(20, |b| u16::from_le_bytes([b[0], b[1]]));
+    let laps = stag.map_or(3, |b| u16::from_le_bytes([b[2], b[3]]).clamp(1, 9));
+    let generated = generate_nkm(course, laps, &points, 150., 0)?;
+    for mut section in generated.sections {
+        let size = nitro_formats::nkm::stride(&section.kind, n.version).unwrap();
+        for row in &mut section.entries {
+            row.truncate(size);
+        }
+        let minimum = match section.kind.as_str() {
+            "CPOI" => 16,
+            "KTPJ" => 2,
+            "STAG" | "KTPS" | "KTP2" | "IPOI" | "EPOI" | "CAME" => 1,
+            _ => 0,
+        };
+        if let Some(old) = n.sections.iter_mut().find(|s| s.kind == section.kind) {
+            if old.entries.len() < minimum {
+                *old = section;
+            }
+        } else {
+            n.sections.push(section);
+        }
+    }
+    const ORDER: [&str; 19] = [
+        "OBJI", "PATH", "POIT", "STAG", "KTPS", "KTPJ", "KTP2", "KTPC", "KTPM", "CPOI", "CPAT",
+        "IPOI", "IPAT", "EPOI", "EPAT", "AREA", "CAME", "MEPO", "MEPA",
+    ];
+    n.sections.sort_by_key(|s| {
+        ORDER
+            .iter()
+            .position(|k| *k == s.kind)
+            .unwrap_or(ORDER.len())
+    });
+    for (path, points) in [("CPAT", "CPOI"), ("IPAT", "IPOI"), ("EPAT", "EPOI")] {
+        let count = n.section(points).unwrap().entries.len();
+        // Collapse an invalid graph into one closed route; valid graphs survive.
+        if validate(n).iter().any(|e| e.starts_with(path)) {
+            let mut row = vec![255; 12];
+            u16at(&mut row, 0, 0);
+            u16at(&mut row, 2, count as u16);
+            row[4] = 0;
+            row[7] = 0;
+            row[10..12].fill(0);
+            n.sections
+                .iter_mut()
+                .find(|s| s.kind == path)
+                .unwrap()
+                .entries = vec![row];
+        }
+    }
+    Ok(())
 }
 pub fn move_checkpoint(n: &mut Nkm, index: usize, left: [f32; 2], right: [f32; 2]) -> Result<()> {
     let section = n
@@ -393,6 +508,101 @@ fn minimap(m: &nitro_formats::model::Model, rect: [f32; 4]) -> Result<(Vec<u8>, 
         Nscr::new(256, 256, &(0..1024).collect::<Vec<u16>>())?.write(),
     ))
 }
+pub fn surface_height(m: &nitro_formats::model::Model, x: f32, z: f32) -> Result<f32> {
+    let mut height: Option<f32> = None;
+    for mesh in &m.meshes {
+        for ids in mesh.indices.chunks_exact(3) {
+            let [a, b, c] = [
+                mesh.positions[ids[0] as usize],
+                mesh.positions[ids[1] as usize],
+                mesh.positions[ids[2] as usize],
+            ];
+            let determinant = (b[2] - c[2]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[2] - c[2]);
+            if determinant.abs() < 1e-6 {
+                continue;
+            }
+            let u = ((b[2] - c[2]) * (x - c[0]) + (c[0] - b[0]) * (z - c[2])) / determinant;
+            let v = ((c[2] - a[2]) * (x - c[0]) + (a[0] - c[0]) * (z - c[2])) / determinant;
+            if u >= -1e-5 && v >= -1e-5 && u + v <= 1.00001 {
+                let y = u * a[1] + v * b[1] + (1. - u - v) * c[1];
+                height = Some(height.map_or(y, |h| h.max(y)));
+            }
+        }
+    }
+    height.ok_or_else(|| {
+        err("racing line or item row is outside the map surface; move it onto the road")
+    })
+}
+pub fn place_object(
+    p: &mut Project,
+    s: &RomSession,
+    path: &str,
+    donor: Option<&str>,
+    index: usize,
+    position: [f32; 3],
+) -> Result<()> {
+    let mut n = Nkm::parse(&crate::preview::plain(p.bytes(s, path)?)?)?;
+    let mut edits = BTreeMap::new();
+    let mut row = if let Some(donor) = donor {
+        let source = Nkm::parse(&crate::preview::plain(p.bytes(s, donor)?)?)?;
+        let row = source
+            .section("OBJI")
+            .and_then(|s| s.entries.get(index))
+            .ok_or_else(|| err("choose an object from the donor course"))?
+            .clone();
+        if u16::from_le_bytes([row[38], row[39]]) != u16::MAX {
+            return Err(err("this object uses a route; copy its PATH/POIT in the Track editor before placing it"));
+        }
+        let from = donor
+            .rsplit_once('/')
+            .ok_or_else(|| err("invalid donor course"))?
+            .0;
+        let to = path
+            .rsplit_once('/')
+            .ok_or_else(|| err("invalid destination course"))?
+            .0;
+        // The handler-to-file map is incomplete. Copy the full donor MapObj
+        // family, including texture/animation companions, instead of guessing.
+        for (from, to) in [
+            (from.to_string(), to.to_string()),
+            (
+                from.replace(".carc", "Tex.carc"),
+                to.replace(".carc", "Tex.carc"),
+            ),
+        ] {
+            for node in &s.nodes {
+                if let Some(suffix) = node.path.strip_prefix(&format!("{from}/MapObj/")) {
+                    let dest = format!("{to}/MapObj/{suffix}");
+                    let bytes = p.bytes(s, &node.path)?.to_vec();
+                    if p.bytes(s, &dest).is_ok_and(|b| b != bytes) {
+                        return Err(err("donor object resources conflict with this course; choose another donor"));
+                    }
+                    edits.insert(dest, bytes);
+                }
+            }
+        }
+        row
+    } else {
+        let mut row = vec![0; 60];
+        vec(&mut row, 24, [1.; 3])?;
+        u16at(&mut row, 36, 0x65);
+        u16at(&mut row, 38, u16::MAX);
+        row
+    };
+    vec(&mut row, 0, position)?;
+    n.sections
+        .iter_mut()
+        .find(|s| s.kind == "OBJI")
+        .ok_or_else(|| err("repair the missing object section first"))?
+        .entries
+        .push(row);
+    edits.insert(path.into(), n.write()?);
+    let limits = file_budgets(s)?;
+    for (path, bytes) in &edits {
+        check_file_size(path, bytes, &limits)?;
+    }
+    p.edit_many(edits, "Place track object and resources", s)
+}
 pub fn track(p: &mut Project, s: &RomSession, o: &TrackOptions) -> Result<Report> {
     let model = crate::model_import::import(std::path::Path::new(&o.source))?;
     track_from(p, s, o, model)
@@ -457,13 +667,58 @@ pub fn track_from(
             ))
         })
         .collect::<Result<Vec<_>>>()?;
-    let nkm = generate_nkm(o.course as u16, o.laps, &line, o.width, o.item_rows)?;
+    let mut nkm = generate_nkm(o.course as u16, o.laps, &line, o.width, o.item_rows)?;
+    for (tag, lift) in [
+        ("KTPS", 10.),
+        ("KTP2", 10.),
+        ("KTPJ", 10.),
+        ("EPOI", 1.),
+        ("IPOI", 1.),
+        ("OBJI", 12.),
+    ] {
+        for row in &mut nkm
+            .sections
+            .iter_mut()
+            .find(|s| s.kind == tag)
+            .unwrap()
+            .entries
+        {
+            let p = nitro_formats::nkm::vec3(row, 0)?;
+            fx(row, 4, surface_height(m, p[0], p[2])? + lift)?;
+        }
+    }
     let collision = collision::generate(m, &collision::AttributeTable::default())?;
     let polygons = m.meshes.iter().map(|m| m.indices.len() as u32 / 3).sum();
     if polygons > 2000 {
         return Err(err(
             "track exceeds 2000 triangles; decimate it in Model first",
         ));
+    }
+    if let Some(tx) = source.textures.take() {
+        let mut textures = vec![];
+        let mut palettes = vec![];
+        for (i, texture) in tx.textures.iter().enumerate() {
+            let palette = source.models[0]
+                .materials
+                .iter()
+                .find(|m| m.texture.as_deref() == Some(&texture.name))
+                .and_then(|m| m.palette.as_ref())
+                .and_then(|name| tx.palettes.iter().position(|p| &p.name == name))
+                .unwrap_or(i.min(tx.palettes.len().saturating_sub(1)));
+            let (converted, mut colors) =
+                crate::model::convert_texture(&tx.decode(i, palette)?, &texture.name, 3, 128)?;
+            colors.name = format!("map_pal_{i}");
+            for material in &mut source.models[0].materials {
+                if material.texture.as_deref() == Some(&texture.name) {
+                    material.palette = Some(colors.name.clone());
+                    material.width = converted.width as u16;
+                    material.height = converted.height as u16;
+                }
+            }
+            textures.push(converted);
+            palettes.push(colors);
+        }
+        source.textures = Some(nitro_formats::texture::Nsbtx::new(textures, palettes)?);
     }
     let mut edits = BTreeMap::new();
     // Update D variants as well, so every race mode sees the replacement.
@@ -476,11 +731,16 @@ pub fn track_from(
             .find(|p| p.to_ascii_lowercase().ends_with(&suffix))
             .ok_or_else(|| err("course archive absent"))?;
         let tex_root = root.replace(".carc", "Tex.carc");
-        edits.insert(format!("{root}/course_model.nsbmd"), source.write()?);
+        let texture_path = format!("{tex_root}/course_model.nsbtx");
+        let mut course_model = source.clone();
+        if s.file(&texture_path).is_ok() {
+            course_model.textures = None;
+        }
+        edits.insert(format!("{root}/course_model.nsbmd"), course_model.write()?);
         edits.insert(format!("{root}/course_collision.kcl"), collision.write());
         edits.insert(format!("{root}/course_map.nkm"), nkm.write()?);
         if let Some(tx) = &source.textures {
-            let path = format!("{tex_root}/course_model.nsbtx");
+            let path = texture_path;
             if s.file(&path).is_ok() {
                 edits.insert(path, tx.write());
             }
@@ -494,13 +754,25 @@ pub fn track_from(
             edits.insert(second, Nscr::new(256, 256, &vec![0; 1024])?.write());
         }
     }
+    let limits = file_budgets(s)?;
+    for (path, bytes) in &edits {
+        check_file_size(path, bytes, &limits)?;
+    }
+    let mut warnings = vec![
+        "Single camera and no area triggers: verify the intro and goal views in your emulator"
+            .into(),
+        format!(
+            "Checked {} generated track files against retail size limits; KCL {} / {} bytes",
+            edits.len(),
+            collision.write().len(),
+            nitro_formats::kcl::MAX_BYTES
+        ),
+    ];
+    warnings.extend(collision.budget_warning());
     let report = Report {
         files: edits.keys().cloned().collect(),
         polygons,
-        warnings: vec![
-            "Single camera and no area triggers: verify the intro and goal views in your emulator"
-                .into(),
-        ],
+        warnings,
     };
     p.edit_many(edits, "New track", s)?;
     Ok(report)
