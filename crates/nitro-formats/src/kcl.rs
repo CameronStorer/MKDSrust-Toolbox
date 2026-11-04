@@ -197,7 +197,9 @@ impl Kcl {
                     return Err(error(0, "collision octree exceeds work limit"));
                 }
                 self.work += ids.len() + 1;
-                if ids.len() <= 16 || size <= 32. || depth >= 8 {
+                // Coarse leaves keep the file small: the game loads the KCL into a fixed course heap, and a 499 KB
+                // octree for a flat 2000-unit map crashed the race on load (retail courses stay under ~215 KB).
+                if ids.len() <= 32 || size <= 256. || depth >= 5 {
                     let data = self.bytes.len();
                     crate::put32(&mut self.bytes, at, 0x80000000 | ((data - 2 - base) as u32));
                     for &id in ids {
