@@ -1,7 +1,7 @@
 # Instructions for coding agents
 
 Read `docs/SPEC.md` (product and architecture), `docs/PLUGIN_FORMAT.md` (mod package contract) and
-`docs/PRIOR_ART.md` first. Read `docs/STATUS.md`, then the current task: `docs/STAGE6.md` (stages 1-5 are done).
+`docs/PRIOR_ART.md` first. Read `docs/STATUS.md`, then the current task: `docs/STAGE6B.md` (stages 1-6 are done).
 
 Hard rules:
 1. **No Nintendo material, ever.** Do not add any ROM, game file, extracted asset, text, sound, or SDK code/binary. Tests
