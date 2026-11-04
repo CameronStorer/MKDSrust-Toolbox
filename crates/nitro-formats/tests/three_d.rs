@@ -21,7 +21,7 @@ fn kcl_roundtrip_prisms_and_octree() {
     assert_eq!(k.octree[0].prisms, [0, 1]);
     let t = k.triangles().unwrap();
     assert_eq!(t.len(), 2);
-    assert_eq!(t[1].attribute, 1);
+    assert_eq!(t[1].attribute, 0x8100);
     assert!(t
         .iter()
         .flat_map(|t| t.positions)

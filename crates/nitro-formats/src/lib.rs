@@ -1,15 +1,19 @@
 //! Safe, UI-independent Nitro file readers and lossless writers.
 pub mod animation;
 pub mod archive;
+pub mod audio;
 pub mod bmg;
 pub mod bps;
 pub mod cell;
 pub mod detect;
+mod g3d;
 pub mod graphics;
 pub mod kcl;
 pub mod lz77;
 pub mod math;
 pub mod model;
+mod model_edit;
+mod model_write;
 pub mod nkm;
 pub mod rom;
 pub mod rom_build;

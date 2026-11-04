@@ -1,0 +1,26 @@
+[
+  {
+    "kind": 0,
+    "index": 0,
+    "name": "Original synth tone",
+    "file": 0,
+    "bytes": 48,
+    "samples": 0
+  },
+  {
+    "kind": 2,
+    "index": 0,
+    "name": "Sine bank",
+    "file": 1,
+    "bytes": 74,
+    "samples": 0
+  },
+  {
+    "kind": 3,
+    "index": 0,
+    "name": "Sine waves",
+    "file": 2,
+    "bytes": 16076,
+    "samples": 1
+  }
+]

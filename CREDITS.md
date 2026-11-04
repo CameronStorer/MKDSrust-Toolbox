@@ -7,6 +7,9 @@ Any code ported from another project is listed here with its license, and keeps 
 |---|---|---|
 | [MKDSrust builder](https://github.com/CameronStorer/MKDSrust) | GPL-3.0 | LZ77 / NARC / mod packing (same author) |
 | [apicula](https://github.com/scurest/apicula) | 0BSD | Reference for model/GX, joint animation, TEX0 and texture dictionary layouts; independent bounded implementation |
+| [Mario Kart Toolbox](https://github.com/HaroohiePals/MarioKartToolbox) (Haroohie Pals) | MIT | NKM/KCL and collision attribute layouts, Nitro resource dictionary reference; independent Rust implementations |
+| [ndspy](https://github.com/RoadrunnerWMC/ndspy) (RoadrunnerWMC) | GPL-3.0-or-later | SDAT/SSEQ/SBNK/SWAR/SWAV/SSAR/STRM format references; original Rust codecs and writers, no source code copied |
+| [jpeg-decoder](https://github.com/image-rs/jpeg-decoder) (image-rs Developers) | MIT OR Apache-2.0 | Pure Rust JPEG texture import, default features disabled |
 | [DS Pokémon Hacking format research](https://ds-pokemon-hacking.github.io/docs/universal/resources/nitro/graphics_2d/section_cebk/) (Gonhex, NOCASH, magical) | Format reference only | NCER/CEBK and NANR/ABNK layouts; independent implementation, no code copied |
 | [dockview](https://github.com/mathuo/dockview) | MIT | Dockable workspace panels |
 | [Inter](https://github.com/rsms/inter) | SIL OFL 1.1 | Bundled UI font, via Fontsource; license in `app/public/licenses/Inter-OFL.txt` |

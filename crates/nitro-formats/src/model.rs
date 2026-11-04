@@ -1,4 +1,5 @@
 //! BMD0/MDL0 and GX decoding, independently implemented from apicula's 0BSD layout documentation.
+pub use crate::model_edit::*;
 use crate::{
     error,
     math::{self, Mat4, IDENTITY},

@@ -14,6 +14,11 @@ export const layerDefaults = {
 };
 export type Layer = keyof typeof layerDefaults;
 interface SceneState {
+  part: number;
+  triangle: number;
+  gizmo: 'off' | 'translate' | 'rotate' | 'scale';
+  brush: boolean;
+  attribute: number;
   info: SceneInfo | null;
   selected: string;
   layers: typeof layerDefaults;
@@ -27,6 +32,11 @@ interface SceneState {
   set: (state: Partial<Omit<SceneState, 'set'>>) => void;
 }
 export const useScene = create<SceneState>((set) => ({
+  part: 0,
+  triangle: 0,
+  gizmo: 'off',
+  brush: false,
+  attribute: 0x8000,
   info: null,
   selected: '',
   layers: structuredClone(layerDefaults),

@@ -17,7 +17,8 @@ pub(crate) fn blocks<'a>(b: &'a [u8], magic: &[u8; 4]) -> Result<Vec<(usize, &'a
     if slice(b, 0, 4)? != magic {
         return Err(error(0, "unexpected file magic"));
     }
-    if ![0xfeff, 0xfffe].contains(&u16le(b, 4)?) {
+    // Early Nitro character exporters (including the debug font) use zero.
+    if ![0, 0xfeff, 0xfffe].contains(&u16le(b, 4)?) {
         return Err(error(4, "only little-endian Nitro files supported"));
     }
     let end = u32le(b, 8)? as usize;
@@ -60,7 +61,9 @@ pub struct Nclr {
 }
 impl Nclr {
     pub fn parse(b: &[u8]) -> Result<Self> {
-        let (at, s) = blocks(b, b"RLCN")?
+        let sections = blocks(b, b"RLCN")?;
+        let compressed = sections.iter().any(|(_, s)| s.starts_with(b"PMCP"));
+        let (at, s) = sections
             .into_iter()
             .find(|(_, s)| s.starts_with(b"TTLP"))
             .ok_or_else(|| error(16, "missing TTLP"))?;
@@ -73,7 +76,14 @@ impl Nclr {
         if !len.is_multiple_of(2) || rel < 24 {
             return Err(error(at + 16, "invalid palette data"));
         }
-        let data = slice(s, rel, len)?;
+        // PCMP stores only the used palette slots. TTLP's size may describe
+        // the expanded palette address space rather than the stored colours.
+        let stored = if compressed {
+            len.min(s.len().saturating_sub(rel))
+        } else {
+            len
+        };
+        let data = slice(s, rel, stored)?;
         Ok(Self {
             raw: b.to_vec(),
             color_at: at + rel,
@@ -139,7 +149,17 @@ impl Ncgr {
         if rel < 32 || !size.is_multiple_of(if depth == 3 { 32 } else { 64 }) {
             return Err(error(at + 24, "invalid tile data size"));
         }
-        let data = slice(s, rel, size)?;
+        // Legacy zero-BOM single-block exports undercount both lengths by
+        // the eight-byte chunk header. Read only the bounded trailing data.
+        let legacy = u16le(b, 4)? == 0
+            && u16le(b, 14)? == 1
+            && b.len() == u32le(b, 8)? as usize + 8
+            && rel + size == s.len() + 8;
+        let data = if legacy {
+            slice(b, at + rel, size)?
+        } else {
+            slice(s, rel, size)?
+        };
         let pixels = if depth == 3 {
             data.iter().flat_map(|x| [x & 15, x >> 4]).collect()
         } else {

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+import { ModelTools, CollisionTools } from './EngineTools';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { binary, inspectScene } from '../backend';
 import { useStore } from '../store';
@@ -138,6 +140,9 @@ export function SceneViewport() {
   const selected = useStore((s) => s.snapshot?.selected ?? '');
   const files = useStore((s) => s.snapshot?.files);
   const settings = useStore((s) => s.snapshot?.settings);
+  const geometryRevision = useStore(
+    (s) => s.snapshot?.history.map((h) => `${h.title}:${h.applied}`).join('|') ?? '',
+  );
   const { mode, grid, set, frameRequest } = useScene();
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
@@ -178,6 +183,38 @@ export function SceneViewport() {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000000);
     const controls = new OrbitControls(camera, renderer.domElement);
+    const transform = new TransformControls(camera, renderer.domElement);
+    scene.add(transform.getHelper());
+    transform.addEventListener('dragging-changed', (event) => {
+      controls.enabled = !event.value;
+    });
+    transform.addEventListener('mouseUp', () => {
+      const object = transform.object;
+      const state = useScene.getState();
+      if (!object || track || !state.info?.model_path) return;
+      if (
+        object.position.lengthSq() === 0 &&
+        object.quaternion.equals(new THREE.Quaternion()) &&
+        object.scale.equals(new THREE.Vector3(1, 1, 1))
+      )
+        return;
+      void useStore.getState().run({
+        kind: 'Model',
+        path: state.info.model_path,
+        action: {
+          kind: 'Transform',
+          part: state.part,
+          translation: [object.position.x, object.position.y, object.position.z],
+          rotation: [
+            object.quaternion.x,
+            object.quaternion.y,
+            object.quaternion.z,
+            object.quaternion.w,
+          ],
+          scale: [object.scale.x, object.scale.y, object.scale.z],
+        },
+      });
+    });
     controls.enableDamping = true;
     const mktb = settings?.navigation === 'MKTB';
     controls.mouseButtons = {
@@ -233,16 +270,75 @@ export function SceneViewport() {
     renderer.domElement.addEventListener('keydown', keydown);
     const raycaster = new THREE.Raycaster();
     let down = new THREE.Vector2();
-    const pointerdown = (e: PointerEvent) => {
-      down = new THREE.Vector2(e.clientX, e.clientY);
+    const stroke = new Set<number>();
+    const cast = (e: PointerEvent) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      raycaster.setFromCamera(
+        new THREE.Vector2(
+          ((e.clientX - rect.left) / rect.width) * 2 - 1,
+          (-(e.clientY - rect.top) / rect.height) * 2 + 1,
+        ),
+        camera,
+      );
     };
-    const pointerup = (e: PointerEvent) => {
+    const paint = (e: PointerEvent) => {
+      const state = useScene.getState();
       if (
-        e.button !== 0 ||
-        down.distanceTo(new THREE.Vector2(e.clientX, e.clientY)) > 4 ||
-        !markerRoot
+        !track ||
+        !state.brush ||
+        !content ||
+        !state.layers.KCL.visible ||
+        state.layers.KCL.locked ||
+        !useStore.getState().snapshot?.project_path
       )
         return;
+      cast(e);
+      const hit = raycaster
+        .intersectObject(content, true)
+        .find((hit) => Array.isArray(hit.object.userData.prisms));
+      if (hit?.faceIndex !== undefined && hit.faceIndex !== null) {
+        const ids: unknown = hit.object.userData.prisms;
+        if (Array.isArray(ids) && typeof ids[hit.faceIndex] === 'number')
+          stroke.add(ids[hit.faceIndex] as number);
+      }
+    };
+    const pointerdown = (e: PointerEvent) => {
+      down = new THREE.Vector2(e.clientX, e.clientY);
+      if (e.button === 0) {
+        stroke.clear();
+        paint(e);
+      }
+    };
+    const pointermove = (e: PointerEvent) => {
+      if (e.buttons & 1) paint(e);
+    };
+    const pointerup = (e: PointerEvent) => {
+      if (e.button === 0 && stroke.size) {
+        const state = useScene.getState();
+        if (state.info?.kcl_path)
+          void useStore.getState().run({
+            kind: 'PaintCollision',
+            path: state.info.kcl_path,
+            triangles: [...stroke],
+            attribute: state.attribute,
+          });
+        stroke.clear();
+        return;
+      }
+      if (e.button !== 0 || down.distanceTo(new THREE.Vector2(e.clientX, e.clientY)) > 4) return;
+      cast(e);
+      if (!track && content) {
+        const hit = raycaster
+          .intersectObject(content, true)
+          .find((hit) => typeof hit.object.userData.part === 'number');
+        if (hit)
+          useScene.setState({
+            part: hit.object.userData.part as number,
+            triangle: hit.faceIndex ?? 0,
+          });
+        return;
+      }
+      if (!markerRoot) return;
       const rect = renderer.domElement.getBoundingClientRect();
       raycaster.setFromCamera(
         new THREE.Vector2(
@@ -263,6 +359,7 @@ export function SceneViewport() {
     };
     renderer.domElement.addEventListener('pointerdown', pointerdown);
     renderer.domElement.addEventListener('pointerup', pointerup);
+    renderer.domElement.addEventListener('pointermove', pointermove);
     void Promise.all([
       inspectScene(selected),
       binary({
@@ -292,7 +389,10 @@ export function SceneViewport() {
           markerRoot = overlays(info, size);
           scene.add(markerRoot);
         }
-        useScene.setState({ info });
+        useScene.setState({
+          info,
+          part: Math.min(useScene.getState().part, Math.max(0, info.parts.length - 1)),
+        });
         setLoaded(true);
         frame();
       })
@@ -307,6 +407,20 @@ export function SceneViewport() {
       const dt = Math.min((time - last) / 1000, 0.1);
       last = time;
       const state = useScene.getState();
+      if (track) controls.enabled = !state.brush;
+      if (
+        !track &&
+        content &&
+        state.gizmo !== 'off' &&
+        useStore.getState().snapshot?.project_path
+      ) {
+        let target: THREE.Object3D | undefined;
+        content.traverse((object) => {
+          if (object instanceof THREE.Mesh && object.userData.part === state.part) target = object;
+        });
+        if (target && transform.object !== target) transform.attach(target);
+        transform.setMode(state.gizmo);
+      } else if (transform.object) transform.detach();
       gridObject.visible = state.grid;
       if (state.frameRequest !== activeFrameRequest) {
         activeFrameRequest = state.frameRequest;
@@ -315,7 +429,7 @@ export function SceneViewport() {
       if (content)
         content.traverse((o) => {
           if (o instanceof THREE.Mesh) {
-            const collision = o.name.startsWith('collision:');
+            const collision = Array.isArray(o.userData.prisms) || o.name.startsWith('collision:');
             o.visible = !collision || (track && state.layers.KCL.visible);
             const materials = Array.isArray(o.material) ? o.material : [o.material];
             for (const m of materials) {
@@ -378,17 +492,29 @@ export function SceneViewport() {
       cancelAnimationFrame(animationFrame);
       observer.disconnect();
       controls.dispose();
+      transform.detach();
+      scene.remove(transform.getHelper());
+      transform.dispose();
       mixer?.stopAllAction();
       renderer.domElement.removeEventListener('keydown', keydown);
       renderer.domElement.removeEventListener('pointerdown', pointerdown);
       renderer.domElement.removeEventListener('pointerup', pointerup);
+      renderer.domElement.removeEventListener('pointermove', pointermove);
       dispose(scene);
       renderer.dispose();
       renderer.domElement.remove();
     };
     // View options are read by the renderer without rebuilding the scene.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected, valid, track, settings?.theme, settings?.navigation, settings?.camera_speed]);
+  }, [
+    selected,
+    valid,
+    track,
+    geometryRevision,
+    settings?.theme,
+    settings?.navigation,
+    settings?.camera_speed,
+  ]);
   return (
     <div className="panel scene-panel">
       <div className="scene-toolbar">
@@ -438,7 +564,9 @@ export function SceneViewport() {
         <span className="viewport-hint">
           {settings?.navigation ?? 'Blender'} · MMB orbit · RMB pan · Wheel zoom
         </span>
-        <span className="viewport-badge">{track ? 'COURSE' : 'MODEL'} / READ ONLY</span>
+        <span className="viewport-badge">
+          {track ? 'COLLISION EDITING ? NKM READ ONLY' : 'MODEL EDITING'}
+        </span>
       </div>
     </div>
   );
@@ -499,11 +627,13 @@ export function SceneOutliner() {
   );
 }
 export function SceneProperties() {
+  const workspace = useStore((s) => s.workspace);
   const { info, selected } = useScene();
   const entry = info?.entries.find((e) => key(e) === selected);
   const budget = info?.budget;
   return (
     <div className="panel properties">
+      {workspace === 'Model' ? <ModelTools /> : <CollisionTools />}
       <div className="section-label">DS BUDGET · GEOMETRY ESTIMATE</div>
       {budget && (
         <>
@@ -513,7 +643,7 @@ export function SceneProperties() {
               ['Vertices', `${budget.vertices} / 6,144`],
               ['Texture VRAM', `${bytes(budget.texture_bytes)} / 512 KiB`],
               ['Palette VRAM', `${bytes(budget.palette_bytes)} / 96 KiB`],
-              ['Matrix slots', `${budget.matrices} / 32`],
+              ['Matrix slots', `${budget.matrices} / 31`],
             ].map(([label, value]) => (
               <div className="budget-row" key={label}>
                 <dt>{label}</dt>
@@ -615,7 +745,7 @@ export function Overlays() {
         );
       })}
       <details className="inset" open>
-        <summary>Collision legend (type bits 0–4)</summary>
+        <summary>Collision legend (type bits 8–12)</summary>
         {info?.collision_types.map((t) => {
           const h = t * 2.3999631;
           const rgb = [0, 2.094, 4.189].map((v) =>

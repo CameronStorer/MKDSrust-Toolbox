@@ -9,6 +9,117 @@ use nitro_formats::{
     texture::Nsbtx,
 };
 use serde_json::{json, Value};
+/// One scene/model-set budget calculation for imported and retail models.
+pub fn budget(container: &Nsbmd, external: Option<&Nsbtx>) -> crate::scene::Budget {
+    let mut b = crate::scene::Budget::default();
+    for model in &container.models {
+        b.polygons += model
+            .meshes
+            .iter()
+            .map(|m| m.indices.len() as u32 / 3)
+            .sum::<u32>();
+        b.vertices += model
+            .meshes
+            .iter()
+            .map(|m| m.positions.len() as u32)
+            .sum::<u32>();
+        b.matrices = b
+            .matrices
+            .max(model.matrix_count as u32)
+            .max(model.bones.len() as u32);
+    }
+    if let Some(t) = container.textures.as_ref().or(external) {
+        b.texture_bytes = t
+            .textures
+            .iter()
+            .map(|t| (t.data.len() + t.indices.len()) as u32)
+            .sum();
+        b.palette_bytes = t.palettes.iter().map(|p| p.colors.len() as u32 * 2).sum();
+    }
+    for (value, limit, name) in [
+        (b.polygons, 2048, "polygons (triangulated)"),
+        (b.vertices, 6144, "vertices"),
+        (
+            b.texture_bytes,
+            mkds_data::TEXTURE_VRAM as u32,
+            "texture VRAM bytes",
+        ),
+        (
+            b.palette_bytes,
+            mkds_data::PALETTE_VRAM as u32,
+            "palette VRAM bytes",
+        ),
+        (b.matrices, 31, "matrix slots"),
+    ] {
+        if value > limit {
+            b.reasons.push(format!("{name}: {value} / {limit}"));
+        }
+    }
+    b
+}
+pub fn convert_texture(
+    image: &nitro_formats::graphics::Image,
+    name: &str,
+    format: u8,
+    cap: u32,
+) -> Result<(
+    nitro_formats::texture::Texture,
+    nitro_formats::texture::Palette,
+)> {
+    use nitro_formats::{
+        graphics::Image,
+        texture::{self, Palette},
+    };
+    if image.width == 0
+        || image.height == 0
+        || image.width > 4096
+        || image.height > 4096
+        || image.rgba.len() != image.width as usize * image.height as usize * 4
+    {
+        return Err(Error::Invalid("invalid model image".into()));
+    }
+    let cap = 1 << cap.clamp(8, 1024).ilog2();
+    let width = image.width.next_power_of_two().clamp(8, cap);
+    let height = image.height.next_power_of_two().clamp(8, cap);
+    let mut rgba = vec![];
+    for y in 0..height {
+        for x in 0..width {
+            let i = ((y as u64 * image.height as u64 / height as u64) * image.width as u64
+                + x as u64 * image.width as u64 / width as u64) as usize
+                * 4;
+            rgba.extend_from_slice(&image.rgba[i..i + 4]);
+        }
+    }
+    let image = Image {
+        width,
+        height,
+        rgba,
+    };
+    let count = match format {
+        1 => 32,
+        2 => 4,
+        3 => 16,
+        4 => 256,
+        6 => 8,
+        7 => 2,
+        _ => {
+            return Err(Error::Invalid(
+                "choose a supported model texture format".into(),
+            ))
+        }
+    };
+    let transparent = image.rgba.chunks_exact(4).any(|p| p[3] < 128);
+    let (colors, indices) = crate::graphic::quantize(&image, count, true, transparent);
+    let mut texture = texture::encode(&image, format, &colors, &indices, transparent)?;
+    texture.name = name.into();
+    Ok((
+        texture,
+        Palette {
+            name: name.into(),
+            colors: if format == 7 { vec![] } else { colors },
+        },
+    ))
+}
 #[derive(Default)]
 struct Buffer {
     data: Vec<u8>,
@@ -154,20 +265,23 @@ pub fn glb(
                 let accessor = buffer.floats(&inverses, "MAT4", false);
                 skins.push(json!({"joints":(bone_start..bone_start+world.len()).collect::<Vec<_>>(),"inverseBindMatrices":accessor}));
             }
-            for mesh in &model.meshes {
+            for (part, mesh) in model.meshes.iter().enumerate() {
                 if mesh.indices.is_empty() {
                     continue;
                 }
                 let mut attrs = json!({"POSITION":buffer.floats(&mesh.positions,"VEC3",true),"NORMAL":buffer.floats(&mesh.normals,"VEC3",false),"TEXCOORD_0":buffer.floats(&mesh.uvs,"VEC2",false),"COLOR_0":buffer.floats(&mesh.colors,"VEC4",false)});
-                let skinned =
-                    !world.is_empty() && mesh.weights.iter().all(|w| w.iter().sum::<f32>() > 0.99);
+                let skinned = !world.is_empty()
+                    && mesh.weights.len() == mesh.positions.len()
+                    && mesh.joints.len() == mesh.positions.len()
+                    && mesh.weights.iter().all(|w| w.iter().sum::<f32>() > 0.99);
                 if skinned {
                     attrs["JOINTS_0"] = json!(buffer.joints(&mesh.joints));
                     attrs["WEIGHTS_0"] = json!(buffer.floats(&mesh.weights, "VEC4", false))
                 }
                 let id = meshes.len();
                 meshes.push(json!({"name":mesh.name,"primitives":[{"attributes":attrs,"indices":buffer.indices(&mesh.indices),"material":mat_start+mesh.material}]}));
-                let mut node = json!({"name":format!("model:{}",mesh.name),"mesh":id});
+                let mut node =
+                    json!({"name":format!("model:{}",mesh.name),"mesh":id,"extras":{"part":part}});
                 if skinned {
                     node["skin"] = json!(skin_id)
                 }
@@ -212,7 +326,7 @@ pub fn glb(
         let triangles = kcl.triangles()?;
         let types = triangles
             .iter()
-            .map(|t| t.attribute & 31)
+            .map(|t| mkds_data::collision_type(t.attribute))
             .collect::<std::collections::BTreeSet<_>>();
         for kind in types {
             let mat = materials.len();
@@ -220,7 +334,13 @@ pub fn glb(
             materials.push(json!({"name":format!("collision_{kind:02}"),"pbrMetallicRoughness":{"baseColorFactor":[color[0],color[1],color[2],0.65],"metallicFactor":0,"roughnessFactor":1},"doubleSided":true,"alphaMode":"BLEND"}));
             let mut p = vec![];
             let mut n = vec![];
-            for t in triangles.iter().filter(|t| t.attribute & 31 == kind) {
+            let mut prism_ids = vec![];
+            for (prism, t) in triangles
+                .iter()
+                .enumerate()
+                .filter(|(_, t)| mkds_data::collision_type(t.attribute) == kind)
+            {
+                prism_ids.push(prism);
                 p.extend(t.positions);
                 n.extend([t.normal; 3])
             }
@@ -228,7 +348,9 @@ pub fn glb(
             let id = meshes.len();
             meshes.push(json!({"primitives":[{"attributes":{"POSITION":buffer.floats(&p,"VEC3",true),"NORMAL":buffer.floats(&n,"VEC3",false)},"indices":buffer.indices(&indices),"material":mat}]}));
             roots.push(nodes.len());
-            nodes.push(json!({"name":format!("collision:{kind}"),"mesh":id}));
+            nodes.push(
+                json!({"name":format!("collision:{kind}"),"mesh":id,"extras":{"prisms":prism_ids}}),
+            );
         }
     }
     if meshes.is_empty() {
@@ -284,8 +406,8 @@ pub fn obj(kcl: &Kcl) -> Result<Vec<u8>> {
         writeln!(
             s,
             "g collision_{:02}\nusemtl collision_{:02}",
-            t.attribute & 31,
-            t.attribute & 31
+            mkds_data::collision_type(t.attribute),
+            mkds_data::collision_type(t.attribute)
         )
         .unwrap();
         writeln!(s, "# attribute 0x{:04x}", t.attribute).unwrap();

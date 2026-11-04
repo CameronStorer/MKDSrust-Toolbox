@@ -40,6 +40,7 @@ pub fn files() -> BTreeMap<String, Vec<u8>> {
         Token::Text("scenic route.".encode_utf16().collect()),
     ];
     let inner = Narc::new(BTreeMap::from([
+        ("audio/sound_data.sdat".into(), sound_fixture()),
         ("art/studio.nclr".into(), palette),
         ("art/studio.ncgr".into(), tiles),
         ("art/studio.nscr".into(), screen),
@@ -83,6 +84,30 @@ pub fn files() -> BTreeMap<String, Vec<u8>> {
         ),
         ("data/Studio/texture.nsbtx".into(), texture_fixture()),
     ])
+}
+pub fn sound_fixture() -> Vec<u8> {
+    use nitro_formats::audio::Sdat;
+    let pcm = crate::audio::Pcm {
+        rate: 16000,
+        channels: vec![(0..8000)
+            .map(|i| ((i as f32 / 16000. * 440. * std::f32::consts::TAU).sin() * 10000.) as i16)
+            .collect()],
+    };
+    let song = crate::audio::sampled(&pcm, 16000, false, 1, Some(0), None).expect("synthetic tone");
+    let mut s = Sdat::default();
+    s.files = vec![
+        song.sequence.write(),
+        song.bank.write().unwrap(),
+        song.waves.write().unwrap(),
+    ];
+    s.info[0].push(Some(vec![0, 0, 0, 0, 0, 0, 127, 64, 64, 0]));
+    s.info[2].push(Some(vec![1, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255]));
+    s.info[3].push(Some(vec![2, 0, 0, 0]));
+    s.info[4].push(Some(vec![1, 0, 255, 255, 0, 0, 1, 0]));
+    s.symbols[0].push(Some("Original synth tone".into()));
+    s.symbols[2].push(Some("Sine bank".into()));
+    s.symbols[3].push(Some("Sine waves".into()));
+    s.write().unwrap()
 }
 /// An 8×8 direct-colour texture in a real TEX0 dictionary.
 pub fn texture_fixture() -> Vec<u8> {
