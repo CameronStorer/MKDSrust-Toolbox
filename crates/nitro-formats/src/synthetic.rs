@@ -342,7 +342,7 @@ pub fn kcl() -> Vec<u8> {
             b.extend(((v * 4096.) as i16).to_le_bytes())
         }
     }
-    for (p, n, a) in [(0, [0, 1, 2, 3], 0), (1, [0, 4, 5, 6], 1)] {
+    for (p, n, a) in [(0, [0, 1, 2, 3], 0x8000), (1, [0, 4, 5, 6], 0x8100)] {
         b.extend((543u32 * 4096).to_le_bytes());
         b.extend((p as u16).to_le_bytes());
         for i in n {

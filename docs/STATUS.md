@@ -1,67 +1,76 @@
 # Toolbox status — 2026-11-03
 
-## Stage 2 checkpoint
+Stage 4 A–E work at a basic end-to-end engine level. Stages 1–3 (projects,
+archive edits, text/2D tools, packages, BPS/DS export and Play targets) remain available.
 
-Done: NSBMD/GX meshes, bones/materials/skinning, NSBCA joint animation, animation header listings,
-exact NKM section round-trips, KCL triangles/octree; textured/skinned GLB and collision OBJ exports.
-Model and read-only Track have navigation, timeline, overlays, selection, outliner and budgets.
-Test Bench discovers portable installs, installs/replaces/enables packages, launches/stops and captures logs,
-queries/caches courses, supplies race subsets and restarts with Ctrl+R. The tuple type error and onboarding's
-positional command references are fixed. All rule 5 checks and 25 browser tests passed at this checkpoint.
+## Done
 
-## Stage 3 checkpoint — done at a basic end-to-end level
-
-- File/Overview Export for DS: ROM and/or BPS pickers, clean-ROM/output collision protection, verified rebuild,
-  changed/in-place/moved files, sizes, warnings and Show in folder. Compatibility issues are listed from Rust
-  validation; packaging retains DS claims only when checks pass. Allow PC-only features defaults off.
-- New Project accepts clean ROM, modded ROM or BPS. Imported bases are stored only as `base.bps` with clean hash
-  and source provenance. Working sessions apply the base in memory; later edits reopen against that base.
-  Final BPS output is verified against the clean ROM. Overview lists added/removed/changed files and code/overlays.
-  Code/removal bases use DS output; MKDSrust packages support filesystem deltas and report unsupported bases.
-- Play targets: configured emulator plus patched ROM in the per-user cache; MKDSrust with course listing,
-  character/kart ids, 1–8 racers, logs/Stop/last-run; remembered flashcart folder export. Reload restarts.
-- NCGR and NSBTX pencil, fill, line, rectangle, eyedropper and select/move, palette indices/direct colour,
-  zoom, pixel/tile grids and project undo/redo. Paint preserves exact indices and does not grow texture files.
-- PNG import uses deterministic median cut and optional error-diffusion dithering, before/after preview,
-  size/VRAM readout, and one undo step for graphics plus palette. Encodes 4/16/256-colour, a3i5, a5i3 and direct
-  textures, including palette creation for direct-only texture containers; repacks pools on format changes.
-  PNG export covers palette, tile, screen, texture, cell and animation-frame previews (default first frame).
-- NCER compositions use companion NCGR/NCLR; NANR frame lists and playback include translation/scale/rotation.
-  Recipes cover menu recolouring, item icon replacement and kart textures. All IPC types are regenerated from Rust.
+- Retail correctness: resource-specific dictionaries (also during texture replacement),
+  compact PCMP palettes, legacy zero-BOM NCGR lengths and CLI test environment isolation.
+  The owned ROM was read in place. Local tests round-trip 286 archives, 92 BMGs,
+  433 NCLRs, 672 NCGRs, 470 NSCRs and 124 NKMs; parse 766 NSBMDs, 335 NSBTXs,
+  136 NSBCAs and 59 KCLs. Counts print with `--nocapture`.
+- Models: GLB/glTF and OBJ import; transforms, quadric decimation, interpolated plane
+  cuts, part/material/connected/box deletion, seam-aware merging and normal recomputation.
+  Authored NSBMD writes bones, inverse binds, weighted matrices, materials, GX triangles
+  or connected strips, lookup trees and optional embedded textures. PNG/JPEG textures
+  resize to capped powers of two and use the existing quantizer. Scene and badge
+  validation share the model budget function.
+- Collision: fixed-point prisms, conservative spatial octree, configurable material/slope
+  classification and repainting. A retail rebuild retained all 902 prisms and a valid
+  tree. MKDS type bits now use bits 8–12; observed types 0–22 live in `mkds-data`.
+- Audio: SDAT SYMB/INFO/FAT/FILE, SSEQ, SBNK, SWAR/SWAV, SSAR and STRM readers/writers.
+  The retail SDAT and its 76 sequences, 99 banks, 104 wave archives and 5 sequence
+  archives round-trip; relocation and a short retail sequence preview also pass.
+  WAV resampling, mono/stereo, PCM8/PCM16/IMA-ADPCM, aligned loops, independent sampled
+  song banks, RAM reporting and sample replacement. MIDI imports notes, tempo, programs,
+  volume, pan, pitch bend and loop markers, mapping programs against a chosen bank.
+- App: model import, transform gizmos, part selection, decimation/cut/delete/merge and
+  budgets; Track collision generation, attribute colours and stroke painting; Audio
+  tree, song import options and software playback. Mutations use project history and
+  archive rebuilding. Synthetic tests cover save/reopen, undo/redo, packing and BPS
+  reproduction across all engines. IPC bindings and original demos are regenerated.
 
 ## Partial / next
 
-4×4 texture encoding, IPS import and cell-position editing remain the named stretch goals. NSBTA/NSBTP/NSBMA
-list headers only. The cell viewer is a basic fixed-stage preview: external OAM affine matrices, VRAM-transfer
-banks, multi-cell animations and exact NANR loop policies remain partial. PNG imports preserve existing image
-dimensions; painting uses raw tiles rather than an NSCR's reused/flipped view. Converting a texture's palette
-format may require updating its separate model material binding; automatic material repair is later work.
-
-DS budgets are conservative format/model-set estimates, not live frame measurements or a hardware certification.
-New top-level ROM files/archive members, full FNT reconstruction and xdelta remain outside the inherited DS
-rebuilder. Its existing-file growth/move path is used here; imported bases retain their own filesystem/code.
-Next: run the opt-in suite against an owned ROM and smoke-test emulator/DS/MKDSrust installs, then the model-import,
-rigging, track-authoring, audio and code roadmap. No real game install or hardware was exercised in this session.
+- FBX/DAE are deferred: no suitable importer was cached. Convert in Blender to GLB/glTF/
+  OBJ. glTF requires dense triangles and a TRS skeleton whose rest pose matches its
+  inverse binds. Sparse/Draco accessors, arbitrary bind-pose conversion and OBJ MTL
+  image loading remain future work. PNG/JPEG textures cover the glTF image formats.
+- The writer rejects models above 31 usable matrix slots; automatic splitting and
+  rig fitting remain next work. Cuts are uncapped; decimation can stop above a target
+  when safe collapses are unavailable. KCL candidate lists favour correctness over size.
+- Audio preview is basic, without accurate envelopes or every SSEQ command; unsupported
+  commands report errors. WAV accepts PCM8/PCM16/float32; MIDI accepts formats 0/1 with
+  PPQN timing. Sampled-song allocation is capped at 2 MiB, not a full live RAM budget.
+- Next: Stage 5 research/wizards and emulator/DS boot tests. No hardware or external game
+  install was launched. Inherited limits include 4×4 texture encoding, IPS/xdelta,
+  new top-level ROM files/FNT reconstruction, detailed cell affine/transfer policies
+  and editing non-joint animation formats.
 
 ## Verification and run
 
-Passed locally on Windows: `cargo fmt --check`, workspace Clippy with `-D warnings`, workspace tests,
-app lint/typecheck/Vitest/build and the Tauri `cargo build`. Six Vitest and 28 Playwright tests pass;
-synthetic screenshots cover all workspaces in both themes plus export, base changes and PNG painting/import.
-`MKDS_ROM` is unset: opt-in bodies skip. New synthetic tests cover encoders, paint/import history, cells,
-clean-ROM protection and imported-base-plus-edit BPS reproduction. No Nintendo data was added.
+Passed: `cargo fmt --check`, workspace Clippy/all targets with `-D warnings`, workspace
+tests, and `cargo test --workspace --release --no-fail-fast` with `MKDS_ROM` set to the
+external dump in `STAGE4.md`. App lint/typecheck, 6 Vitest tests, production build and
+Tauri `cargo build` pass. All 30 Playwright tests pass, including actual gizmo dragging
+and collision brush strokes. Screenshots use generated fixtures in both themes.
+No Nintendo data was added; the clean ROM was never copied into the workspace.
 
-With Rust stable, Node 22 and Tauri prerequisites: in `app/`, `npm ci`, then `npm run tauri dev`.
-Open an AMCE revision 0 dump outside the project; create/open a project. Double-click models/courses/cells in
-Explorer. Texture & 2D offers paint/import/recipes. Overview exports for DS. Configure emulator/install/flashcart
-paths in Settings and choose the Play target in Test Bench. MKDSrust course discovery uses Refresh courses;
-engine class stays disabled because the game does not support it. CLI: `cargo run -p toolbox-cli -- --help`.
+From the repository root in PowerShell, set `$env:CARGO_HOME="$PWD/.cache/cargo"` and
+`$env:CARGO_NET_OFFLINE='true'`. With Rust stable, Node 22 and Tauri prerequisites,
+in `app/` run `npm ci`, then `npm run tauri dev`. Open the external AMCE rev 0 ROM
+and a project. Select an existing model/course/SDAT and use Model, Track or Audio.
+Imports replace selected resources; undo and export work as before. Audio loop fields
+use source sample numbers; MIDI loop markers are `loopStart` and `loopEnd`.
 
-Cached PowerShell from repository root: `$env:CARGO_HOME="$PWD/.cache/cargo"`;
-`$env:CARGO_NET_OFFLINE='true'`. Browser tests from `app/`:
-`$env:PLAYWRIGHT_BROWSERS_PATH="$PWD/../.cache/playwright"`; `$env:MKDSTB_SCREENSHOT_PREVIEW='1'`;
-`npm run test:e2e`. Regenerate synthetic assets with `cargo run -p toolbox-core --example demo`.
-For local ROM checks, set `MKDS_ROM` and run `cargo test -p toolbox-core --test retail_opt_in --test stage3`;
-exports use disposable temporary directories outside the repository.
+Local counts: set `MKDS_ROM`, then run
+`cargo test -p toolbox-core --release --test retail_opt_in -- --nocapture`.
+Regenerate original demos: `cargo run -p toolbox-core --example demo`.
+For browser checks in `app/`, set `PLAYWRIGHT_BROWSERS_PATH=<repo>/.cache/playwright`
+and `MKDSTB_SCREENSHOT_PREVIEW=1`, then run `npm run test:e2e`.
+The only added crate is `jpeg-decoder` 0.3.2 (MIT OR Apache-2.0), without default
+features or transitive dependencies. It is cached; all final builds ran offline.
 
-Changes are uncommitted. Nothing was pushed; Git metadata and the builder repository were not modified.
+Changes are uncommitted. Nothing was pushed; Git metadata/remotes and the builder
+repository were not modified.

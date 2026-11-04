@@ -172,32 +172,24 @@ fn check_file(path: &str, bytes: &[u8], depth: usize, budget: &mut usize) -> Vec
         match nitro_formats::model::Nsbmd::parse(bytes) {
             Err(e) => return invalid(path, e.to_string()),
             Ok(b) => {
+                for reason in crate::model::budget(&b, None).reasons {
+                    add(
+                        reason,
+                        "The DS geometry engine and texture memory are limited",
+                    );
+                }
                 for m in b.models {
-                    let polys: usize = m.meshes.iter().map(|m| m.indices.len() / 3).sum();
-                    let vertices: usize = m.meshes.iter().map(|m| m.positions.len()).sum();
-                    if polys > 2048 {
-                        add(
-                            format!("{}: {polys} polygons / 2,048", m.name),
-                            "The DS geometry engine has a per-frame polygon limit",
-                        );
-                    }
-                    if vertices > 6144 {
-                        add(
-                            format!("{}: {vertices} vertices / 6,144", m.name),
-                            "The DS geometry engine has a per-frame vertex limit",
-                        );
-                    }
-                    if m.bones.len() > 32 {
-                        add(
-                            format!("{}: {} matrix slots / 32", m.name, m.bones.len()),
-                            "The DS matrix stack has 32 slots",
-                        );
-                    }
                     for w in m.warnings {
                         add(w, "This model uses features the reader cannot verify");
                     }
                 }
             }
+        }
+    }
+    if bytes.starts_with(b"SDAT") {
+        match nitro_formats::audio::Sdat::parse(bytes).and_then(|s| s.validate_files()) {
+            Ok(()) => {}
+            Err(e) => return invalid(path, e.to_string()),
         }
     }
     issues

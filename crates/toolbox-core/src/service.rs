@@ -18,6 +18,32 @@ use std::path::{Path, PathBuf};
 #[derive(Clone, Debug, Deserialize, Type)]
 #[serde(tag = "kind")]
 pub enum Request {
+    Model {
+        path: String,
+        action: crate::engine::ModelAction,
+    },
+    GenerateCollision {
+        model: String,
+        path: String,
+    },
+    PaintCollision {
+        path: String,
+        triangles: Vec<u32>,
+        attribute: u16,
+    },
+    ImportSong {
+        path: String,
+        source: String,
+        options: crate::engine::SongOptions,
+    },
+    ReplaceEffect {
+        path: String,
+        source: String,
+        archive: u32,
+        sample: u32,
+        rate: u16,
+        encoding: u8,
+    },
     Snapshot,
     OpenRom {
         path: String,
@@ -111,6 +137,8 @@ pub enum Request {
 }
 #[derive(Clone, Debug, Serialize, Type)]
 pub struct Snapshot {
+    pub audio_resources: Vec<crate::audio::AudioResource>,
+    pub song_report: Option<crate::engine::SongReport>,
     pub graphic_import: Option<crate::graphic::ImportInfo>,
     pub base: Option<crate::base::BaseConfig>,
     pub base_changes: Vec<crate::base::BaseChange>,
@@ -146,6 +174,7 @@ pub struct BinaryRequest {
     pub bank: u32,
 }
 pub struct Service {
+    pub song_report: Option<crate::engine::SongReport>,
     pub graphic_import: Option<crate::graphic::ImportDraft>,
     pub ds_export: Option<crate::export::ExportResult>,
     pub bench: crate::bench::Bench,
@@ -160,6 +189,7 @@ pub struct Service {
 impl Default for Service {
     fn default() -> Self {
         Self {
+            song_report: None,
             graphic_import: None,
             ds_export: None,
             bench: crate::bench::Bench::default(),
@@ -231,6 +261,16 @@ impl Service {
             }
         }
         Ok(Snapshot {
+            audio_resources: bytes
+                .filter(|b| b.starts_with(b"SDAT"))
+                .map(|b| {
+                    nitro_formats::audio::Sdat::parse(b)
+                        .map_err(Error::from)
+                        .and_then(|s| crate::audio::resources(&s))
+                })
+                .transpose()?
+                .unwrap_or_default(),
+            song_report: self.song_report.clone(),
             graphic_import: self.graphic_import.as_ref().map(|d| d.info.clone()),
             base: project.and_then(|p| p.config.base.clone()),
             base_changes: session
@@ -275,7 +315,12 @@ impl Service {
         self.bench.poll()?;
         let changes_project = matches!(
             &request,
-            Request::CreateProject { .. }
+            Request::Model { .. }
+                | Request::GenerateCollision { .. }
+                | Request::PaintCollision { .. }
+                | Request::ImportSong { .. }
+                | Request::ReplaceEffect { .. }
+                | Request::CreateProject { .. }
                 | Request::CreateFromBase { .. }
                 | Request::OpenProject { .. }
                 | Request::Palette { .. }
@@ -288,6 +333,63 @@ impl Service {
                 | Request::ApplyGraphic
         );
         match request {
+            Request::Model { path, action } => {
+                let (p, s) = self.editing()?;
+                crate::engine::model(p, s, &path, action)?;
+                self.packed = None;
+            }
+            Request::GenerateCollision { model, path } => {
+                let (p, s) = self.editing()?;
+                crate::engine::generate_collision(p, s, &model, &path)?;
+                self.packed = None;
+            }
+            Request::PaintCollision {
+                path,
+                triangles,
+                attribute,
+            } => {
+                let (p, s) = self.editing()?;
+                crate::engine::paint_collision(p, s, &path, &triangles, attribute)?;
+                self.packed = None;
+            }
+            Request::ImportSong {
+                path,
+                source,
+                options,
+            } => {
+                let (p, s) = self.editing()?;
+                self.song_report = Some(crate::engine::import_song(
+                    p,
+                    s,
+                    &path,
+                    Path::new(&source),
+                    &options,
+                )?);
+                self.packed = None;
+            }
+            Request::ReplaceEffect {
+                path,
+                source,
+                archive,
+                sample,
+                rate,
+                encoding,
+            } => {
+                let (p, s) = self.editing()?;
+                crate::engine::replace_effect(
+                    p,
+                    s,
+                    &path,
+                    Path::new(&source),
+                    crate::engine::EffectOptions {
+                        archive,
+                        sample,
+                        rate,
+                        encoding,
+                    },
+                )?;
+                self.packed = None;
+            }
             Request::Paint {
                 path,
                 palette,
@@ -719,6 +821,14 @@ impl Service {
         Ok(())
     }
     pub fn binary(&self, r: BinaryRequest) -> Result<Vec<u8>> {
+        if r.mode == "audio-wav" {
+            let s = self.session()?;
+            let bytes = match &self.project {
+                Some(p) => p.bytes(s, &r.path)?,
+                None => s.file(&r.path)?,
+            };
+            return crate::engine::preview_audio(bytes, r.texture, r.bank, r.start, r.length);
+        }
         if r.mode == "cell-png" {
             return preview::png(&preview::cell_image(
                 self.project.as_ref(),

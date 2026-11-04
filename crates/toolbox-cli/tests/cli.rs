@@ -7,6 +7,7 @@ use toolbox_core::{
 fn cli(args: &[&str]) -> std::process::Output {
     Command::new(env!("CARGO_BIN_EXE_mkdstb"))
         .args(args)
+        .env_remove("MKDS_ROM")
         .output()
         .unwrap()
 }

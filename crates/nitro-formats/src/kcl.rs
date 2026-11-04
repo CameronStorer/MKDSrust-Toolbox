@@ -36,6 +36,240 @@ pub struct Triangle {
     pub attribute: u16,
 }
 impl Kcl {
+    /// Generate fixed-point prisms and a conservative spatial octree. Lists
+    /// include triangles whose expanded AABB touches the cell, so collision
+    /// candidates are never lost at subdivision boundaries.
+    pub fn from_triangles(triangles: &[Triangle]) -> Result<Self> {
+        use crate::{g3d::align, math::normalize, put32};
+        use std::collections::BTreeMap;
+        if triangles.is_empty() || triangles.len() > 65534 {
+            return Err(error(0, "KCL needs 1–65,534 non-degenerate triangles"));
+        }
+        let fx32 = |v: f32| -> Result<i32> {
+            let q = (v * 4096.).round();
+            if !q.is_finite() || !(-2147483648. ..2147483648.).contains(&q) {
+                return Err(error(0, "collision coordinate exceeds fx32"));
+            }
+            Ok(q as i32)
+        };
+        let mut positions = BTreeMap::<[i32; 3], u16>::new();
+        let mut normals = BTreeMap::<[i16; 3], u16>::new();
+        let mut prism_bytes = vec![];
+        let mut bounds = vec![];
+        let mut minimum = [f32::INFINITY; 3];
+        let mut maximum = [f32::NEG_INFINITY; 3];
+        for (i, t) in triangles.iter().enumerate() {
+            let [a, b, c] = t.positions;
+            let ab = std::array::from_fn(|k| b[k] - a[k]);
+            let ac = std::array::from_fn(|k| c[k] - a[k]);
+            let f = normalize(cross(ab, ac));
+            if dot(f, f) < 0.5 || t.positions.iter().flatten().any(|v| !v.is_finite()) {
+                return Err(error(i, "degenerate/non-finite collision triangle"));
+            }
+            let edge1 = normalize(cross(f, ac));
+            let edge2 = normalize(cross(ab, f));
+            let edge3 = normalize(cross(f, std::array::from_fn(|k| b[k] - c[k])));
+            let q = a.map(fx32);
+            let p = [
+                q[0].as_ref()
+                    .copied()
+                    .map_err(|_| error(i, "collision position exceeds fx32"))?,
+                q[1].as_ref()
+                    .copied()
+                    .map_err(|_| error(i, "collision position exceeds fx32"))?,
+                q[2].as_ref()
+                    .copied()
+                    .map_err(|_| error(i, "collision position exceeds fx32"))?,
+            ];
+            let next = positions.len();
+            if next >= 65535 {
+                return Err(error(i, "too many collision positions"));
+            }
+            let pos = *positions.entry(p).or_insert(next as u16);
+            let mut ids = [0; 4];
+            for (k, n) in [f, edge1, edge2, edge3].iter().enumerate() {
+                let key = n.map(|v| (v * 4096.).round() as i16);
+                let next = normals.len();
+                if next >= 65535 {
+                    return Err(error(i, "too many collision normals"));
+                }
+                ids[k] = *normals.entry(key).or_insert(next as u16);
+            }
+            let quantized = edge3.map(|v| (v * 4096.).round() / 4096.);
+            let height = dot(ab, quantized);
+            if height <= 0. {
+                return Err(error(
+                    i,
+                    "collision triangle is too small for fixed-point normals",
+                ));
+            }
+            prism_bytes.extend(fx32(height)?.to_le_bytes());
+            prism_bytes.extend(pos.to_le_bytes());
+            for id in ids {
+                prism_bytes.extend(id.to_le_bytes());
+            }
+            prism_bytes.extend(t.attribute.to_le_bytes());
+            let lo = std::array::from_fn(|k| {
+                t.positions
+                    .iter()
+                    .map(|p| p[k])
+                    .fold(f32::INFINITY, f32::min)
+                    - 55.
+            });
+            let hi = std::array::from_fn(|k| {
+                t.positions
+                    .iter()
+                    .map(|p| p[k])
+                    .fold(f32::NEG_INFINITY, f32::max)
+                    + 55.
+            });
+            for k in 0..3 {
+                minimum[k] = minimum[k].min(lo[k].floor());
+                maximum[k] = maximum[k].max(hi[k].ceil());
+            }
+            bounds.push((lo, hi));
+        }
+        let span = (0..3)
+            .map(|k| (maximum[k] - minimum[k]).ceil() as u32)
+            .max()
+            .unwrap()
+            .max(1);
+        let cube = span
+            .checked_next_power_of_two()
+            .ok_or_else(|| error(0, "collision bounds overflow"))?;
+        if cube > 524288 {
+            return Err(error(0, "collision bounds exceed DS range"));
+        }
+        let mut b = vec![0; 60];
+        put32(&mut b, 0, 60);
+        for v in minimum {
+            let _ = fx32(v)?;
+        }
+        let mut p = vec![[0; 3]; positions.len()];
+        for (key, id) in positions {
+            p[id as usize] = key;
+        }
+        for v in p {
+            for q in v {
+                b.extend(q.to_le_bytes());
+            }
+        }
+        let n = b.len();
+        put32(&mut b, 4, n as u32);
+        let mut ns = vec![[0; 3]; normals.len()];
+        for (key, id) in normals {
+            ns[id as usize] = key;
+        }
+        for v in ns {
+            for q in v {
+                b.extend(q.to_le_bytes());
+            }
+        }
+        align(&mut b, 4);
+        let t = b.len();
+        put32(&mut b, 8, (t - 16) as u32);
+        b.extend(prism_bytes);
+        let o = b.len();
+        put32(&mut b, 12, o as u32);
+        put32(&mut b, 16, 30 * 4096);
+        put32(&mut b, 56, 25 * 4096);
+        for (k, value) in minimum.iter().enumerate() {
+            put32(&mut b, 20 + k * 4, fx32(*value)? as u32);
+            put32(&mut b, 32 + k * 4, !(cube - 1));
+        }
+        put32(&mut b, 44, cube.ilog2());
+        struct Tree<'a> {
+            bytes: Vec<u8>,
+            bounds: &'a [([f32; 3], [f32; 3])],
+            work: usize,
+        }
+        impl Tree<'_> {
+            fn node(
+                &mut self,
+                base: usize,
+                at: usize,
+                lo: [f32; 3],
+                size: f32,
+                ids: &[u16],
+                depth: usize,
+            ) -> Result<()> {
+                if self.work > 500_000 {
+                    return Err(error(0, "collision octree exceeds work limit"));
+                }
+                self.work += ids.len() + 1;
+                if ids.len() <= 16 || size <= 32. || depth >= 8 {
+                    let data = self.bytes.len();
+                    crate::put32(&mut self.bytes, at, 0x80000000 | ((data - 2 - base) as u32));
+                    for &id in ids {
+                        self.bytes.extend((id + 1).to_le_bytes());
+                    }
+                    self.bytes.extend(0u16.to_le_bytes());
+                    return Ok(());
+                }
+                let half = size / 2.;
+                let children = (0..8)
+                    .map(|i| {
+                        let child = std::array::from_fn(|k| {
+                            lo[k] + if i & (1 << k) != 0 { half } else { 0. }
+                        });
+                        let list = ids
+                            .iter()
+                            .copied()
+                            .filter(|&id| {
+                                let (min, max) = self.bounds[id as usize];
+                                (0..3).all(|k| min[k] <= child[k] + half && max[k] >= child[k])
+                            })
+                            .collect::<Vec<_>>();
+                        (child, list)
+                    })
+                    .collect::<Vec<_>>();
+                if children.iter().map(|(_, ids)| ids.len()).sum::<usize>() >= ids.len() * 6 {
+                    let data = self.bytes.len();
+                    crate::put32(&mut self.bytes, at, 0x80000000 | ((data - 2 - base) as u32));
+                    for &id in ids {
+                        self.bytes.extend((id + 1).to_le_bytes());
+                    }
+                    self.bytes.extend(0u16.to_le_bytes());
+                    return Ok(());
+                }
+                crate::g3d::align(&mut self.bytes, 4);
+                let target = self.bytes.len();
+                crate::put32(&mut self.bytes, at, (target - base) as u32);
+                self.bytes.resize(target + 32, 0);
+                for (i, (child, list)) in children.iter().enumerate() {
+                    self.node(target, target + i * 4, *child, half, list, depth + 1)?;
+                }
+                Ok(())
+            }
+        }
+        let mut tree = Tree {
+            bytes: vec![0; 4],
+            bounds: &bounds,
+            work: 0,
+        };
+        tree.node(
+            0,
+            0,
+            minimum,
+            cube as f32,
+            &(0..triangles.len() as u16).collect::<Vec<_>>(),
+            0,
+        )?;
+        b.extend(tree.bytes);
+        Self::parse(&b)
+    }
+    /// Attribute edits preserve geometry and the original spatial tree.
+    pub fn repaint(&mut self, triangles: &[usize], attribute: u16) -> Result<()> {
+        if triangles.iter().any(|&i| i >= self.prisms.len()) {
+            return Err(error(0, "collision selection outside prism table"));
+        }
+        let start = u32le(&self.raw, 8)? as usize + 16;
+        for &i in triangles {
+            self.prisms[i].attribute = attribute;
+            crate::put16(&mut self.raw, start + i * 16 + 14, attribute);
+        }
+        Ok(())
+    }
     pub fn parse(b: &[u8]) -> Result<Self> {
         slice(b, 0, 60)?;
         let p = u32le(b, 0)? as usize;

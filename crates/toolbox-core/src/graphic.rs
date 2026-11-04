@@ -30,7 +30,65 @@ fn wrap(original: &[u8], bytes: Vec<u8>) -> Vec<u8> {
     }
 }
 pub fn read_png(path: &Path) -> Result<Image> {
-    let mut decoder = png::Decoder::new(std::io::BufReader::new(std::fs::File::open(path)?));
+    read_png_data(&std::fs::read(path)?)
+}
+/// glTF 2.0 permits PNG and JPEG images. Bound dimensions and the decoder's
+/// allocation before expanding either into the shared RGBA representation.
+pub fn read_image_data(data: &[u8]) -> Result<Image> {
+    if !data.starts_with(&[0xff, 0xd8]) {
+        return read_png_data(data);
+    }
+    let mut decoder = jpeg_decoder::Decoder::new(std::io::Cursor::new(data));
+    decoder.set_max_decoding_buffer_size(64 * 1024 * 1024);
+    decoder
+        .read_info()
+        .map_err(|e| Error::Invalid(e.to_string()))?;
+    let info = decoder
+        .info()
+        .ok_or_else(|| Error::Invalid("JPEG has no image header".into()))?;
+    if info.width == 0 || info.height == 0 || info.width > 4096 || info.height > 4096 {
+        return Err(Error::Invalid("JPEG exceeds 4096 pixels per side".into()));
+    }
+    let bytes = decoder
+        .decode()
+        .map_err(|e| Error::Invalid(e.to_string()))?;
+    let mut rgba = vec![];
+    match info.pixel_format {
+        jpeg_decoder::PixelFormat::L8 => {
+            for &v in &bytes {
+                rgba.extend([v, v, v, 255]);
+            }
+        }
+        jpeg_decoder::PixelFormat::RGB24 => {
+            for c in bytes.chunks_exact(3) {
+                rgba.extend([c[0], c[1], c[2], 255]);
+            }
+        }
+        jpeg_decoder::PixelFormat::CMYK32 => {
+            for c in bytes.chunks_exact(4) {
+                let k = c[3] as u16;
+                rgba.extend([
+                    (c[0] as u16 * k / 255) as u8,
+                    (c[1] as u16 * k / 255) as u8,
+                    (c[2] as u16 * k / 255) as u8,
+                    255,
+                ]);
+            }
+        }
+        _ => {
+            return Err(Error::Invalid(
+                "convert 16-bit JPEG to 8-bit RGB before import".into(),
+            ))
+        }
+    }
+    Ok(Image {
+        width: info.width as u32,
+        height: info.height as u32,
+        rgba,
+    })
+}
+pub fn read_png_data(data: &[u8]) -> Result<Image> {
+    let mut decoder = png::Decoder::new(std::io::Cursor::new(data));
     decoder.set_transformations(png::Transformations::EXPAND | png::Transformations::STRIP_16);
     decoder.set_limits(png::Limits {
         bytes: 32 * 1024 * 1024,

@@ -31,9 +31,20 @@ pub(crate) fn dictionary(b: &[u8], at: usize, stride: usize) -> Result<Vec<(Stri
     let count = slice(b, at + 1, 1)?[0] as usize;
     let len = u16le(b, at + 2)? as usize;
     let d = slice(b, at, len)?;
-    let table = 8 + u16le(d, 6)? as usize;
+    if count == 0 {
+        return Ok(vec![]);
+    }
+    // The Patricia tree contains a root plus one node per resource. The
+    // subheader fields vary between exporters; entries follow the tree.
+    let table = 12 + count * 4;
     if u16le(d, table)? as usize != stride {
-        return Err(error(at + table, "unexpected dictionary entry size"));
+        return Err(error(
+            at + table,
+            format!(
+                "unexpected dictionary entry size: {} (expected {stride})",
+                u16le(d, table)?
+            ),
+        ));
     }
     let names = table + u16le(d, table + 2)? as usize;
     let mut out = vec![];
@@ -48,6 +59,102 @@ pub(crate) fn dictionary(b: &[u8], at: usize, stride: usize) -> Result<Vec<(Stri
     Ok(out)
 }
 impl Nsbtx {
+    /// Construct an authored texture bank; pools and resource trees are built
+    /// from scratch, without a retail template.
+    pub fn new(textures: Vec<Texture>, palettes: Vec<Palette>) -> Result<Self> {
+        use crate::{
+            g3d::{align, container, dictionary},
+            put16, put32,
+        };
+        let mut normal = vec![];
+        let mut compressed = vec![];
+        let mut descriptors = Vec::<u8>::new();
+        let mut td = vec![];
+        for t in &textures {
+            if !(8..=1024).contains(&t.width)
+                || !(8..=1024).contains(&t.height)
+                || !t.width.is_power_of_two()
+                || !t.height.is_power_of_two()
+                || !(1..=7).contains(&t.format)
+            {
+                return Err(error(0, "invalid DS texture dimensions or format"));
+            }
+            let n = t.width as usize * t.height as usize;
+            let expected = match t.format {
+                2 | 5 => n / 4,
+                3 => n / 2,
+                7 => n * 2,
+                _ => n,
+            };
+            if t.data.len() != expected || (t.format == 5 && t.indices.len() != expected / 2) {
+                return Err(error(0, "texture pool length mismatch"));
+            }
+            let pool = if t.format == 5 {
+                &mut compressed
+            } else {
+                &mut normal
+            };
+            align(pool, 8);
+            let offset = pool.len() / 8;
+            if offset > 65535 {
+                return Err(error(0, "texture pool exceeds hardware range"));
+            }
+            let param = offset as u32
+                | ((t.width.ilog2() - 3) << 20)
+                | ((t.height.ilog2() - 3) << 23)
+                | ((t.format as u32) << 26)
+                | u32::from(t.transparent_zero) << 29;
+            let mut d = param.to_le_bytes().to_vec();
+            d.extend(((t.width - 1) | ((t.height - 1) << 11)).to_le_bytes());
+            td.push((t.name.clone(), d));
+            pool.extend(&t.data);
+            if t.format == 5 {
+                descriptors.extend(&t.indices);
+            }
+        }
+        let mut pd = vec![];
+        let mut colors = vec![];
+        for p in &palettes {
+            align(&mut colors, 8);
+            let offset = colors.len() / 8;
+            if offset > 65535 {
+                return Err(error(0, "palette pool exceeds hardware range"));
+            }
+            pd.push((p.name.clone(), (offset as u32).to_le_bytes().to_vec()));
+            for c in &p.colors {
+                colors.extend(c.to_le_bytes());
+            }
+        }
+        let mut tex = vec![0; 60];
+        tex[..4].copy_from_slice(b"TEX0");
+        let td_at = tex.len();
+        tex.extend(dictionary(&td, 8)?);
+        let pd_at = tex.len();
+        tex.extend(dictionary(&pd, 4)?);
+        align(&mut tex, 8);
+        put16(&mut tex, 14, td_at as u16);
+        put32(&mut tex, 52, pd_at as u32);
+        for (pool, size_field, offset_field) in [
+            (&mut normal, 12, 20),
+            (&mut compressed, 28, 36),
+            (&mut colors, 48, 56),
+        ] {
+            align(pool, 8);
+            if pool.len() / 8 > 65535 {
+                return Err(error(0, "texture pool exceeds 512 KiB"));
+            }
+            let at = tex.len();
+            put16(&mut tex, size_field, (pool.len() / 8) as u16);
+            put32(&mut tex, offset_field, at as u32);
+            tex.extend_from_slice(pool);
+        }
+        let at = tex.len();
+        put32(&mut tex, 40, at as u32);
+        tex.extend(descriptors);
+        let len = tex.len();
+        put32(&mut tex, 4, len as u32);
+        Self::parse(&container(b"BTX0", &[tex]))
+    }
     /// Repack changed pools and relocate the containing blocks. Unrelated dictionary entries,
     /// texture flags, compressed pools and unknown blocks are retained.
     pub fn replace(
@@ -87,7 +194,7 @@ impl Nsbtx {
                     continue;
                 }
                 let td = u16le(&out, at + 14)? as usize + at;
-                let record = td + 8 + u16le(&out, td + 6)? as usize + 4 + texture * 8;
+                let record = td + 12 + out[td + 1] as usize * 4 + 4 + texture * 8;
                 let params = u32le(&out, record)?;
                 let dest = at + u32le(&out, at + 20)? as usize + (params as usize & 65535) * 8;
                 out[dest..dest + value.data.len()].copy_from_slice(&value.data);
@@ -98,7 +205,7 @@ impl Nsbtx {
                 );
                 if let Some(c) = colors {
                     let pd = u32le(&out, at + 52)? as usize + at;
-                    let record = pd + 8 + u16le(&out, pd + 6)? as usize + 4 + palette * 4;
+                    let record = pd + 12 + out[pd + 1] as usize * 4 + 4 + palette * 4;
                     let dest =
                         at + u32le(&out, at + 56)? as usize + u16le(&out, record)? as usize * 8;
                     for (i, c) in c.iter().enumerate() {
@@ -120,8 +227,8 @@ impl Nsbtx {
                 }
                 let td = u16le(&block, 14)? as usize;
                 let pd = u32le(&block, 52)? as usize;
-                let table = td + 8 + u16le(&block, td + 6)? as usize;
-                let mut pal_table = pd + 8 + u16le(&block, pd + 6)? as usize;
+                let table = td + 12 + block[td + 1] as usize * 4;
+                let mut pal_table = pd + 12 + block[pd + 1] as usize * 4;
                 let metadata_end = (td + u16le(&block, td + 2)? as usize)
                     .max(pd + u16le(&block, pd + 2)? as usize)
                     .max(60);
@@ -131,19 +238,7 @@ impl Nsbtx {
                         block.push(0);
                     }
                     let pd = block.len();
-                    // A one-entry Patricia dictionary: root -> only leaf -> root.
-                    let mut dict = vec![0; 40];
-                    dict[1] = 1;
-                    crate::put16(&mut dict, 2, 40);
-                    crate::put16(&mut dict, 4, 8);
-                    crate::put16(&mut dict, 6, 8);
-                    dict[8] = 127;
-                    dict[9] = 1;
-                    crate::put16(&mut dict, 16, 4);
-                    crate::put16(&mut dict, 18, 8);
-                    let name = previous.name.as_bytes();
-                    let count = name.len().min(16);
-                    dict[24..24 + count].copy_from_slice(&name[..count]);
+                    let dict = crate::g3d::dictionary(&[(previous.name.clone(), vec![0; 4])], 4)?;
                     block.extend_from_slice(&dict);
                     crate::put32(&mut block, 52, pd as u32);
                     pal_table = pd + 16;

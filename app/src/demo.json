@@ -1,4 +1,6 @@
 {
+  "audio_resources": [],
+  "song_report": null,
   "graphic_import": null,
   "base": null,
   "base_changes": [],
@@ -13,7 +15,7 @@
   },
   "rom_path": "/user/roms/synthetic.nds",
   "game": "AMCE",
-  "rom_hash": "7387fb1108563d766f59b1b57ff412ee835868a85d4777a6ee1db8ac66abea65",
+  "rom_hash": "500c1175166499f57760e444c59a1c9253426f8fea4096ba154eccb4170c8ab1",
   "project_path": "/projects/colour-study",
   "manifest": {
     "id": "studio.colour-study",
@@ -32,7 +34,7 @@
       "name": "studio.carc",
       "format": "carc",
       "category": "Archive",
-      "size": 1256,
+      "size": 1260,
       "offset": 656,
       "compressed": true,
       "archive": true,
@@ -98,8 +100,8 @@
       "name": "demo.carc",
       "format": "carc",
       "category": "Archive",
-      "size": 6784,
-      "offset": 1912,
+      "size": 11368,
+      "offset": 1916,
       "compressed": true,
       "archive": true,
       "parent": null
@@ -110,7 +112,7 @@
       "format": "nanr",
       "category": "Animation",
       "size": 84,
-      "offset": 204,
+      "offset": 244,
       "compressed": false,
       "archive": false,
       "parent": "data/Studio/demo.carc"
@@ -121,7 +123,7 @@
       "format": "ncer",
       "category": "Cells",
       "size": 76,
-      "offset": 288,
+      "offset": 328,
       "compressed": false,
       "archive": false,
       "parent": "data/Studio/demo.carc"
@@ -132,7 +134,7 @@
       "format": "ncgr",
       "category": "Tiles",
       "size": 16432,
-      "offset": 364,
+      "offset": 404,
       "compressed": false,
       "archive": false,
       "parent": "data/Studio/demo.carc"
@@ -143,7 +145,7 @@
       "format": "nclr",
       "category": "Palette",
       "size": 552,
-      "offset": 16796,
+      "offset": 16836,
       "compressed": false,
       "archive": false,
       "parent": "data/Studio/demo.carc"
@@ -154,7 +156,18 @@
       "format": "nscr",
       "category": "Screen",
       "size": 548,
-      "offset": 17348,
+      "offset": 17388,
+      "compressed": false,
+      "archive": false,
+      "parent": "data/Studio/demo.carc"
+    },
+    {
+      "path": "data/Studio/demo.carc/audio/sound_data.sdat",
+      "name": "sound_data.sdat",
+      "format": "sdat",
+      "category": "Audio",
+      "size": 16736,
+      "offset": 17936,
       "compressed": false,
       "archive": false,
       "parent": "data/Studio/demo.carc"
@@ -165,7 +178,7 @@
       "format": "bmg",
       "category": "Text",
       "size": 352,
-      "offset": 17896,
+      "offset": 34672,
       "compressed": false,
       "archive": false,
       "parent": "data/Studio/demo.carc"
@@ -176,7 +189,7 @@
       "format": "bmg",
       "category": "Text",
       "size": 192,
-      "offset": 8696,
+      "offset": 13284,
       "compressed": false,
       "archive": false,
       "parent": null
@@ -187,7 +200,7 @@
       "format": "nsbtx",
       "category": "Texture",
       "size": 300,
-      "offset": 8888,
+      "offset": 13476,
       "compressed": false,
       "archive": false,
       "parent": null

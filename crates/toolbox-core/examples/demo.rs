@@ -63,6 +63,26 @@ fn main() -> toolbox_core::Result<()> {
     std::fs::create_dir_all(root.join("app/public/demo"))?;
     std::fs::write(root.join("app/public/demo/course.glb"), scene.glb(true)?)?;
     std::fs::write(root.join("app/public/demo/model.glb"), scene.glb(false)?)?;
+    let sound = nitro_formats::audio::Sdat::parse(&synthetic::sound_fixture())?;
+    std::fs::write(
+        root.join("app/src/demo-audio.json"),
+        serde_json::to_vec_pretty(&toolbox_core::audio::resources(&sound)?)?,
+    )?;
+    std::fs::write(
+        root.join("app/public/demo/tone.wav"),
+        toolbox_core::audio::wav(&toolbox_core::audio::Pcm {
+            rate: 16000,
+            channels: vec![sound
+                .files
+                .get(2)
+                .map(|b| {
+                    nitro_formats::audio::Swar::parse(b).unwrap().waves[0]
+                        .samples()
+                        .unwrap()
+                })
+                .unwrap()],
+        })?,
+    )?;
     let messages = session
         .nodes
         .iter()

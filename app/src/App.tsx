@@ -39,8 +39,10 @@ import { CommandPalette } from './CommandPalette';
 import { SceneViewport, SceneOutliner, SceneProperties, Overlays, Timeline } from './panels/Scene';
 import { TestBench, GameLog } from './panels/TestBench';
 import { useScene } from './scene-view';
+import { AudioWorkspace } from './panels/Audio';
 const components: Record<string, React.FunctionComponent<IDockviewPanelProps>> = {
   overview: Overview,
+  audio: AudioWorkspace,
   explorer: Explorer,
   history: History,
   hex: Hex,
@@ -115,9 +117,11 @@ function Dock() {
                   ? 'text'
                   : workspace === 'Model' || workspace === 'Track'
                     ? 'scene'
-                    : workspace === 'Test Bench'
-                      ? 'bench'
-                      : 'placeholder',
+                    : workspace === 'Audio'
+                      ? 'audio'
+                      : workspace === 'Test Bench'
+                        ? 'bench'
+                        : 'placeholder',
         title:
           workspace === 'Overview'
             ? 'Project dashboard'
@@ -486,7 +490,7 @@ export function App() {
           <Package size={12} />
           {snapshot?.edited.length ?? 0} edits
         </span>
-        <span className="stage-label">STAGES 2 + 3</span>
+        <span className="stage-label">DS AUTHORING</span>
       </footer>
       {settingsOpen && <Settings />}
       {exportOpen && <ExportDialog />}

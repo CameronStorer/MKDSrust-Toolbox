@@ -11,6 +11,7 @@ serde_json.workspace = true
 thiserror.workspace = true
 specta.workspace = true
 png = "0.18"
+jpeg-decoder = { version = "=0.3.2", default-features = false }
 directories = "6"
 semver = "1"
 sha2 = "0.11"

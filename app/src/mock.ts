@@ -2,14 +2,16 @@
 import demo from './demo.json';
 import assets from './demo-assets.json';
 import sceneData from './demo-scene.json';
+import audioData from './demo-audio.json';
+let sceneState = structuredClone(sceneData);
 import type { SceneInfo } from './bindings';
 export async function scene(path: string): Promise<SceneInfo> {
   const tuple = (v: number[] | null): [number, number, number] | null =>
     v ? [v[0], v[1], v[2]] : null;
   return {
-    ...clone(sceneData),
+    ...clone(sceneState),
     path,
-    entries: sceneData.entries.map((e) => ({
+    entries: sceneState.entries.map((e) => ({
       ...e,
       position: tuple(e.position),
       end: tuple(e.end),
@@ -31,6 +33,10 @@ const original = [...colors];
 const messages = clone(assets.messages) as Record<string, typeof state.preview.messages>;
 const originalMessages = clone(messages);
 interface Edit {
+  oldScene: typeof sceneState;
+  newScene: typeof sceneState;
+  oldAudio: typeof state.audio_resources;
+  newAudio: typeof state.audio_resources;
   title: string;
   before: typeof colors;
   after: typeof colors;
@@ -56,6 +62,8 @@ if (new URLSearchParams(location.search).get('onboarding') === '1') {
   });
 }
 function updatePreview() {
+  if (state.selected.endsWith('.sdat') && !state.audio_resources.length)
+    state.audio_resources = clone(audioData);
   const file = state.files.find((f) => f.path === state.selected);
   state.preview = {
     cells: file?.format === 'ncer' ? [1, 1] : [],
@@ -82,6 +90,8 @@ function updatePreview() {
 }
 export async function dispatch(r: Request): Promise<Snapshot> {
   const oldPixels = clone(pixels);
+  const oldScene = clone(sceneState),
+    oldAudio = clone(state.audio_resources);
   const before = clone(colors),
     oldMessages = clone(messages),
     oldEdited = clone(state.edited),
@@ -89,6 +99,41 @@ export async function dispatch(r: Request): Promise<Snapshot> {
   let editedPath = '';
   let title = '';
   switch (r.kind) {
+    case 'Model':
+      title = r.action.kind === 'Import' ? 'Import model' : r.action.kind + ' model';
+      editedPath = r.path;
+      if (r.action.kind === 'Decimate') {
+        const part = sceneState.parts[r.action.part];
+        sceneState.budget.polygons -= Math.max(0, part.triangles - r.action.target);
+        part.triangles = Math.min(part.triangles, r.action.target);
+      }
+      break;
+    case 'GenerateCollision':
+    case 'PaintCollision':
+      title = r.kind === 'GenerateCollision' ? 'Generate collision' : 'Paint collision';
+      editedPath = r.path;
+      break;
+    case 'ImportSong':
+      title = 'Import song';
+      editedPath = r.path;
+      state.song_report = {
+        ram_bytes: 8192,
+        loop_sample: r.options.loop_start,
+        route: r.options.route === 'midi' ? 'midi' : 'sampled',
+      };
+      state.audio_resources.push({
+        kind: 2,
+        index: state.audio_resources.filter((r) => r.kind === 2).length,
+        name: 'Imported bank',
+        file: 3,
+        bytes: 100,
+        samples: 0,
+      });
+      break;
+    case 'ReplaceEffect':
+      title = 'Replace sound effect';
+      editedPath = r.path;
+      break;
     case 'Courses':
       state.bench.courses = [
         { id: 0, name: 'studio_course' },
@@ -208,6 +253,8 @@ export async function dispatch(r: Request): Promise<Snapshot> {
       if (cursor > 0) {
         const h = history[--cursor];
         pixels = clone(h.oldPixels);
+        sceneState = clone(h.oldScene);
+        state.audio_resources = clone(h.oldAudio);
         colors = clone(h.before);
         Object.assign(messages, clone(h.oldMessages));
         state.edited = clone(h.oldEdited);
@@ -218,6 +265,8 @@ export async function dispatch(r: Request): Promise<Snapshot> {
       if (cursor < history.length) {
         const h = history[cursor++];
         pixels = clone(h.newPixels);
+        sceneState = clone(h.newScene);
+        state.audio_resources = clone(h.newAudio);
         colors = clone(h.after);
         Object.assign(messages, clone(h.newMessages));
         state.edited = clone(h.newEdited);
@@ -271,6 +320,10 @@ export async function dispatch(r: Request): Promise<Snapshot> {
     history = history.slice(0, cursor);
     history.push({
       title,
+      oldScene,
+      newScene: clone(sceneState),
+      oldAudio,
+      newAudio: clone(state.audio_resources),
       before,
       after: clone(colors),
       oldMessages,
@@ -288,6 +341,7 @@ export async function dispatch(r: Request): Promise<Snapshot> {
   return clone(state);
 }
 export async function binary(r: BinaryRequest): Promise<ArrayBuffer> {
+  if (r.mode === 'audio-wav') return (await fetch('/demo/tone.wav')).arrayBuffer();
   if (r.mode === 'glb' || r.mode === 'course-glb')
     return (await fetch(`/demo/${r.mode === 'glb' ? 'model' : 'course'}.glb`)).arrayBuffer();
   if (r.mode === 'palette-colors') return Uint16Array.from(colors).buffer;

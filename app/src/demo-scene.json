@@ -1,4 +1,11 @@
 {
+  "parts": [
+    {
+      "name": "platform",
+      "triangles": 4,
+      "material": 0
+    }
+  ],
   "path": "data/Course/studio.carc/course_map.nkm",
   "model_path": "data/Course/studio.carc/course_model.nsbmd",
   "kcl_path": "data/Course/studio.carc/course_collision.kcl",

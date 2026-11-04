@@ -29,6 +29,7 @@ pub struct SceneEntry {
 }
 #[derive(Clone, Debug, Default, Serialize, Type)]
 pub struct SceneInfo {
+    pub parts: Vec<ModelPart>,
     pub path: String,
     pub model_path: Option<String>,
     pub kcl_path: Option<String>,
@@ -40,6 +41,12 @@ pub struct SceneInfo {
     pub budget: Budget,
     pub issues: Vec<String>,
     pub collision_types: Vec<u16>,
+}
+#[derive(Clone, Debug, Serialize, Type)]
+pub struct ModelPart {
+    pub name: String,
+    pub triangles: u32,
+    pub material: u32,
 }
 pub struct CourseScene {
     pub model: Option<Nsbmd>,
@@ -117,51 +124,13 @@ impl CourseScene {
                 }));
                 info.bones.extend(m.bones.iter().map(|b| b.name.clone()));
                 info.issues.extend(m.warnings.clone());
-                info.budget.polygons += m
-                    .meshes
-                    .iter()
-                    .map(|m| m.indices.len() as u32 / 3)
-                    .sum::<u32>();
-                info.budget.vertices += m
-                    .meshes
-                    .iter()
-                    .map(|m| m.positions.len() as u32)
-                    .sum::<u32>();
-                info.budget.matrices = info.budget.matrices.max(m.matrix_count as u32);
+                info.parts.extend(m.meshes.iter().map(|mesh| ModelPart {
+                    name: mesh.name.clone(),
+                    triangles: (mesh.indices.len() / 3) as u32,
+                    material: mesh.material as u32,
+                }));
             }
-        }
-        if let Some(t) = model
-            .as_ref()
-            .and_then(|m| m.textures.as_ref())
-            .or(textures.as_ref())
-        {
-            info.budget.texture_bytes = t
-                .textures
-                .iter()
-                .map(|t| (t.data.len() + t.indices.len()) as u32)
-                .sum();
-            info.budget.palette_bytes = t.palettes.iter().map(|p| p.colors.len() as u32 * 2).sum();
-        }
-        for (value, limit, name) in [
-            (info.budget.polygons, 2048, "polygons (triangulated)"),
-            (info.budget.vertices, 6144, "vertices"),
-            (
-                info.budget.texture_bytes,
-                mkds_data::TEXTURE_VRAM as u32,
-                "texture VRAM bytes",
-            ),
-            (
-                info.budget.palette_bytes,
-                mkds_data::PALETTE_VRAM as u32,
-                "palette VRAM bytes",
-            ),
-            (info.budget.matrices, 32, "matrix slots"),
-        ] {
-            if value > limit {
-                info.budget
-                    .reasons
-                    .push(format!("{name}: {value} / {limit}"))
-            }
+            info.budget = crate::model::budget(m, textures.as_ref());
         }
         info.animations = animations
             .iter()
@@ -171,7 +140,7 @@ impl CourseScene {
             info.collision_types = k
                 .prisms
                 .iter()
-                .map(|p| p.attribute & 31)
+                .map(|p| mkds_data::collision_type(p.attribute))
                 .collect::<std::collections::BTreeSet<_>>()
                 .into_iter()
                 .collect();
