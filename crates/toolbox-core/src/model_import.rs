@@ -20,6 +20,22 @@ fn array<'a>(v: &'a Value, key: &str) -> Result<&'a Vec<Value>> {
         .as_array()
         .ok_or_else(|| invalid("missing glTF array"))
 }
+/// Splits an affine column-major matrix into translation, rotation and scale (a mirror goes into the X scale).
+fn decompose(m: math::Mat4) -> Result<([f32; 3], [f32; 4], [f32; 3])> {
+    let column = |k: usize| [m[k * 4], m[k * 4 + 1], m[k * 4 + 2]];
+    let mut scale = [0, 1, 2].map(|k| math::dot(column(k), column(k)).sqrt());
+    if scale.iter().any(|v| !v.is_finite() || *v < 1e-8) || m[3] != 0. || m[7] != 0. || m[11] != 0.
+    {
+        return Err(invalid(
+            "a bone matrix is not an invertible affine transform",
+        ));
+    }
+    if math::dot(math::cross(column(0), column(1)), column(2)) < 0. {
+        scale[0] = -scale[0];
+    }
+    let r: [f32; 9] = std::array::from_fn(|i| m[i / 3 * 4 + i % 3] / scale[i / 3]);
+    Ok(([m[12], m[13], m[14]], math::quaternion(r), scale))
+}
 fn floats<const N: usize>(v: &Value, default: [f32; N]) -> [f32; N] {
     std::array::from_fn(|i| v[i].as_f64().map_or(default[i], |n| n as f32))
 }
@@ -37,6 +53,14 @@ pub fn default_material(name: String) -> Material {
     }
 }
 pub fn import(path: &Path) -> Result<Nsbmd> {
+    import_with(path, true)
+}
+/// For the wizards, which re-rig onto the game's own skeleton: skins are dropped and skinned meshes keep their
+/// bind pose, so source skeletons of any size or rest pose import.
+pub fn import_static(path: &Path) -> Result<Nsbmd> {
+    import_with(path, false)
+}
+fn import_with(path: &Path, rigged: bool) -> Result<Nsbmd> {
     let bytes = std::fs::read(path)?;
     if bytes.len() > 128 * 1024 * 1024 {
         return Err(invalid("model exceeds 128 MiB"));
@@ -49,7 +73,7 @@ pub fn import(path: &Path) -> Result<Nsbmd> {
         .as_str()
     {
         "obj" => obj(std::str::from_utf8(&bytes).map_err(|_| invalid("OBJ must be UTF-8"))?),
-        "gltf" | "glb" => gltf(&bytes, path.parent().unwrap_or(Path::new("."))),
+        "gltf" | "glb" => gltf_with(&bytes, path.parent().unwrap_or(Path::new(".")), rigged),
         _ => Err(invalid(
             "Import glTF, GLB or OBJ; convert FBX/DAE in Blender first",
         )),
@@ -357,6 +381,9 @@ impl Gltf {
     }
 }
 pub fn gltf(bytes: &[u8], base: &Path) -> Result<Nsbmd> {
+    gltf_with(bytes, base, true)
+}
+fn gltf_with(bytes: &[u8], base: &Path, rigged: bool) -> Result<Nsbmd> {
     let mut bin = None;
     let json = if bytes.starts_with(b"glTF") {
         if bytes.len() < 20
@@ -432,7 +459,7 @@ pub fn gltf(bytes: &[u8], base: &Path) -> Result<Nsbmd> {
     if visited.iter().any(|v| !*v) {
         return Err(invalid("cyclic glTF nodes"));
     }
-    let has_skin = nodes.iter().any(|n| n["skin"].is_number());
+    let has_skin = rigged && nodes.iter().any(|n| n["skin"].is_number());
     let mut bone_nodes = vec![];
     if has_skin {
         for skin in doc.json["skins"]
@@ -470,17 +497,22 @@ pub fn gltf(bytes: &[u8], base: &Path) -> Result<Nsbmd> {
             .iter()
             .enumerate()
             .map(|(i, &n)| {
-                if nodes[n]["matrix"].is_array() {
-                    return Err(invalid(
-                        "apply bone matrices to TRS in Blender before import",
-                    ));
-                }
+                // Blender and other exporters sometimes write bones as matrices: split them into TRS.
+                let (translation, rotation, scale) = if nodes[n]["matrix"].is_array() {
+                    decompose(floats(&nodes[n]["matrix"], IDENTITY))?
+                } else {
+                    (
+                        floats(&nodes[n]["translation"], [0.; 3]),
+                        floats(&nodes[n]["rotation"], [0., 0., 0., 1.]),
+                        floats(&nodes[n]["scale"], [1.; 3]),
+                    )
+                };
                 Ok(Bone {
                     name: format!("bone{i}"),
                     parent: parents[n].and_then(|p| bone_nodes.iter().position(|&n| n == p)),
-                    translation: floats(&nodes[n]["translation"], [0.; 3]),
-                    rotation: floats(&nodes[n]["rotation"], [0., 0., 0., 1.]),
-                    scale: floats(&nodes[n]["scale"], [1.; 3]),
+                    translation,
+                    rotation,
+                    scale,
                 })
             })
             .collect::<Result<Vec<_>>>()?
@@ -596,7 +628,7 @@ pub fn gltf(bytes: &[u8], base: &Path) -> Result<Nsbmd> {
             } else {
                 (0..m.positions.len() as u32).collect()
             };
-            if let Some(skin) = node["skin"].as_u64() {
+            if let Some(skin) = node["skin"].as_u64().filter(|_| rigged) {
                 let skin = &doc.json["skins"][skin as usize];
                 let joints = array(skin, "joints")?;
                 let js = read("JOINTS_0", 4)?;
@@ -639,7 +671,8 @@ pub fn gltf(bytes: &[u8], base: &Path) -> Result<Nsbmd> {
                         }
                     }
                 }
-            } else {
+            } else if !node["skin"].is_number() {
+                // a skinned mesh's vertices are already in bind (model) space; its node transform is ignored
                 nitro_formats::model::transform(&mut m, world[node_id])?;
             }
             nitro_formats::model::validate_mesh(&m)?;
@@ -670,4 +703,22 @@ pub fn gltf(bytes: &[u8], base: &Path) -> Result<Nsbmd> {
             Some(Nsbtx::new(textures, palettes)?)
         },
     })
+}
+
+#[cfg(test)]
+mod decompose_tests {
+    use super::*;
+    #[test]
+    fn matrix_bones_split_into_the_same_transform() {
+        let (t, r, s) = ([1., -2., 3.], [0.2, 0.3, -0.1, 0.927], [2., 0.5, 1.5]);
+        let n = r.iter().map(|v: &f32| v * v).sum::<f32>().sqrt();
+        let r = r.map(|v| v / n);
+        let m = math::trs(t, r, s);
+        let (t2, r2, s2) = decompose(m).unwrap();
+        let back = math::trs(t2, r2, s2);
+        for (a, b) in m.iter().zip(back) {
+            assert!((a - b).abs() < 1e-4, "{m:?} vs {back:?}");
+        }
+        assert!(decompose([0.; 16]).is_err());
+    }
 }

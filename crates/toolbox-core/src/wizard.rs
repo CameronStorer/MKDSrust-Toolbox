@@ -636,7 +636,7 @@ fn existing_model_path(s: &RomSession, suffix: &str, menu: bool) -> Result<Strin
         .ok_or_else(|| invalid("base/slot model is absent from the ROM"))
 }
 pub fn character(p: &mut Project, s: &RomSession, o: &CharacterOptions) -> Result<Report> {
-    let source = crate::model_import::import(std::path::Path::new(&o.source))?;
+    let source = crate::model_import::import_static(std::path::Path::new(&o.source))?;
     character_from(p, s, o, source)
 }
 pub fn character_from(
@@ -801,7 +801,7 @@ pub fn copy_voice(sound: &mut nitro_formats::audio::Sdat, slot: usize, base: usi
     Ok(())
 }
 pub fn kart(p: &mut Project, s: &RomSession, o: &KartOptions) -> Result<Report> {
-    let source = crate::model_import::import(std::path::Path::new(&o.source))?;
+    let source = crate::model_import::import_static(std::path::Path::new(&o.source))?;
     kart_from(p, s, o, source)
 }
 pub fn kart_from(

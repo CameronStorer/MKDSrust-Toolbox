@@ -606,7 +606,7 @@ pub fn place_object(
 /// Height of the lowest point of an imported map.
 pub const MAP_FLOOR_Y: f32 = 600.;
 pub fn track(p: &mut Project, s: &RomSession, o: &TrackOptions) -> Result<Report> {
-    let model = crate::model_import::import(std::path::Path::new(&o.source))?;
+    let model = crate::model_import::import_static(std::path::Path::new(&o.source))?;
     track_from(p, s, o, model)
 }
 pub fn track_from(
