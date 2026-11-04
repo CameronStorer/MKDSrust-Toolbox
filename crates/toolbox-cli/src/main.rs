@@ -49,6 +49,16 @@ enum Command {
     Validate {
         project: PathBuf,
     },
+    /// Export for real hardware: a patched ROM (for your own DS/flashcart/emulator) and/or a BPS patch (to share).
+    ExportDs {
+        project: PathBuf,
+        /// Write the patched ROM here (never over your clean ROM)
+        #[arg(long)]
+        rom: Option<PathBuf>,
+        /// Write a BPS patch here
+        #[arg(long)]
+        bps: Option<PathBuf>,
+    },
 }
 #[derive(Clone, ValueEnum)]
 enum To {
@@ -168,6 +178,16 @@ fn run(cli: Cli) -> Result<()> {
                 "{}",
                 serde_json::to_string_pretty(&toolbox_core::pack::pack(&p, &s)?)?
             );
+        }
+        Command::ExportDs { project, rom, bps } => {
+            if rom.is_none() && bps.is_none() {
+                return Err(Error::Invalid(
+                    "give --rom FILE.nds and/or --bps FILE.bps".into(),
+                ));
+            }
+            let (p, s) = Service::project_session(&project)?;
+            let r = toolbox_core::export::export_ds(&p, &s, rom.as_deref(), bps.as_deref())?;
+            println!("{}", serde_json::to_string_pretty(&r)?);
         }
         Command::Validate { project } => {
             let (p, s) = Service::project_session(&project)?;

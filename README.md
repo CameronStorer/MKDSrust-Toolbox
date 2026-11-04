@@ -1,7 +1,8 @@
 # MKDSrust Toolbox
 
-A pro-grade, all-in-one modding studio for **Mario Kart DS** on [MKDSrust](https://mkdsrust.com): tracks, karts,
-characters, textures, text, audio and code, with a one-click Test Bench that races your mod in your own MKDSrust install.
+A real-hardware-first, all-in-one ROM-hacking studio for **Mario Kart DS**: tracks, karts,
+characters, textures, text, audio and code. Everything it makes plays on a real DS, flashcart or emulator, and
+optionally on PC through [MKDSrust](https://mkdsrust.com). Goal: even a beginner can make a ROM hack.
 
 > **Status:** Stage 1 foundation implemented. See [docs/STATUS.md](docs/STATUS.md) for verification and limitations.
 

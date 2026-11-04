@@ -1,11 +1,18 @@
 # MKDSrust Toolbox: product and architecture spec
 
-Status: v0.1 draft, 2026-11-03. Owner: CameronStorer. License: GPL-3.0-or-later.
+Status: v0.2, 2026-11-03 (**real hardware first**). Owner: CameronStorer. License: GPL-3.0-or-later.
 
 ## 1. Vision
-The "Blender of Mario Kart DS modding." A single professional tool that can change any part of the game:
+**A real-hardware ROM-hacking studio for Mario Kart DS**: the "Blender of MKDS modding". Everything it makes is a ROM
+hack of the original game, playable on a DS, a flashcart or an emulator. One tool covers:
 - tracks, karts, characters, textures, 2D UI, text, audio, effects and game code;
-- tested instantly in the player's own MKDSrust install.
+- tested instantly in an emulator, on hardware, or in MKDSrust.
+
+**MKDSrust is an option, not the target.** It turns any ROM hack the Toolbox makes into a PC game, so DS-compatible
+means PC-compatible. PC-only features (Lua scripts, HD, files over DS limits) are hidden behind a setting ("Allow
+PC-only features", off by default) and are backlog work.
+
+**Goal: even a beginner can make a ROM hack.** The acceptance scenario (section 7) is the definition of done.
 
 It's a pro tool: it may take time to learn, but it lets you do anything. It still has to be easy to navigate, with
 discoverable commands, consistent panels and no hidden modes.
@@ -16,18 +23,23 @@ Hard rules (non-negotiable):
    local-only and opt-in (the env var `MKDS_ROM` points to the user's own dump) and are skipped otherwise.
 2. The Toolbox reads the user's own ROM in place. Extracted data goes to a per-user cache outside the project folder,
    and never into a mod package.
-3. Mods are exported only in the MKDSrust package format (`docs/PLUGIN_FORMAT.md`). That means `patch` (bsdiff against
-   the retail file) or `add` (the author's own new file). Retail bytes never end up in a package.
+3. What leaves the user's machine never contains retail bytes: BPS/xdelta patches against the clean ROM, MKDSrust
+   packages (`docs/PLUGIN_FORMAT.md`: per-file `patch`/`add`), and the author's own files. A patched ROM is written
+   only for the user's own use.
 4. No proprietary SDK tools (g3dcvtr, seqconv and so on) are required or bundled. We write DS formats ourselves.
 5. Third-party code is used only under a GPL-3-compatible license, credited in `CREDITS.md`. Ideas, layouts and UX
    conventions from other tools are welcome (see `docs/PRIOR_ART.md`); unlicensed code is not.
 
 ## 2. Users
-- **Players who make a small mod:** recolour a kart, change some text, swap music. They need guided flows and good
-  defaults.
-- **Experienced modders** used to Blender, MKTB and NitroPaint. They need speed, keyboard shortcuts, precision and
-  batch tools.
-- **Code modders** who write Lua gameplay scripts and Rust source patches against MKDSrust's readable source.
+- **Beginners** who want their own kart, character, track, music or Grand Prix on a real DS. They need guided flows
+  ("recipes"), automatic conversion to DS limits, and Fix buttons instead of error codes.
+- **Experienced ROM hackers** used to Blender, MKTB and NitroPaint. They need speed, precision, batch tools, and
+  interop with DS-format files from other tools.
+- **Code modders** at four levels:
+  1. tweak panels (no code);
+  2. hack templates (tick boxes);
+  3. MKDS Script, a simple Lua-like language compiled to DS code;
+  4. C/ARM assembly against the generated SDK headers.
 
 ## 3. UI model (Blender-like, but easy to navigate)
 - **Top bar:** File/Edit/View/Project menus, **workspace tabs**, the **Play** button, and the **DS-compatibility
@@ -113,7 +125,63 @@ A project must also run on a real DS (flashcart) or a DS emulator, not only in M
 The CLI gets the same as `mkdstb export-ds <project> --rom <rom> (--out patched.nds | --patch out.bps)`.
 Packages on mkdsrust.com marked "DS compatible" can be exported the same way from the launcher.
 
-## 4. Architecture
+## 4. Pipeline: what goes in, how you work, what comes out
+**In** (all optional except the first):
+- **The user's clean ROM.** USA (AMCE), identified by hash. Read in place, never modified. Extracted data is cached
+  per user, outside projects.
+- **An existing ROM hack** (.nds), or a **patch** (BPS/xdelta/IPS) applied to the clean ROM. It's compared with the
+  clean ROM, and the changes become the project's base layer: changed files, plus code regions shown as "changed
+  code".
+- **MKDSrust packages:** their file changes become layers.
+- **Open-format assets:** glTF/FBX/OBJ/DAE, PNG, WAV/MIDI, text tables. Converted at build.
+- **DS-format files from other tools** (.nclr, .ncgr, .nsbmd, .nkm, .kcl, .sdat...): used as-is.
+
+**Working: copies, never the originals.** A project is a git-friendly folder:
+```
+project.toml   name, version, base (clean ROM hash + imported hack/patch hash), settings
+sources/       the author's editable sources (.glb, .png, track .json, text, music)
+overrides/     DS-format files used as-is
+code/          C / ARM asm / MKDS Script
+build/         generated, disposable
+```
+- A build is a recipe: clean ROM + base layer + project changes, converted, packed into archives, then the ROM is
+  rebuilt.
+- Every asset can be exported to an open format and re-imported at any time.
+- Watched files (saving in Blender) are picked up live.
+- Projects store only the author's changes, so they're shareable without game data.
+- Assets taken from other people's hacks keep a provenance note. Publishing warns: credit or ask the author.
+
+**Out:**
+- **Patched ROM** (.nds), for the user's own DS/flashcart/emulator.
+- **BPS patch** (default; xdelta optional), for sharing. It checks the source ROM, so a wrong ROM is refused.
+- **MKDSrust package**, for the launcher and the site.
+- **Open formats:** glTF, PNG, OBJ, MIDI, WAV.
+
+**ROM rebuild** (ndstool equivalent): NitroFS FNT/FAT, files may grow or be added, overlay table and binaries, banner,
+header CRC, padding and alignment. Verified by re-reading and round-tripping every file.
+
+**Combining:** file layers merge in load order, with a warning when two layers touch the same file. A finished
+whole-ROM BPS isn't mergeable (standard for ROM hacks), so combine at project level.
+
+**Code hacks:**
+- Source in `code/`, compiled by a bundled ARM compiler (ARMv5TE/Thumb) against the generated **symbol map and
+  headers**: function addresses, structs and globals from the readable-source research (USA ROM).
+- Hooks are declared by name: `MKDS_HOOK_AFTER(item_roulette_select)`; before, replace, call-site and constant patches
+  also exist.
+- At build, the code is placed in a code file in the ROM, loaded at boot by a small loader patched into the game's
+  start-up (arena allocation, as RuntimeCodeModules does). Hooks become branch instructions.
+- Two mods hooking the same place are reported as a conflict.
+- Imported hacks keep their code working. Editing it needs its source.
+
+**Limits** (checked continuously):
+- about 4 MB main RAM;
+- 512 KB texture VRAM per scene;
+- about 2,048 polygons per frame;
+- 16 sound channels;
+- region USA only for now (each region needs its own symbol map);
+- online play (Wiimmfi) out of scope.
+
+## 5. Architecture
 ```
 MKDSrust-Toolbox/
   crates/
@@ -149,26 +217,60 @@ MKDSrust-Toolbox/
   Import back from all of them.
 - **Platforms:** Windows first. Linux and macOS builds should work from the start, so don't use Windows-only APIs.
 
-## 5. Stages (each one ships)
-1. **Foundation:**
-   - app shell, workspaces, docking, command palette, themes, settings, undo framework;
-   - open the ROM; Explorer with nested archives, hex view and format detection;
-   - palette and texture viewing (NCLR/NCGR/NSCR/NSBTX), BMG viewing;
-   - `nitro-formats` with LZ77/NARC/ROM/NCLR/NCGR/NSCR/BMG (parse and write);
-   - edit a palette and a BMG, then pack a mod that the launcher installs.
-2. **3D viewing:** NSBMD/NSBTX rendering, the Track workspace read-only (NKM + KCL overlays, budget readout), and model
-   export to glTF.
-3. **Test Bench:** Play button, race-setup arguments, hot reload of 2D/text, logs.
-4. **Model pipeline:** glTF/FBX/OBJ import, mesh editing, decimation, NSBMD/NSBTX writer, DS checks, the
-   Compatibility panel and "Make DS-compatible".
-5. **Rig & Animate:** skeleton fitting, weights, retargeting, NSBCA writer.
-6. **Track editing:** NKM editing (MKTB parity), KCL generation, new courses.
-7. **Code:** Lua scripting API docs and the IDE, Rust source patches against the readable source.
-8. **Audio:** SDAT editing, MIDI ↔ SSEQ, WAV ↔ SWAV/STRM.
-9. **Effects and 2D UI layouts.**
-10. **Export for real hardware** (3.3). It can come earlier: it only needs the ROM rebuild and the patch writers.
+## 6. Roadmap (real hardware first)
+Done:
+- **Stage 1:** shell, workspaces, ROM explorer, palette and text editing, packing.
+- **Stage 2+3:** 3D viewing, the read-only Track workspace, glTF/OBJ export, Test Bench. In progress (`stage2-wip`).
 
-## 6. Quality bar
+Next, in order:
+1. **Foundation for DS output:**
+   - ROM writer (rebuild);
+   - Export for DS: patched ROM, BPS, xdelta;
+   - open a ROM hack or patch as a project base (diff against the clean ROM);
+   - the project folder layout above;
+   - Play targets: emulator (configurable path, e.g. melonDS), MKDSrust (`--race`), and export to flashcart.
+2. **Textures & 2D (NitroPaint level):** pixel and tile painting, PNG import with colour reduction to the palette size,
+   every texture format, cells and animations, item icons, menu graphics.
+3. **Karts & characters:**
+   - import any model (unrigged too) to NSBMD;
+   - auto-fit to the kart and driver skeletons, auto-rig with weights;
+   - trim and decimate to DS budgets;
+   - textures to DS formats;
+   - menu and select-screen assets.
+4. **Tracks (MKTB level, plus model-to-track):**
+   - import any map model;
+   - paint collision types and generate KCL;
+   - generate and edit start, checkpoints, CPU and item routes, respawns and cameras;
+   - item boxes and objects;
+   - minimap;
+   - validation with Fix buttons.
+5. **Audio:** SDAT editing, MIDI → SSEQ (with instrument banks), WAV → SWAV/STRM, sound effect replacement, and
+   assigning music to tracks.
+6. **Text & Grand Prix:** all BMG messages with a preview, cups (names and track order), track names and icons.
+7. **Animations & effects:** kart and driver animations (NSBCA), texture animations, particles (SPL).
+8. **Tweak panels and hack templates:** kart/character stats, item odds per place, CPU difficulty, speeds and laps;
+   templates such as "200cc", "no blue shells", "item rain".
+9. **Code:**
+   - SDK headers and symbol map generated from the readable-source research;
+   - the C/ASM injector;
+   - MKDS Script;
+   - **extra track slots** (CTGP-style: add tracks instead of replacing them).
+
+Backlog (PC): Lua scripting (already in MKDSrust, behind the setting), HD/widescreen, a drop-in mod file loader.
+After the Toolbox is done: site and launcher work (file types, DS-only vs PC-only labels on the site).
+
+## 7. Acceptance scenario (definition of done)
+A beginner, with the Toolbox alone and their own ROM, can:
+1. import their own **character model, unrigged**, and race as it;
+2. import their own **kart model, unrigged**, and drive it;
+3. turn a **random map model** into a playable track (collision, routes, CPU racers, item boxes);
+4. add a **song** to that track, and replace some **sound effects**;
+5. replace **item textures**;
+6. change **text** (menus, names);
+7. make their own **Grand Prix cup** with chosen tracks;
+8. export a BPS and a patched ROM that **boot and play on a real DS** (and in an emulator, and in MKDSrust).
+
+## 8. Quality bar
 - `cargo test`, `cargo clippy -D warnings`, `npm run lint`, `npm run typecheck` and `npm test` (vitest) all pass in CI
   (GitHub Actions, Windows + Linux).
 - Every format has write(parse(x)) == x tests on synthetic fixtures, plus fuzzing (cargo-fuzz) for parsers in later
