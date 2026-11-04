@@ -284,9 +284,17 @@ pub fn preview_audio(
     seconds: u32,
 ) -> Result<Vec<u8>> {
     let sdat = Sdat::parse(&preview::plain(bytes)?)?;
-    let duration = seconds.clamp(1, 30);
+    let duration = if seconds == 0 {
+        300
+    } else {
+        seconds.clamp(1, 300)
+    };
     let pcm = match kind {
-        0 => audio::preview_sequence(&sdat, index as usize, duration as f32)?,
+        0 => audio::preview_sequence(
+            &sdat,
+            index as usize,
+            if seconds == 0 { 0. } else { duration as f32 },
+        )?,
         3 => {
             let waves = nitro_formats::audio::Swar::parse(
                 &sdat.files[sdat.resource_file(3, index as usize)?],

@@ -222,17 +222,7 @@ pub fn cell_image(
     }
 }
 pub fn find_companion(session: &RomSession, path: &str, ext: &str) -> Option<String> {
-    let stem = path.rsplit_once('.').map_or(path, |x| x.0);
-    let exact = format!("{stem}.{ext}");
-    if session.file(&exact).is_ok() {
-        return Some(exact);
-    }
-    let parent = path.rsplit_once('/').map_or("", |x| x.0);
-    session
-        .nodes
-        .iter()
-        .find(|n| n.format == ext && n.path.rsplit_once('/').map_or("", |x| x.0) == parent)
-        .map(|n| n.path.clone())
+    crate::game::companion(&session.nodes, path, ext)
 }
 pub fn png(image: &Image) -> Result<Vec<u8>> {
     let mut out = vec![];

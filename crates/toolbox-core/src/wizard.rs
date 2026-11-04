@@ -491,7 +491,7 @@ fn fit(m: &mut Model, donor: &Model) -> Result<()> {
     }
     Ok(())
 }
-fn reduce(m: &mut Model, target: usize, vertices: usize) -> Result<()> {
+pub(crate) fn reduce(m: &mut Model, target: usize, vertices: usize) -> Result<()> {
     let total: usize = m.meshes.iter().map(|m| m.indices.len() / 3).sum();
     for mesh in &mut m.meshes {
         let share = ((mesh.indices.len() / 3) * target / total.max(1)).max(1);

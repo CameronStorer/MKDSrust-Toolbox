@@ -279,6 +279,75 @@ impl Project {
             toml::to_string_pretty(&self.config)?.as_bytes(),
         )
     }
+    /// Copy authored project files and patch metadata, never the external ROM or build outputs.
+    pub fn save_as(&mut self, destination: &Path, session: &RomSession) -> Result<()> {
+        fn copy_tree(from: &Path, to: &Path) -> Result<()> {
+            if !from.exists() {
+                return Ok(());
+            }
+            let metadata = fs::symlink_metadata(from)?;
+            if metadata.file_type().is_symlink() {
+                return Err(Error::Invalid(
+                    "Save As does not follow symbolic links".into(),
+                ));
+            }
+            if metadata.is_dir() {
+                fs::create_dir_all(to)?;
+                for entry in fs::read_dir(from)? {
+                    let entry = entry?;
+                    copy_tree(&entry.path(), &to.join(entry.file_name()))?;
+                }
+            } else {
+                if from
+                    .extension()
+                    .is_some_and(|e| e.eq_ignore_ascii_case("nds"))
+                {
+                    return Err(Error::Invalid(
+                        "keep ROM images outside project sources".into(),
+                    ));
+                }
+                fs::copy(from, to)?;
+            }
+            Ok(())
+        }
+        fs::create_dir_all(destination)?;
+        let destination = destination.canonicalize()?;
+        if destination.starts_with(&self.root)
+            || self.root.starts_with(&destination)
+            || session.path.starts_with(&destination)
+            || fs::read_dir(&destination)?.next().is_some()
+        {
+            return Err(Error::Invalid(
+                "choose an empty folder outside this project and the ROM folder".into(),
+            ));
+        }
+        self.save()?;
+        for name in [
+            "edits",
+            "sources",
+            "overrides",
+            "code",
+            ".gitignore",
+            "README.md",
+        ] {
+            copy_tree(&self.root.join(name), &destination.join(name))?;
+        }
+        if let Some(base) = &self.config.base {
+            check_path(&base.patch)?;
+            let target = destination.join(&base.patch);
+            if let Some(parent) = target.parent() {
+                fs::create_dir_all(parent)?;
+            }
+            copy_tree(&self.root.join(&base.patch), &target)?;
+        }
+        // Write the manifest last, so failed copies cannot look like complete projects.
+        atomic_write(
+            &destination.join("project.toml"),
+            toml::to_string_pretty(&self.config)?.as_bytes(),
+        )?;
+        self.root = destination;
+        Ok(())
+    }
     fn store(&mut self, path: &str, bytes: &Option<Vec<u8>>) -> Result<()> {
         check_path(path)?;
         if self.root.as_os_str().is_empty() {

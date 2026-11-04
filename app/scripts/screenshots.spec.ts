@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 import path from 'node:path';
 const workspaces = [
+  'Home',
+  'Game browser',
+  'Image gallery',
   'Overview',
   'Explorer',
   'Texture & 2D',
@@ -25,6 +28,11 @@ for (const theme of ['dark', 'light'])
       await page.getByRole('button', { name: 'Save settings', exact: true }).click();
       await expect(page.getByRole('dialog', { name: 'Settings', exact: true })).toBeHidden();
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      if (workspace === 'Image gallery') {
+        await page.getByLabel('Search game').fill('art/studio.ncgr');
+        await page.locator('.game-card').first().click();
+        await expect(page.getByLabel('Texture preview')).toHaveAttribute('width', '128');
+      }
       if (workspace === 'Text') {
         await page.getByLabel('BMG file').selectOption('data/Studio/demo.carc/language/en.bmg');
         await expect(

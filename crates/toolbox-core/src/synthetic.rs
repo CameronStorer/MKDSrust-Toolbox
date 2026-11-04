@@ -266,6 +266,16 @@ pub fn wizard_rom() -> Vec<u8> {
         );
     }
     let names: Vec<_> = (0..140).map(|i| format!("Studio name {i}")).collect();
+    let spanish: Vec<_> = (0..140).map(|i| format!("Prueba {i}")).collect();
+    files.insert(
+        "data/Main2D_es.carc".into(),
+        Narc::new(BTreeMap::from([(
+            "common.bmg".into(),
+            Bmg::new(&spanish.iter().map(String::as_str).collect::<Vec<_>>()).write(),
+        )]))
+        .unwrap()
+        .write(),
+    );
     let refs: Vec<_> = names.iter().map(String::as_str).collect();
     files.insert(
         "data/Main2D_us.carc".into(),

@@ -11,7 +11,7 @@ import {
   BookOpen,
   ChevronRight,
 } from 'lucide-react';
-import { useStore, select } from '../store';
+import { useStore, select, draft as registerDraft } from '../store';
 import { commands, invokeCommand, openWorkspace } from '../commands';
 import { bytes } from './Properties';
 import type { Manifest } from '../bindings';
@@ -76,6 +76,15 @@ export function Overview() {
         </div>
       </div>
     );
+  const changeDraft = (manifest: Manifest) => {
+    setDraft(manifest);
+    registerDraft(
+      'manifest',
+      JSON.stringify(manifest) === JSON.stringify(snapshot.manifest)
+        ? null
+        : { kind: 'UpdateManifest', manifest },
+    );
+  };
   const dirty = JSON.stringify(draft) !== JSON.stringify(snapshot.manifest);
   return (
     <div className="panel overview">
@@ -186,7 +195,9 @@ export function Overview() {
               className="manifest-form"
               onSubmit={(e) => {
                 e.preventDefault();
-                void run({ kind: 'UpdateManifest', manifest: draft });
+                void run({ kind: 'UpdateManifest', manifest: draft }).then(() => {
+                  if (!useStore.getState().error) registerDraft('manifest', null);
+                });
               }}
             >
               {(['name', 'id', 'version', 'author'] as const).map((key) => (
@@ -195,7 +206,7 @@ export function Overview() {
                   <input
                     aria-label={`Project ${key}`}
                     value={draft[key]}
-                    onChange={(e) => setDraft({ ...draft, [key]: e.target.value })}
+                    onChange={(e) => changeDraft({ ...draft, [key]: e.target.value })}
                   />
                 </label>
               ))}
@@ -203,7 +214,7 @@ export function Overview() {
                 Type
                 <select
                   value={draft.type}
-                  onChange={(e) => setDraft({ ...draft, type: e.target.value })}
+                  onChange={(e) => changeDraft({ ...draft, type: e.target.value })}
                 >
                   {['character', 'track', 'kart', 'battle', 'music', 'texture', 'other'].map(
                     (t) => (
@@ -218,7 +229,7 @@ export function Overview() {
                   aria-label="Project description"
                   maxLength={2000}
                   value={draft.description ?? ''}
-                  onChange={(e) => setDraft({ ...draft, description: e.target.value })}
+                  onChange={(e) => changeDraft({ ...draft, description: e.target.value })}
                 />
               </label>
               <label>
@@ -226,7 +237,7 @@ export function Overview() {
                 <select
                   value={draft.platforms?.includes('ds') ? 'ds' : 'pc'}
                   onChange={(e) =>
-                    setDraft({
+                    changeDraft({
                       ...draft,
                       platforms: e.target.value === 'ds' ? ['pc', 'ds'] : ['pc'],
                     })

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 test('palette history, immutable text codes, settings and packaging', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?workspace=Overview');
   await page.getByRole('button', { name: 'Texture & 2D', exact: true }).click();
   await page.getByRole('button', { name: 'Colour 1', exact: true }).click();
   const before = await page.getByLabel('R channel').inputValue();
@@ -13,10 +13,10 @@ test('palette history, immutable text codes, settings and packaging', async ({ p
   await page.getByRole('button', { name: 'Text', exact: true }).click();
   await page.getByLabel('BMG file').selectOption('data/Studio/demo.carc/language/en.bmg');
   await page.getByRole('button', { name: /0001.*Take the/ }).click();
-  await expect(page.getByText('CONTROL', { exact: true })).toBeVisible();
+  await expect(page.getByText('Game control 1', { exact: true })).toBeVisible();
   await page.getByLabel('Text segment 1').fill('Travel the ');
   await page.getByRole('button', { name: 'Save message', exact: true }).click();
-  await expect(page.getByText('CONTROL', { exact: true })).toBeVisible();
+  await expect(page.getByText('Game control 1', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Overview', exact: true }).click();
   await page.getByRole('button', { name: 'Pack mod', exact: true }).click();
   await expect(page.getByText('Package built', { exact: false })).toBeVisible();
@@ -42,7 +42,7 @@ test('layout persistence and reset', async ({ page }) => {
 });
 
 test('palette render changes and undo restores its pixels', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?workspace=Overview');
   await page.getByRole('button', { name: 'Texture & 2D', exact: true }).click();
   const canvas = page.getByLabel('Texture preview');
   await expect(canvas).toHaveAttribute('width', '128');
@@ -58,7 +58,7 @@ test('palette render changes and undo restores its pixels', async ({ page }) => 
   await expect.poll(pixel).toEqual(original);
 });
 test('text revert restores the message and can be undone', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?workspace=Overview');
   await page.getByRole('button', { name: 'Text', exact: true }).click();
   const path = 'data/Studio/demo.carc/language/en.bmg';
   await page.getByLabel('BMG file').selectOption(path);
@@ -73,16 +73,15 @@ test('text revert restores the message and can be undone', async ({ page }) => {
 });
 test('first run opens a ROM before creating a project', async ({ page }) => {
   await page.goto('/?onboarding=1');
-  await expect(page.getByRole('button', { name: 'Create project', exact: true })).toBeDisabled();
-  await page.getByRole('button', { name: 'Choose ROM', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Create project', exact: true })).toBeEnabled();
-  await page.getByRole('button', { name: 'Create project', exact: true }).click();
+  await expect(page.getByRole('button', { name: /^Replace a character/ })).toBeDisabled();
+  await page.getByRole('button', { name: 'Open ROM…', exact: true }).click();
+  await page.getByRole('button', { name: 'Create project…', exact: true }).click();
   await page.getByRole('button', { name: 'Choose folder…', exact: true }).click();
   await page
     .getByRole('dialog', { name: 'New project' })
     .getByRole('button', { name: 'Create project', exact: true })
     .click();
-  await expect(page.getByLabel('Project name')).toHaveValue('Untitled mod');
-  await page.getByRole('button', { name: 'Text', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'What do you want to make?' })).toBeVisible();
+  await page.getByRole('button', { name: /^Change text and names/ }).click();
   await expect(page.getByLabel('Text segment 1')).toBeEnabled();
 });

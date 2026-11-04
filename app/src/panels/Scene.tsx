@@ -148,9 +148,13 @@ export function SceneViewport() {
     useScene();
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
-  const track = workspace === 'Track';
   const format = files?.find((f) => f.path === selected)?.format;
-  const valid = track ? ['nkm', 'kcl', 'nsbmd'].includes(format ?? '') : format === 'nsbmd';
+  const track =
+    workspace === 'Track' ||
+    (workspace === 'Game browser' && ['nkm', 'kcl'].includes(format ?? ''));
+  const valid = track
+    ? ['nkm', 'kcl', 'nsbmd'].includes(format ?? '')
+    : ['nsbmd', 'nsbca'].includes(format ?? '');
   useEffect(() => {
     if (valid || !files?.length) return;
     const f = files.find((f) => f.format === (track ? 'nkm' : 'nsbmd'));
@@ -339,18 +343,16 @@ export function SceneViewport() {
         const state = useScene.getState();
         if (state.info?.model_path)
           for (const [part, triangles] of rigStroke)
-            void useStore
-              .getState()
-              .run({
-                kind: 'Wizard',
-                action: {
-                  kind: 'RigPaint',
-                  path: state.info.model_path,
-                  part,
-                  triangles: [...triangles],
-                  bone: state.bone,
-                },
-              });
+            void useStore.getState().run({
+              kind: 'Wizard',
+              action: {
+                kind: 'RigPaint',
+                path: state.info.model_path,
+                part,
+                triangles: [...triangles],
+                bone: state.bone,
+              },
+            });
         rigStroke.clear();
         return;
       }

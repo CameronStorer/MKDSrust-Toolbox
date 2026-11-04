@@ -26,6 +26,11 @@ const clone = <T>(v: T): T => structuredClone(v);
 const state = clone(demo) as Snapshot;
 state.wizard_catalog = clone(wizardData.catalog);
 state.names = clone(wizardData.names);
+state.game_entries.push(
+  ...clone(wizardData.game_entries).filter(
+    (e) => !state.game_entries.some((old) => old.path === e.path),
+  ),
+);
 state.files.push(
   ...clone(wizardData.files).filter((f) => !state.files.some((old) => old.path === f.path)),
 );
@@ -36,7 +41,10 @@ state.settings.play_target = 'mkdsrust';
 let pixels = [...assets.pixels];
 let colors = [...state.preview.colors];
 const original = [...colors];
-const messages = clone(assets.messages) as Record<string, typeof state.preview.messages>;
+const messages = { ...clone(assets.messages), ...clone(wizardData.messages) } as Record<
+  string,
+  typeof state.preview.messages
+>;
 const originalMessages = clone(messages);
 interface Edit {
   oldCatalog: Snapshot['wizard_catalog'];
@@ -192,6 +200,7 @@ export async function dispatch(r: Request): Promise<Snapshot> {
         route: r.options.route === 'midi' ? 'midi' : 'sampled',
       };
       state.audio_resources.push({
+        bank: null,
         kind: 2,
         index: state.audio_resources.filter((r) => r.kind === 2).length,
         name: 'Imported bank',
@@ -286,12 +295,18 @@ export async function dispatch(r: Request): Promise<Snapshot> {
         state.bench.last_run.stopped = true;
       }
       break;
+    case 'Save':
+      break;
+    case 'SaveAs':
+      state.project_path = r.path;
+      break;
     case 'Snapshot':
       break;
     case 'Select':
       if (!state.files.some((f) => f.path === r.path)) throw new Error('File not found');
       state.selected = r.path;
       break;
+    case 'TexturePalette':
     case 'Palette':
       r.indices.forEach((index, i) => {
         colors[index] = r.colors[i];

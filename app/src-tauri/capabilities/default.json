@@ -3,5 +3,11 @@
   "identifier": "default",
   "description": "Main Toolbox window and native path pickers",
   "windows": ["main"],
-  "permissions": ["core:default", "dialog:allow-open", "dialog:allow-save"]
+  "permissions": [
+    "core:default",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "dialog:allow-confirm",
+    "core:window:allow-destroy"
+  ]
 }

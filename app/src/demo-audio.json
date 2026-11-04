@@ -1,5 +1,6 @@
 [
   {
+    "bank": 0,
     "kind": 0,
     "index": 0,
     "name": "Original synth tone",
@@ -8,6 +9,7 @@
     "samples": 0
   },
   {
+    "bank": null,
     "kind": 2,
     "index": 0,
     "name": "Sine bank",
@@ -16,6 +18,7 @@
     "samples": 0
   },
   {
+    "bank": null,
     "kind": 3,
     "index": 0,
     "name": "Sine waves",

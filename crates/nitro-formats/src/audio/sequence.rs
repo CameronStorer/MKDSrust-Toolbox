@@ -92,6 +92,13 @@ pub struct SequenceTimeline {
 /// Basic bounded scheduler for auditioning sequences. Unsupported commands are
 /// reported explicitly; the file parser still retains them byte for byte.
 pub fn timeline(events: &[u8], max_ticks: u32) -> Result<SequenceTimeline> {
+    schedule(events, max_ticks, false)
+}
+/// Audition a complete arrangement through its first infinite loop.
+pub fn timeline_once(events: &[u8], max_ticks: u32) -> Result<SequenceTimeline> {
+    schedule(events, max_ticks, true)
+}
+fn schedule(events: &[u8], max_ticks: u32, once: bool) -> Result<SequenceTimeline> {
     let mut out = SequenceTimeline {
         tempos: vec![(0, 120)],
         ..SequenceTimeline::default()
@@ -99,6 +106,7 @@ pub fn timeline(events: &[u8], max_ticks: u32) -> Result<SequenceTimeline> {
     let mut tracks = vec![(0u8, 0usize)];
     let mut opened = std::collections::BTreeSet::from([0u8]);
     let mut work = 0;
+    let mut variables = [0i16; 32];
     while let Some((track, mut at)) = tracks.pop() {
         let mut tick = 0u32;
         let mut wait = true;
@@ -110,6 +118,7 @@ pub fn timeline(events: &[u8], max_ticks: u32) -> Result<SequenceTimeline> {
         let mut bend_range = 2u8;
         let mut stack = vec![];
         let mut loops = vec![];
+        let mut condition = true;
         while at < events.len() && tick < max_ticks {
             work += 1;
             if work > 250_000 {
@@ -142,6 +151,11 @@ pub fn timeline(events: &[u8], max_ticks: u32) -> Result<SequenceTimeline> {
                     }
                 }
                 0x80 => tick = tick.saturating_add(read_var(events, &mut at)?),
+                0xa2 => {
+                    if !condition {
+                        skip_event(events, &mut at)?;
+                    }
+                }
                 0x81 => program = read_var(events, &mut at)?,
                 0x93 => {
                     let p = slice(events, at, 4)?;
@@ -162,6 +176,9 @@ pub fn timeline(events: &[u8], max_ticks: u32) -> Result<SequenceTimeline> {
                         return Err(error(at, "sequence branch out of bounds"));
                     }
                     at += 3;
+                    if once && op == 0x94 && target < at {
+                        break;
+                    }
                     if op == 0x95 {
                         if stack.len() >= 16 {
                             return Err(error(at, "sequence call stack limit"));
@@ -196,6 +213,9 @@ pub fn timeline(events: &[u8], max_ticks: u32) -> Result<SequenceTimeline> {
                         return Err(error(at, "loop end without start"));
                     };
                     if *count == 0 {
+                        if once {
+                            break;
+                        }
                         at = *start;
                     } else if *count > 1 {
                         *count -= 1;
@@ -216,7 +236,38 @@ pub fn timeline(events: &[u8], max_ticks: u32) -> Result<SequenceTimeline> {
                 }
                 0xff => break,
                 0xb0..=0xbd => {
-                    slice(events, at, 3)?;
+                    let data = slice(events, at, 3)?;
+                    let id = data[0] as usize;
+                    let value = i16::from_le_bytes([data[1], data[2]]);
+                    let v = variables
+                        .get_mut(id)
+                        .ok_or_else(|| error(at, "sequence variable outside range"))?;
+                    match op {
+                        0xb0 => *v = value,
+                        0xb1 => *v = v.wrapping_add(value),
+                        0xb2 => *v = v.wrapping_sub(value),
+                        0xb3 => *v = v.wrapping_mul(value),
+                        0xb4 => {
+                            if value != 0 {
+                                *v = v.wrapping_div(value);
+                            }
+                        }
+                        0xb5 => {
+                            *v = if value >= 0 {
+                                v.wrapping_shl(value as u32)
+                            } else {
+                                v.wrapping_shr(value.unsigned_abs() as u32)
+                            }
+                        }
+                        0xb6 => *v = value / 2, // Stable audition of a game-controlled random variation.
+                        0xb8 => condition = *v == value,
+                        0xb9 => condition = *v >= value,
+                        0xba => condition = *v > value,
+                        0xbb => condition = *v <= value,
+                        0xbc => condition = *v < value,
+                        0xbd => condition = *v != value,
+                        _ => {}
+                    }
                     at += 3;
                 }
                 _ => {
@@ -232,6 +283,33 @@ pub fn timeline(events: &[u8], max_ticks: u32) -> Result<SequenceTimeline> {
     out.tempos.sort_by_key(|(tick, _)| *tick);
     out.notes.sort_by_key(|n| n.tick);
     Ok(out)
+}
+// Format-only lengths for conditional execution, per ndspy's sequence reference.
+fn skip_event(events: &[u8], at: &mut usize) -> Result<()> {
+    let op = slice(events, *at, 1)?[0];
+    *at += 1;
+    let bytes = match op {
+        0..=127 => {
+            slice(events, *at, 1)?;
+            *at += 1;
+            read_var(events, at)?;
+            0
+        }
+        0x80 | 0x81 => {
+            read_var(events, at)?;
+            0
+        }
+        0x93 => 4,
+        0x94 | 0x95 => 3,
+        0xb0..=0xbd => 3,
+        0xc0..=0xdf => 1,
+        0xe0..=0xef | 0xfe => 2,
+        0xfc | 0xfd | 0xff => 0,
+        _ => return Err(error(*at - 1, "unsupported conditional sequence command")),
+    };
+    slice(events, *at, bytes)?;
+    *at += bytes;
+    Ok(())
 }
 #[derive(Clone, Debug, PartialEq)]
 pub struct SequenceArchiveEntry {

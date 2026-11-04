@@ -2217,3 +2217,264 @@ canvas {
 .wizard-dialog .name-list .active {
   color: var(--accent-ink) !important;
 }
+
+/* Stage 6 task-first views */
+.home {
+  padding: 28px 36px;
+  overflow: auto;
+  width: 100%;
+}
+.home-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.home h1 {
+  font-size: 26px;
+  margin: 10px 0;
+}
+.home p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(210px, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+.home-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 12px;
+  padding: 20px;
+  min-height: 156px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+}
+.home-card strong {
+  font-size: 16px;
+}
+.home-card span {
+  line-height: 1.6;
+  color: var(--muted);
+}
+.home-card .card-link {
+  margin-top: auto;
+  color: var(--accent);
+}
+.recent-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.recent-project {
+  display: block;
+  margin: 8px 0;
+}
+.save-state {
+  font-size: 11px;
+  color: var(--muted);
+}
+.menubar button.accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 5px 14px;
+  border-radius: 4px;
+}
+.game-browser {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.game-tree {
+  height: 100%;
+  width: 230px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--line);
+  padding: 14px;
+  overflow: auto;
+}
+.game-tree h2 {
+  font-size: 17px;
+}
+.game-tree button {
+  display: block;
+  text-align: left;
+  width: 100%;
+  padding: 7px;
+}
+.game-tree details {
+  margin-top: 10px;
+}
+.game-tree summary {
+  padding: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.game-tree details button {
+  padding-left: 20px;
+  font-size: 12px;
+}
+.game-content {
+  flex: 1;
+  height: 100%;
+  min-width: 0;
+  overflow: auto;
+}
+.game-content > .toolbar {
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+  z-index: 2;
+  padding: 12px;
+}
+.game-content input {
+  flex: 1;
+  min-width: 180px;
+}
+.game-results {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+  gap: 12px;
+  max-height: 46%;
+  overflow: auto;
+}
+.game-card {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+}
+.game-card.active {
+  outline: 1px solid var(--accent);
+}
+.game-card span {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.game-card small {
+  color: var(--muted);
+}
+.thumbnail {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #192027;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.thumbnail img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.thumbnail span {
+  font-size: 24px;
+  color: #b8c2ce;
+}
+.game-tabs {
+  display: flex;
+  overflow: auto;
+  border-bottom: 1px solid var(--line);
+}
+.game-tabs button {
+  white-space: nowrap;
+  padding: 10px;
+}
+.game-tabs [aria-selected='true'] {
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+}
+.game-preview {
+  border-top: 1px solid var(--line);
+  min-height: 400px;
+}
+.game-preview > .toolbar {
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px;
+}
+.game-preview details {
+  padding: 8px 16px;
+}
+.gallery-editor {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) 310px;
+  min-height: 500px;
+}
+.gallery-editor > .texture {
+  min-height: 500px;
+}
+.gallery-editor h3 {
+  padding: 0 16px;
+}
+.shared-images {
+  padding: 12px;
+}
+.shared-images button {
+  max-width: 160px;
+}
+.shared-images .thumbnail {
+  height: 75px;
+}
+.browser-scene {
+  height: 520px;
+  position: relative;
+}
+.friendly-text {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  width: 100%;
+  height: 100%;
+}
+.friendly-text .messages {
+  border-right: 1px solid var(--line);
+}
+.messages .source-controls {
+  display: block;
+}
+.messages .source-controls > label:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  width: 100%;
+}
+.game-preview .scene-toolbar > select:first-child {
+  display: none;
+}
+.messages .source-controls select {
+  width: 100%;
+  margin: 5px 0;
+}
+.technical-code {
+  display: none;
+}
+.format-details > summary {
+  padding: 8px;
+  cursor: pointer;
+}
+@media (max-width: 1150px) {
+  .home-cards {
+    grid-template-columns: repeat(2, minmax(210px, 1fr));
+  }
+  .game-tree {
+    width: 200px;
+  }
+}

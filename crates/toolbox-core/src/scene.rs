@@ -65,6 +65,22 @@ impl CourseScene {
             .filter(|n| n.path.rsplit_once('/').map_or("", |p| p.0) == parent)
             .collect::<Vec<_>>();
         let find = |ext: &str| -> Option<String> {
+            let stem = path.rsplit_once('.').map_or(path, |v| v.0);
+            let stem = if path.ends_with(".nsbca") {
+                ["_drive", "_spin", "_win", "_lose"]
+                    .iter()
+                    .find_map(|suffix| stem.strip_suffix(suffix))
+                    .unwrap_or(stem)
+            } else {
+                stem
+            };
+            let exact = format!("{stem}.{ext}");
+            if let Some(n) = siblings
+                .iter()
+                .find(|n| n.path.eq_ignore_ascii_case(&exact))
+            {
+                return Some(n.path.clone());
+            }
             if path.ends_with(&format!(".{ext}")) {
                 Some(path.into())
             } else {
@@ -95,7 +111,16 @@ impl CourseScene {
             .as_ref()
             .map(|p| Ok::<_, Error>(Nsbmd::parse(&bytes(p)?)?))
             .transpose()?;
-        let textures = find("nsbtx")
+        let texture_path = model_path
+            .as_ref()
+            .and_then(|path| {
+                let exact = path.replace(".nsbmd", ".nsbtx");
+                [exact.clone(), exact.replace(".carc/", "Tex.carc/")]
+                    .into_iter()
+                    .find(|p| session.file(p).is_ok())
+            })
+            .or_else(|| find("nsbtx"));
+        let textures = texture_path
             .map(|p| Ok::<_, Error>(Nsbtx::parse(&bytes(&p)?)?))
             .transpose()?;
         let kcl = kcl_path

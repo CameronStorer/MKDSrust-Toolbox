@@ -625,7 +625,7 @@
       "compressed": false,
       "format": "narc",
       "name": "reference.carc",
-      "offset": 54392,
+      "offset": 57976,
       "parent": null,
       "path": "data/Course/reference.carc",
       "size": 327476
@@ -669,7 +669,7 @@
       "compressed": false,
       "format": "narc",
       "name": "referenceTex.carc",
-      "offset": 381868,
+      "offset": 385452,
       "parent": null,
       "path": "data/Course/referenceTex.carc",
       "size": 68348
@@ -713,7 +713,7 @@
       "compressed": true,
       "format": "carc",
       "name": "studio.carc",
-      "offset": 450216,
+      "offset": 453800,
       "parent": null,
       "path": "data/Course/studio.carc",
       "size": 1352
@@ -779,7 +779,7 @@
       "compressed": false,
       "format": "narc",
       "name": "studio20.carc",
-      "offset": 451568,
+      "offset": 455152,
       "parent": null,
       "path": "data/Course/studio20.carc",
       "size": 1700
@@ -823,7 +823,7 @@
       "compressed": false,
       "format": "narc",
       "name": "studio20D.carc",
-      "offset": 453268,
+      "offset": 456852,
       "parent": null,
       "path": "data/Course/studio20D.carc",
       "size": 1700
@@ -867,7 +867,7 @@
       "compressed": false,
       "format": "narc",
       "name": "studio20DTex.carc",
-      "offset": 454968,
+      "offset": 458552,
       "parent": null,
       "path": "data/Course/studio20DTex.carc",
       "size": 1160
@@ -922,7 +922,7 @@
       "compressed": false,
       "format": "narc",
       "name": "studio20Tex.carc",
-      "offset": 456128,
+      "offset": 459712,
       "parent": null,
       "path": "data/Course/studio20Tex.carc",
       "size": 1160
@@ -977,7 +977,7 @@
       "compressed": false,
       "format": "narc",
       "name": "studio22.carc",
-      "offset": 457288,
+      "offset": 460872,
       "parent": null,
       "path": "data/Course/studio22.carc",
       "size": 1700
@@ -1021,7 +1021,7 @@
       "compressed": false,
       "format": "narc",
       "name": "studio22Tex.carc",
-      "offset": 458988,
+      "offset": 462572,
       "parent": null,
       "path": "data/Course/studio22Tex.carc",
       "size": 1160
@@ -1076,7 +1076,7 @@
       "compressed": true,
       "format": "carc",
       "name": "KartModelMainA.carc",
-      "offset": 1096,
+      "offset": 1120,
       "parent": null,
       "path": "data/KartModelMainA.carc",
       "size": 10364
@@ -2242,7 +2242,7 @@
       "compressed": true,
       "format": "carc",
       "name": "KartModelMainB.carc",
-      "offset": 11460,
+      "offset": 11484,
       "parent": null,
       "path": "data/KartModelMainB.carc",
       "size": 1004
@@ -2319,7 +2319,7 @@
       "compressed": true,
       "format": "carc",
       "name": "KartModelMenu.carc",
-      "offset": 12464,
+      "offset": 12488,
       "parent": null,
       "path": "data/KartModelMenu.carc",
       "size": 13476
@@ -4057,7 +4057,7 @@
       "compressed": true,
       "format": "carc",
       "name": "KartModelSub.carc",
-      "offset": 25940,
+      "offset": 25964,
       "parent": null,
       "path": "data/KartModelSub.carc",
       "size": 4896
@@ -4859,8 +4859,30 @@
       "category": "Archive",
       "compressed": false,
       "format": "narc",
+      "name": "Main2D_es.carc",
+      "offset": 30860,
+      "parent": null,
+      "path": "data/Main2D_es.carc",
+      "size": 3560
+    },
+    {
+      "archive": false,
+      "category": "Text",
+      "compressed": false,
+      "format": "bmg",
+      "name": "common.bmg",
+      "offset": 72,
+      "parent": "data/Main2D_es.carc",
+      "path": "data/Main2D_es.carc/common.bmg",
+      "size": 3488
+    },
+    {
+      "archive": true,
+      "category": "Archive",
+      "compressed": false,
+      "format": "narc",
       "name": "Main2D_us.carc",
-      "offset": 30836,
+      "offset": 34420,
       "parent": null,
       "path": "data/Main2D_us.carc",
       "size": 22136
@@ -4915,7 +4937,7 @@
       "compressed": false,
       "format": "narc",
       "name": "MainRace.carc",
-      "offset": 52972,
+      "offset": 56556,
       "parent": null,
       "path": "data/MainRace.carc",
       "size": 1420
@@ -4937,7 +4959,7 @@
       "compressed": false,
       "format": "narc",
       "name": "Race.carc",
-      "offset": 460148,
+      "offset": 463732,
       "parent": null,
       "path": "data/Scene/Race.carc",
       "size": 724
@@ -4970,7 +4992,7 @@
       "compressed": false,
       "format": "narc",
       "name": "Race_us.carc",
-      "offset": 460872,
+      "offset": 464456,
       "parent": null,
       "path": "data/Scene/Race_us.carc",
       "size": 16508
@@ -4992,7 +5014,7 @@
       "compressed": false,
       "format": "sdat",
       "name": "sound_data.sdat",
-      "offset": 477380,
+      "offset": 480964,
       "parent": null,
       "path": "data/Sound/sound_data.sdat",
       "size": 19296
@@ -5003,7 +5025,7 @@
       "compressed": true,
       "format": "carc",
       "name": "demo.carc",
-      "offset": 496676,
+      "offset": 500260,
       "parent": null,
       "path": "data/Studio/demo.carc",
       "size": 11368
@@ -5091,7 +5113,7 @@
       "compressed": false,
       "format": "bmg",
       "name": "readout.bmg",
-      "offset": 508044,
+      "offset": 511628,
       "parent": null,
       "path": "data/Studio/readout.bmg",
       "size": 192
@@ -5102,13 +5124,6480 @@
       "compressed": false,
       "format": "nsbtx",
       "name": "texture.nsbtx",
-      "offset": 508236,
+      "offset": 511820,
       "parent": null,
       "path": "data/Studio/texture.nsbtx",
       "size": 300
     }
   ],
+  "game_entries": [
+    {
+      "group": "Tracks",
+      "label": "course collision",
+      "location": "The road, walls and surfaces you can drive on",
+      "palette": null,
+      "path": "data/Course/reference.carc/course_collision.kcl",
+      "screen": null,
+      "section": "Other courses"
+    },
+    {
+      "group": "Tracks",
+      "label": "course map",
+      "location": "Race starts, CPU routes, items and checkpoints",
+      "palette": null,
+      "path": "data/Course/reference.carc/course_map.nkm",
+      "screen": null,
+      "section": "Other courses"
+    },
+    {
+      "group": "Tracks",
+      "label": "course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "path": "data/Course/reference.carc/course_model.nsbmd",
+      "screen": null,
+      "section": "Other courses"
+    },
+    {
+      "group": "Tracks",
+      "label": "local",
+      "location": "The minimap on the touch screen",
+      "palette": "data/Course/referenceTex.carc/Map2D/local.NCLR",
+      "path": "data/Course/referenceTex.carc/Map2D/local.NCGR",
+      "screen": "data/Course/referenceTex.carc/Map2D/local2.NSCR",
+      "section": "Other courses"
+    },
+    {
+      "group": "Tracks",
+      "label": "course collision",
+      "location": "The road, walls and surfaces you can drive on",
+      "palette": null,
+      "path": "data/Course/studio.carc/course_collision.kcl",
+      "screen": null,
+      "section": "Other courses"
+    },
+    {
+      "group": "Tracks",
+      "label": "course map",
+      "location": "Race starts, CPU routes, items and checkpoints",
+      "palette": null,
+      "path": "data/Course/studio.carc/course_map.nkm",
+      "screen": null,
+      "section": "Other courses"
+    },
+    {
+      "group": "Tracks",
+      "label": "course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "path": "data/Course/studio.carc/course_model.nsbca",
+      "screen": null,
+      "section": "Other courses"
+    },
+    {
+      "group": "Tracks",
+      "label": "course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "path": "data/Course/studio.carc/course_model.nsbmd",
+      "screen": null,
+      "section": "Other courses"
+    },
+    {
+      "group": "Tracks",
+      "label": "course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "path": "data/Course/studio.carc/course_model.nsbtx",
+      "screen": null,
+      "section": "Other courses"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 45 · course collision",
+      "location": "The road, walls and surfaces you can drive on",
+      "palette": null,
+      "path": "data/Course/studio20.carc/course_collision.kcl",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 45 · course map",
+      "location": "Race starts, CPU routes, items and checkpoints",
+      "palette": null,
+      "path": "data/Course/studio20.carc/course_map.nkm",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 45 · course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "path": "data/Course/studio20.carc/course_model.nsbmd",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 45 · course collision",
+      "location": "The road, walls and surfaces you can drive on",
+      "palette": null,
+      "path": "data/Course/studio20D.carc/course_collision.kcl",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 45 · course map",
+      "location": "Race starts, CPU routes, items and checkpoints",
+      "palette": null,
+      "path": "data/Course/studio20D.carc/course_map.nkm",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 45 · course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "path": "data/Course/studio20D.carc/course_model.nsbmd",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 45 · course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "path": "data/Course/studio20DTex.carc/course_model.nsbtx",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 45 · local",
+      "location": "The minimap on the touch screen",
+      "palette": "data/Course/studio20DTex.carc/Map2D/local.NCLR",
+      "path": "data/Course/studio20DTex.carc/Map2D/local.NCGR",
+      "screen": "data/Course/studio20DTex.carc/Map2D/local2.NSCR",
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 45 · course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "path": "data/Course/studio20Tex.carc/course_model.nsbtx",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 45 · local",
+      "location": "The minimap on the touch screen",
+      "palette": "data/Course/studio20Tex.carc/Map2D/local.NCLR",
+      "path": "data/Course/studio20Tex.carc/Map2D/local.NCGR",
+      "screen": "data/Course/studio20Tex.carc/Map2D/local2.NSCR",
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 46 · course collision",
+      "location": "The road, walls and surfaces you can drive on",
+      "palette": null,
+      "path": "data/Course/studio22.carc/course_collision.kcl",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 46 · course map",
+      "location": "Race starts, CPU routes, items and checkpoints",
+      "palette": null,
+      "path": "data/Course/studio22.carc/course_map.nkm",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 46 · course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "path": "data/Course/studio22.carc/course_model.nsbmd",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 46 · course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "path": "data/Course/studio22Tex.carc/course_model.nsbtx",
+      "screen": null,
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Tracks",
+      "label": "Studio name 46 · local",
+      "location": "The minimap on the touch screen",
+      "palette": "data/Course/studio22Tex.carc/Map2D/local.NCLR",
+      "path": "data/Course/studio22Tex.carc/Map2D/local.NCGR",
+      "screen": "data/Course/studio22Tex.carc/Map2D/local2.NSCR",
+      "section": "Studio name 37"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy far-away model",
+      "location": "Daisy, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/daisy/E_DS.nsbmd",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy colours & textures",
+      "location": "Daisy, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/daisy/E_DS.nsbtx",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong far-away model",
+      "location": "Donkey Kong, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/donkey/E_DK.nsbmd",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong colours & textures",
+      "location": "Donkey Kong, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/donkey/E_DK.nsbtx",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy far-away model",
+      "location": "Shy Guy, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/heyho/E_HH.nsbmd",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy colours & textures",
+      "location": "Shy Guy, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/heyho/E_HH.nsbtx",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones far-away model",
+      "location": "Dry Bones, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/karon/E_KA.nsbmd",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones colours & textures",
+      "location": "Dry Bones, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/karon/E_KA.nsbtx",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad far-away model",
+      "location": "Toad, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/kinopio/E_KO.nsbmd",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad colours & textures",
+      "location": "Toad, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/kinopio/E_KO.nsbtx",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser far-away model",
+      "location": "Bowser, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/koopa/E_KP.nsbmd",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser colours & textures",
+      "location": "Bowser, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/koopa/E_KP.nsbtx",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi far-away model",
+      "location": "Luigi, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/luigi/E_LG.nsbmd",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi colours & textures",
+      "location": "Luigi, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/luigi/E_LG.nsbtx",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario far-away model",
+      "location": "Mario, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/mario/E_MR.nsbmd",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario colours & textures",
+      "location": "Mario, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/mario/E_MR.nsbtx",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach far-away model",
+      "location": "Peach, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/peach/E_PC.nsbmd",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach colours & textures",
+      "location": "Peach, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/peach/E_PC.nsbtx",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. far-away model",
+      "location": "R.O.B., far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/robo/E_RB.nsbmd",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. colours & textures",
+      "location": "R.O.B., far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/robo/E_RB.nsbtx",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi far-away model",
+      "location": "Waluigi, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/waluigi/E_WL.nsbmd",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi colours & textures",
+      "location": "Waluigi, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/waluigi/E_WL.nsbtx",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario far-away model",
+      "location": "Wario, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/wario/E_WR.nsbmd",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario colours & textures",
+      "location": "Wario, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/wario/E_WR.nsbtx",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi far-away model",
+      "location": "Yoshi, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/yoshi/E_YS.nsbmd",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi colours & textures",
+      "location": "Yoshi, far away / as an opponent at a distance",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/character/yoshi/E_YS.nsbtx",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Karts",
+      "label": "Daisy second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/daisy/kart_DS_b.nsbmd",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Karts",
+      "label": "Daisy second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/daisy/kart_DS_b.nsbtx",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Karts",
+      "label": "Daisy third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/daisy/kart_DS_c.nsbmd",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Karts",
+      "label": "Daisy third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/daisy/kart_DS_c.nsbtx",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Karts",
+      "label": "Donkey Kong second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/donkey/kart_DK_b.nsbmd",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Karts",
+      "label": "Donkey Kong second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/donkey/kart_DK_b.nsbtx",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Karts",
+      "label": "Donkey Kong third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/donkey/kart_DK_c.nsbmd",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Karts",
+      "label": "Donkey Kong third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/donkey/kart_DK_c.nsbtx",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Karts",
+      "label": "Dry Bones second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/karon/kart_KA_b.nsbmd",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Karts",
+      "label": "Dry Bones second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/karon/kart_KA_b.nsbtx",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Karts",
+      "label": "Dry Bones third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/karon/kart_KA_c.nsbmd",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Karts",
+      "label": "Dry Bones third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/karon/kart_KA_c.nsbtx",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Karts",
+      "label": "Toad second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/kinopio/kart_KO_b.nsbmd",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Karts",
+      "label": "Toad second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/kinopio/kart_KO_b.nsbtx",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Karts",
+      "label": "Toad third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/kinopio/kart_KO_c.nsbmd",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Karts",
+      "label": "Toad third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/kinopio/kart_KO_c.nsbtx",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Karts",
+      "label": "Bowser second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/koopa/kart_KP_b.nsbmd",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Karts",
+      "label": "Bowser second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/koopa/kart_KP_b.nsbtx",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Karts",
+      "label": "Bowser third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/koopa/kart_KP_c.nsbmd",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Karts",
+      "label": "Bowser third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/koopa/kart_KP_c.nsbtx",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Karts",
+      "label": "Luigi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/luigi/kart_LG_b.nsbmd",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Luigi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/luigi/kart_LG_b.nsbtx",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Luigi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/luigi/kart_LG_c.nsbmd",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Luigi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/luigi/kart_LG_c.nsbtx",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario standard kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_a.nsbmd",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario standard kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_a.nsbtx",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_b.nsbmd",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_b.nsbtx",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_c.nsbmd",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/mario/kart_MR_c.nsbtx",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Peach second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/peach/kart_PC_b.nsbmd",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Karts",
+      "label": "Peach second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/peach/kart_PC_b.nsbtx",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Karts",
+      "label": "Peach third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/peach/kart_PC_c.nsbmd",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Karts",
+      "label": "Peach third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/peach/kart_PC_c.nsbtx",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Karts",
+      "label": "R.O.B. second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/robo/kart_RB_b.nsbmd",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Karts",
+      "label": "R.O.B. second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/robo/kart_RB_b.nsbtx",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Karts",
+      "label": "R.O.B. third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/robo/kart_RB_c.nsbmd",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Karts",
+      "label": "R.O.B. third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/robo/kart_RB_c.nsbtx",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Karts",
+      "label": "sh DK b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_DK_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh DK c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_DK_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh DS b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_DS_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh DS c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_DS_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KA b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KA_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KA c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KA_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KO b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KO_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KO c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KO_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KP b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KP_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KP c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_KP_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh LG b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_LG_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh LG c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_LG_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh MR a",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_MR_a.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh MR b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_MR_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh MR c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_MR_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh PC b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_PC_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh PC c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_PC_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh RB b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_RB_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh RB c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_RB_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh WL b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_WL_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh WL c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_WL_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh WR b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_WR_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh WR c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_WR_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh YS b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_YS_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh YS c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/shadow/sh_YS_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "Waluigi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/waluigi/kart_WL_b.nsbmd",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Waluigi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/waluigi/kart_WL_b.nsbtx",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Waluigi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/waluigi/kart_WL_c.nsbmd",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Waluigi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/waluigi/kart_WL_c.nsbtx",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Wario second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/wario/kart_WR_b.nsbmd",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Karts",
+      "label": "Wario second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/wario/kart_WR_b.nsbtx",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Karts",
+      "label": "Wario third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/wario/kart_WR_c.nsbmd",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Karts",
+      "label": "Wario third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/wario/kart_WR_c.nsbtx",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Karts",
+      "label": "Yoshi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/yoshi/kart_YS_b.nsbmd",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Karts",
+      "label": "Yoshi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/yoshi/kart_YS_b.nsbtx",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Karts",
+      "label": "Yoshi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/yoshi/kart_YS_c.nsbmd",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Karts",
+      "label": "Yoshi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMainA.carc/kart/yoshi/kart_YS_c.nsbtx",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy race model",
+      "location": "Shy Guy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH.nsbmd",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy colours & textures",
+      "location": "Shy Guy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH.nsbtx",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy driving & steering animation",
+      "location": "Shy Guy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH_drive.nsbca",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy losing animation",
+      "location": "Shy Guy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH_lose.nsbca",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy spin-out animation",
+      "location": "Shy Guy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH_spin.nsbca",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy winning animation",
+      "location": "Shy Guy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelMainB.carc/character/heyho/P_HH_win.nsbca",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy menu model",
+      "location": "Daisy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS.nsbmd",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy colours & textures",
+      "location": "Daisy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS.nsbtx",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy driving & steering animation",
+      "location": "Daisy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS_drive.nsbca",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy losing animation",
+      "location": "Daisy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS_lose.nsbca",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy spin-out animation",
+      "location": "Daisy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS_spin.nsbca",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy winning animation",
+      "location": "Daisy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/daisy/P_DS_win.nsbca",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong menu model",
+      "location": "Donkey Kong, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK.nsbmd",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong colours & textures",
+      "location": "Donkey Kong, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK.nsbtx",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong driving & steering animation",
+      "location": "Donkey Kong, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK_drive.nsbca",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong losing animation",
+      "location": "Donkey Kong, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK_lose.nsbca",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong spin-out animation",
+      "location": "Donkey Kong, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK_spin.nsbca",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong winning animation",
+      "location": "Donkey Kong, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/donkey/P_DK_win.nsbca",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy menu model",
+      "location": "Shy Guy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH.nsbmd",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy colours & textures",
+      "location": "Shy Guy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH.nsbtx",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy driving & steering animation",
+      "location": "Shy Guy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH_drive.nsbca",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy losing animation",
+      "location": "Shy Guy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH_lose.nsbca",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy spin-out animation",
+      "location": "Shy Guy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH_spin.nsbca",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Shy Guy winning animation",
+      "location": "Shy Guy, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/heyho/P_HH_win.nsbca",
+      "screen": null,
+      "section": "Shy Guy"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones menu model",
+      "location": "Dry Bones, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/karon/P_KA.nsbmd",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones colours & textures",
+      "location": "Dry Bones, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/karon/P_KA.nsbtx",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones driving & steering animation",
+      "location": "Dry Bones, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/karon/P_KA_drive.nsbca",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones losing animation",
+      "location": "Dry Bones, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/karon/P_KA_lose.nsbca",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones spin-out animation",
+      "location": "Dry Bones, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/karon/P_KA_spin.nsbca",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones winning animation",
+      "location": "Dry Bones, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/karon/P_KA_win.nsbca",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad menu model",
+      "location": "Toad, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO.nsbmd",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad colours & textures",
+      "location": "Toad, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO.nsbtx",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad driving & steering animation",
+      "location": "Toad, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO_drive.nsbca",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad losing animation",
+      "location": "Toad, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO_lose.nsbca",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad spin-out animation",
+      "location": "Toad, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO_spin.nsbca",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad winning animation",
+      "location": "Toad, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/kinopio/P_KO_win.nsbca",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser menu model",
+      "location": "Bowser, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP.nsbmd",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser colours & textures",
+      "location": "Bowser, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP.nsbtx",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser driving & steering animation",
+      "location": "Bowser, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP_drive.nsbca",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser losing animation",
+      "location": "Bowser, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP_lose.nsbca",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser spin-out animation",
+      "location": "Bowser, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP_spin.nsbca",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser winning animation",
+      "location": "Bowser, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/koopa/P_KP_win.nsbca",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi menu model",
+      "location": "Luigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG.nsbmd",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi colours & textures",
+      "location": "Luigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG.nsbtx",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi driving & steering animation",
+      "location": "Luigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG_drive.nsbca",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi losing animation",
+      "location": "Luigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG_lose.nsbca",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi spin-out animation",
+      "location": "Luigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG_spin.nsbca",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi winning animation",
+      "location": "Luigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/luigi/P_LG_win.nsbca",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario menu model",
+      "location": "Mario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/mario/P_MR.nsbmd",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario colours & textures",
+      "location": "Mario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/mario/P_MR.nsbtx",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario driving & steering animation",
+      "location": "Mario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/mario/P_MR_drive.nsbca",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario losing animation",
+      "location": "Mario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/mario/P_MR_lose.nsbca",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario spin-out animation",
+      "location": "Mario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/mario/P_MR_spin.nsbca",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario winning animation",
+      "location": "Mario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/mario/P_MR_win.nsbca",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach menu model",
+      "location": "Peach, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/peach/P_PC.nsbmd",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach colours & textures",
+      "location": "Peach, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/peach/P_PC.nsbtx",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach driving & steering animation",
+      "location": "Peach, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/peach/P_PC_drive.nsbca",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach losing animation",
+      "location": "Peach, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/peach/P_PC_lose.nsbca",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach spin-out animation",
+      "location": "Peach, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/peach/P_PC_spin.nsbca",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach winning animation",
+      "location": "Peach, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/peach/P_PC_win.nsbca",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. menu model",
+      "location": "R.O.B., in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/robo/P_RB.nsbmd",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. colours & textures",
+      "location": "R.O.B., in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/robo/P_RB.nsbtx",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. driving & steering animation",
+      "location": "R.O.B., in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/robo/P_RB_drive.nsbca",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. losing animation",
+      "location": "R.O.B., in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/robo/P_RB_lose.nsbca",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. spin-out animation",
+      "location": "R.O.B., in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/robo/P_RB_spin.nsbca",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. winning animation",
+      "location": "R.O.B., in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/robo/P_RB_win.nsbca",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi menu model",
+      "location": "Waluigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL.nsbmd",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi colours & textures",
+      "location": "Waluigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL.nsbtx",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi driving & steering animation",
+      "location": "Waluigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL_drive.nsbca",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi losing animation",
+      "location": "Waluigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL_lose.nsbca",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi spin-out animation",
+      "location": "Waluigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL_spin.nsbca",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi winning animation",
+      "location": "Waluigi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/waluigi/P_WL_win.nsbca",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario menu model",
+      "location": "Wario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/wario/P_WR.nsbmd",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario colours & textures",
+      "location": "Wario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/wario/P_WR.nsbtx",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario driving & steering animation",
+      "location": "Wario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/wario/P_WR_drive.nsbca",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario losing animation",
+      "location": "Wario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/wario/P_WR_lose.nsbca",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario spin-out animation",
+      "location": "Wario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/wario/P_WR_spin.nsbca",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario winning animation",
+      "location": "Wario, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/wario/P_WR_win.nsbca",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi menu model",
+      "location": "Yoshi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS.nsbmd",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi colours & textures",
+      "location": "Yoshi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS.nsbtx",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi driving & steering animation",
+      "location": "Yoshi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS_drive.nsbca",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi losing animation",
+      "location": "Yoshi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS_lose.nsbca",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi spin-out animation",
+      "location": "Yoshi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS_spin.nsbca",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi winning animation",
+      "location": "Yoshi, in the character select menu",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/character/yoshi/P_YS_win.nsbca",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Karts",
+      "label": "Daisy second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/daisy/kart_DS_b.nsbmd",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Karts",
+      "label": "Daisy second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/daisy/kart_DS_b.nsbtx",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Karts",
+      "label": "Daisy third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/daisy/kart_DS_c.nsbmd",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Karts",
+      "label": "Daisy third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/daisy/kart_DS_c.nsbtx",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Karts",
+      "label": "Donkey Kong second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/donkey/kart_DK_b.nsbmd",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Karts",
+      "label": "Donkey Kong second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/donkey/kart_DK_b.nsbtx",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Karts",
+      "label": "Donkey Kong third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/donkey/kart_DK_c.nsbmd",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Karts",
+      "label": "Donkey Kong third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/donkey/kart_DK_c.nsbtx",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Karts",
+      "label": "Dry Bones second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/karon/kart_KA_b.nsbmd",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Karts",
+      "label": "Dry Bones second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/karon/kart_KA_b.nsbtx",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Karts",
+      "label": "Dry Bones third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/karon/kart_KA_c.nsbmd",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Karts",
+      "label": "Dry Bones third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/karon/kart_KA_c.nsbtx",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Karts",
+      "label": "Toad second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/kinopio/kart_KO_b.nsbmd",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Karts",
+      "label": "Toad second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/kinopio/kart_KO_b.nsbtx",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Karts",
+      "label": "Toad third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/kinopio/kart_KO_c.nsbmd",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Karts",
+      "label": "Toad third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/kinopio/kart_KO_c.nsbtx",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Karts",
+      "label": "Bowser second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/koopa/kart_KP_b.nsbmd",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Karts",
+      "label": "Bowser second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/koopa/kart_KP_b.nsbtx",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Karts",
+      "label": "Bowser third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/koopa/kart_KP_c.nsbmd",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Karts",
+      "label": "Bowser third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/koopa/kart_KP_c.nsbtx",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Karts",
+      "label": "Luigi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/luigi/kart_LG_b.nsbmd",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Luigi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/luigi/kart_LG_b.nsbtx",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Luigi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/luigi/kart_LG_c.nsbmd",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Luigi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/luigi/kart_LG_c.nsbtx",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario standard kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_a.nsbmd",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario standard kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_a.nsbtx",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_b.nsbmd",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_b.nsbtx",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_c.nsbmd",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Mario third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/mario/kart_MR_c.nsbtx",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Karts",
+      "label": "Peach second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/peach/kart_PC_b.nsbmd",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Karts",
+      "label": "Peach second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/peach/kart_PC_b.nsbtx",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Karts",
+      "label": "Peach third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/peach/kart_PC_c.nsbmd",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Karts",
+      "label": "Peach third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/peach/kart_PC_c.nsbtx",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Karts",
+      "label": "R.O.B. second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/robo/kart_RB_b.nsbmd",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Karts",
+      "label": "R.O.B. second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/robo/kart_RB_b.nsbtx",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Karts",
+      "label": "R.O.B. third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/robo/kart_RB_c.nsbmd",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Karts",
+      "label": "R.O.B. third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/robo/kart_RB_c.nsbtx",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Karts",
+      "label": "sh DK b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_DK_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh DK c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_DK_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh DS b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_DS_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh DS c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_DS_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KA b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KA_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KA c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KA_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KO b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KO_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KO c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KO_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KP b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KP_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh KP c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_KP_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh LG b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_LG_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh LG c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_LG_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh MR a",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_MR_a.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh MR b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_MR_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh MR c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_MR_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh PC b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_PC_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh PC c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_PC_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh RB b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_RB_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh RB c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_RB_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh WL b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_WL_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh WL c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_WL_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh WR b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_WR_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh WR c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_WR_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh YS b",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_YS_b.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "sh YS c",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/shadow/sh_YS_c.nsbmd",
+      "screen": null,
+      "section": "Bodies, wheels & shadows"
+    },
+    {
+      "group": "Karts",
+      "label": "Waluigi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/waluigi/kart_WL_b.nsbmd",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Waluigi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/waluigi/kart_WL_b.nsbtx",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Waluigi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/waluigi/kart_WL_c.nsbmd",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Waluigi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/waluigi/kart_WL_c.nsbtx",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Karts",
+      "label": "Wario second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/wario/kart_WR_b.nsbmd",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Karts",
+      "label": "Wario second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/wario/kart_WR_b.nsbtx",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Karts",
+      "label": "Wario third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/wario/kart_WR_c.nsbmd",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Karts",
+      "label": "Wario third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/wario/kart_WR_c.nsbtx",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Karts",
+      "label": "Yoshi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/yoshi/kart_YS_b.nsbmd",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Karts",
+      "label": "Yoshi second kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/yoshi/kart_YS_b.nsbtx",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Karts",
+      "label": "Yoshi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/yoshi/kart_YS_c.nsbmd",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Karts",
+      "label": "Yoshi third kart",
+      "location": "On the kart during races or kart selection",
+      "palette": null,
+      "path": "data/KartModelMenu.carc/kart/yoshi/kart_YS_c.nsbtx",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy race model",
+      "location": "Daisy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/daisy/P_DS.nsbmd",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy colours & textures",
+      "location": "Daisy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/daisy/P_DS.nsbtx",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy driving & steering animation",
+      "location": "Daisy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/daisy/P_DS_drive.nsbca",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy losing animation",
+      "location": "Daisy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/daisy/P_DS_lose.nsbca",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy spin-out animation",
+      "location": "Daisy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/daisy/P_DS_spin.nsbca",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Daisy winning animation",
+      "location": "Daisy, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/daisy/P_DS_win.nsbca",
+      "screen": null,
+      "section": "Daisy"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong race model",
+      "location": "Donkey Kong, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/donkey/P_DK.nsbmd",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong colours & textures",
+      "location": "Donkey Kong, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/donkey/P_DK.nsbtx",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong driving & steering animation",
+      "location": "Donkey Kong, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/donkey/P_DK_drive.nsbca",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong losing animation",
+      "location": "Donkey Kong, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/donkey/P_DK_lose.nsbca",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong spin-out animation",
+      "location": "Donkey Kong, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/donkey/P_DK_spin.nsbca",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Donkey Kong winning animation",
+      "location": "Donkey Kong, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/donkey/P_DK_win.nsbca",
+      "screen": null,
+      "section": "Donkey Kong"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones race model",
+      "location": "Dry Bones, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/karon/P_KA.nsbmd",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones colours & textures",
+      "location": "Dry Bones, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/karon/P_KA.nsbtx",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones driving & steering animation",
+      "location": "Dry Bones, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/karon/P_KA_drive.nsbca",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones losing animation",
+      "location": "Dry Bones, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/karon/P_KA_lose.nsbca",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones spin-out animation",
+      "location": "Dry Bones, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/karon/P_KA_spin.nsbca",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Dry Bones winning animation",
+      "location": "Dry Bones, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/karon/P_KA_win.nsbca",
+      "screen": null,
+      "section": "Dry Bones"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad race model",
+      "location": "Toad, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO.nsbmd",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad colours & textures",
+      "location": "Toad, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO.nsbtx",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad driving & steering animation",
+      "location": "Toad, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO_drive.nsbca",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad losing animation",
+      "location": "Toad, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO_lose.nsbca",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad spin-out animation",
+      "location": "Toad, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO_spin.nsbca",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Toad winning animation",
+      "location": "Toad, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/kinopio/P_KO_win.nsbca",
+      "screen": null,
+      "section": "Toad"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser race model",
+      "location": "Bowser, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/koopa/P_KP.nsbmd",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser colours & textures",
+      "location": "Bowser, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/koopa/P_KP.nsbtx",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser driving & steering animation",
+      "location": "Bowser, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/koopa/P_KP_drive.nsbca",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser losing animation",
+      "location": "Bowser, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/koopa/P_KP_lose.nsbca",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser spin-out animation",
+      "location": "Bowser, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/koopa/P_KP_spin.nsbca",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Bowser winning animation",
+      "location": "Bowser, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/koopa/P_KP_win.nsbca",
+      "screen": null,
+      "section": "Bowser"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi race model",
+      "location": "Luigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/luigi/P_LG.nsbmd",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi colours & textures",
+      "location": "Luigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/luigi/P_LG.nsbtx",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi driving & steering animation",
+      "location": "Luigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/luigi/P_LG_drive.nsbca",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi losing animation",
+      "location": "Luigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/luigi/P_LG_lose.nsbca",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi spin-out animation",
+      "location": "Luigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/luigi/P_LG_spin.nsbca",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Luigi winning animation",
+      "location": "Luigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/luigi/P_LG_win.nsbca",
+      "screen": null,
+      "section": "Luigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario race model",
+      "location": "Mario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/mario/P_MR.nsbmd",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario colours & textures",
+      "location": "Mario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/mario/P_MR.nsbtx",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario driving & steering animation",
+      "location": "Mario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/mario/P_MR_drive.nsbca",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario losing animation",
+      "location": "Mario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/mario/P_MR_lose.nsbca",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario spin-out animation",
+      "location": "Mario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/mario/P_MR_spin.nsbca",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Mario winning animation",
+      "location": "Mario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/mario/P_MR_win.nsbca",
+      "screen": null,
+      "section": "Mario"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach race model",
+      "location": "Peach, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/peach/P_PC.nsbmd",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach colours & textures",
+      "location": "Peach, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/peach/P_PC.nsbtx",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach driving & steering animation",
+      "location": "Peach, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/peach/P_PC_drive.nsbca",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach losing animation",
+      "location": "Peach, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/peach/P_PC_lose.nsbca",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach spin-out animation",
+      "location": "Peach, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/peach/P_PC_spin.nsbca",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "Peach winning animation",
+      "location": "Peach, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/peach/P_PC_win.nsbca",
+      "screen": null,
+      "section": "Peach"
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. race model",
+      "location": "R.O.B., seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/robo/P_RB.nsbmd",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. colours & textures",
+      "location": "R.O.B., seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/robo/P_RB.nsbtx",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. driving & steering animation",
+      "location": "R.O.B., seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/robo/P_RB_drive.nsbca",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. losing animation",
+      "location": "R.O.B., seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/robo/P_RB_lose.nsbca",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. spin-out animation",
+      "location": "R.O.B., seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/robo/P_RB_spin.nsbca",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "R.O.B. winning animation",
+      "location": "R.O.B., seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/robo/P_RB_win.nsbca",
+      "screen": null,
+      "section": "R.O.B."
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi race model",
+      "location": "Waluigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL.nsbmd",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi colours & textures",
+      "location": "Waluigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL.nsbtx",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi driving & steering animation",
+      "location": "Waluigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL_drive.nsbca",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi losing animation",
+      "location": "Waluigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL_lose.nsbca",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi spin-out animation",
+      "location": "Waluigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL_spin.nsbca",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Waluigi winning animation",
+      "location": "Waluigi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/waluigi/P_WL_win.nsbca",
+      "screen": null,
+      "section": "Waluigi"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario race model",
+      "location": "Wario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/wario/P_WR.nsbmd",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario colours & textures",
+      "location": "Wario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/wario/P_WR.nsbtx",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario driving & steering animation",
+      "location": "Wario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/wario/P_WR_drive.nsbca",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario losing animation",
+      "location": "Wario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/wario/P_WR_lose.nsbca",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario spin-out animation",
+      "location": "Wario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/wario/P_WR_spin.nsbca",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Wario winning animation",
+      "location": "Wario, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/wario/P_WR_win.nsbca",
+      "screen": null,
+      "section": "Wario"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi race model",
+      "location": "Yoshi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS.nsbmd",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi colours & textures",
+      "location": "Yoshi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS.nsbtx",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi driving & steering animation",
+      "location": "Yoshi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS_drive.nsbca",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi losing animation",
+      "location": "Yoshi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS_lose.nsbca",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi spin-out animation",
+      "location": "Yoshi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS_spin.nsbca",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Characters",
+      "label": "Yoshi winning animation",
+      "location": "Yoshi, seen when you race as this character",
+      "palette": null,
+      "path": "data/KartModelSub.carc/character/yoshi/P_YS_win.nsbca",
+      "screen": null,
+      "section": "Yoshi"
+    },
+    {
+      "group": "Text",
+      "label": "Common menus · Spanish",
+      "location": "Common menus · Spanish",
+      "palette": null,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "screen": null,
+      "section": "Spanish"
+    },
+    {
+      "group": "Text",
+      "label": "Common menus · English (US)",
+      "location": "Common menus · English (US)",
+      "palette": null,
+      "path": "data/Main2D_us.carc/common.bmg",
+      "screen": null,
+      "section": "English (US)"
+    },
+    {
+      "group": "Menus & HUD",
+      "label": "Character selection portraits",
+      "location": "The large character portraits when choosing a driver",
+      "palette": "data/Main2D_us.carc/player_character_L_o.NCLR",
+      "path": "data/Main2D_us.carc/player_character_L.nce.ncer",
+      "screen": null,
+      "section": "Screens & icons"
+    },
+    {
+      "group": "Menus & HUD",
+      "label": "Character selection portraits",
+      "location": "The large character portraits when choosing a driver",
+      "palette": "data/Main2D_us.carc/player_character_L_o.NCLR",
+      "path": "data/Main2D_us.carc/player_character_L.nce.ncgr",
+      "screen": null,
+      "section": "Screens & icons"
+    },
+    {
+      "group": "Items",
+      "label": "it studio",
+      "location": "Items held by racers or placed on the track",
+      "palette": null,
+      "path": "data/MainRace.carc/Item/it_studio.nsbmd",
+      "screen": null,
+      "section": "Race items"
+    },
+    {
+      "group": "Menus & HUD",
+      "label": "race s",
+      "location": "On the race screen",
+      "palette": "data/Scene/Race.carc/race_s_o.NCLR",
+      "path": "data/Scene/Race.carc/race_s.NCER",
+      "screen": null,
+      "section": "race"
+    },
+    {
+      "group": "Menus & HUD",
+      "label": "Race HUD icons and digits (touch screen)",
+      "location": "Item roulette, lap and timer display during a race",
+      "palette": "data/Scene/Race.carc/race_s_o.NCLR",
+      "path": "data/Scene/Race_us.carc/race_s_o.NCGR",
+      "screen": null,
+      "section": "Screens & icons"
+    },
+    {
+      "group": "Music & sounds",
+      "label": "Music, character voices & sounds",
+      "location": "Course themes, menu tunes and sounds during play",
+      "palette": null,
+      "path": "data/Sound/sound_data.sdat",
+      "screen": null,
+      "section": "Songs, voices & sound effects"
+    },
+    {
+      "group": "Menus & HUD",
+      "label": "studio",
+      "location": "On a menu or in the race display; inspect the preview to identify this image",
+      "palette": "data/Studio/demo.carc/art/studio.nclr",
+      "path": "data/Studio/demo.carc/art/studio.ncer",
+      "screen": null,
+      "section": "Screens & icons"
+    },
+    {
+      "group": "Menus & HUD",
+      "label": "studio",
+      "location": "On a menu or in the race display; inspect the preview to identify this image",
+      "palette": "data/Studio/demo.carc/art/studio.nclr",
+      "path": "data/Studio/demo.carc/art/studio.ncgr",
+      "screen": "data/Studio/demo.carc/art/studio.nscr",
+      "section": "Screens & icons"
+    },
+    {
+      "group": "Music & sounds",
+      "label": "Music, character voices & sounds",
+      "location": "Course themes, menu tunes and sounds during play",
+      "palette": null,
+      "path": "data/Studio/demo.carc/audio/sound_data.sdat",
+      "screen": null,
+      "section": "Songs, voices & sound effects"
+    },
+    {
+      "group": "Text",
+      "label": "Menus & messages · English (US)",
+      "location": "Menus & messages · English (US)",
+      "palette": null,
+      "path": "data/Studio/demo.carc/language/en.bmg",
+      "screen": null,
+      "section": "English (US)"
+    },
+    {
+      "group": "Text",
+      "label": "Menus & messages · Shared / language independent",
+      "location": "Menus & messages · Shared / language independent",
+      "palette": null,
+      "path": "data/Studio/readout.bmg",
+      "screen": null,
+      "section": "Shared / language independent"
+    },
+    {
+      "group": "Menus & HUD",
+      "label": "texture",
+      "location": "On a menu or in the race display; inspect the preview to identify this image",
+      "palette": null,
+      "path": "data/Studio/texture.nsbtx",
+      "screen": null,
+      "section": "Screens & icons"
+    }
+  ],
+  "messages": {
+    "data/Main2D_es.carc/common.bmg": [
+      {
+        "id": 0,
+        "preview": "Prueba 0",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 0"
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "preview": "Prueba 1",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 1"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "preview": "Prueba 2",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 2"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "preview": "Prueba 3",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 3"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "preview": "Prueba 4",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 4"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "preview": "Prueba 5",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 5"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "preview": "Prueba 6",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 6"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "preview": "Prueba 7",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 7"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "preview": "Prueba 8",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 8"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "preview": "Prueba 9",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 9"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "preview": "Prueba 10",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 10"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "preview": "Prueba 11",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 11"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "preview": "Prueba 12",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 12"
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "preview": "Prueba 13",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 13"
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "preview": "Prueba 14",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 14"
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "preview": "Prueba 15",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 15"
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "preview": "Prueba 16",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 16"
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "preview": "Prueba 17",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 17"
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "preview": "Prueba 18",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 18"
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "preview": "Prueba 19",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 19"
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "preview": "Prueba 20",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 20"
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "preview": "Prueba 21",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 21"
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "preview": "Prueba 22",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 22"
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "preview": "Prueba 23",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 23"
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "preview": "Prueba 24",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 24"
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "preview": "Prueba 25",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 25"
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "preview": "Prueba 26",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 26"
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "preview": "Prueba 27",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 27"
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "preview": "Prueba 28",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 28"
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "preview": "Prueba 29",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 29"
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "preview": "Prueba 30",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 30"
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "preview": "Prueba 31",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 31"
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "preview": "Prueba 32",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 32"
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "preview": "Prueba 33",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 33"
+          }
+        ]
+      },
+      {
+        "id": 34,
+        "preview": "Prueba 34",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 34"
+          }
+        ]
+      },
+      {
+        "id": 35,
+        "preview": "Prueba 35",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 35"
+          }
+        ]
+      },
+      {
+        "id": 36,
+        "preview": "Prueba 36",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 36"
+          }
+        ]
+      },
+      {
+        "id": 37,
+        "preview": "Prueba 37",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 37"
+          }
+        ]
+      },
+      {
+        "id": 38,
+        "preview": "Prueba 38",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 38"
+          }
+        ]
+      },
+      {
+        "id": 39,
+        "preview": "Prueba 39",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 39"
+          }
+        ]
+      },
+      {
+        "id": 40,
+        "preview": "Prueba 40",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 40"
+          }
+        ]
+      },
+      {
+        "id": 41,
+        "preview": "Prueba 41",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 41"
+          }
+        ]
+      },
+      {
+        "id": 42,
+        "preview": "Prueba 42",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 42"
+          }
+        ]
+      },
+      {
+        "id": 43,
+        "preview": "Prueba 43",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 43"
+          }
+        ]
+      },
+      {
+        "id": 44,
+        "preview": "Prueba 44",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 44"
+          }
+        ]
+      },
+      {
+        "id": 45,
+        "preview": "Prueba 45",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 45"
+          }
+        ]
+      },
+      {
+        "id": 46,
+        "preview": "Prueba 46",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 46"
+          }
+        ]
+      },
+      {
+        "id": 47,
+        "preview": "Prueba 47",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 47"
+          }
+        ]
+      },
+      {
+        "id": 48,
+        "preview": "Prueba 48",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 48"
+          }
+        ]
+      },
+      {
+        "id": 49,
+        "preview": "Prueba 49",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 49"
+          }
+        ]
+      },
+      {
+        "id": 50,
+        "preview": "Prueba 50",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 50"
+          }
+        ]
+      },
+      {
+        "id": 51,
+        "preview": "Prueba 51",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 51"
+          }
+        ]
+      },
+      {
+        "id": 52,
+        "preview": "Prueba 52",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 52"
+          }
+        ]
+      },
+      {
+        "id": 53,
+        "preview": "Prueba 53",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 53"
+          }
+        ]
+      },
+      {
+        "id": 54,
+        "preview": "Prueba 54",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 54"
+          }
+        ]
+      },
+      {
+        "id": 55,
+        "preview": "Prueba 55",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 55"
+          }
+        ]
+      },
+      {
+        "id": 56,
+        "preview": "Prueba 56",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 56"
+          }
+        ]
+      },
+      {
+        "id": 57,
+        "preview": "Prueba 57",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 57"
+          }
+        ]
+      },
+      {
+        "id": 58,
+        "preview": "Prueba 58",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 58"
+          }
+        ]
+      },
+      {
+        "id": 59,
+        "preview": "Prueba 59",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 59"
+          }
+        ]
+      },
+      {
+        "id": 60,
+        "preview": "Prueba 60",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 60"
+          }
+        ]
+      },
+      {
+        "id": 61,
+        "preview": "Prueba 61",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 61"
+          }
+        ]
+      },
+      {
+        "id": 62,
+        "preview": "Prueba 62",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 62"
+          }
+        ]
+      },
+      {
+        "id": 63,
+        "preview": "Prueba 63",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 63"
+          }
+        ]
+      },
+      {
+        "id": 64,
+        "preview": "Prueba 64",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 64"
+          }
+        ]
+      },
+      {
+        "id": 65,
+        "preview": "Prueba 65",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 65"
+          }
+        ]
+      },
+      {
+        "id": 66,
+        "preview": "Prueba 66",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 66"
+          }
+        ]
+      },
+      {
+        "id": 67,
+        "preview": "Prueba 67",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 67"
+          }
+        ]
+      },
+      {
+        "id": 68,
+        "preview": "Prueba 68",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 68"
+          }
+        ]
+      },
+      {
+        "id": 69,
+        "preview": "Prueba 69",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 69"
+          }
+        ]
+      },
+      {
+        "id": 70,
+        "preview": "Prueba 70",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 70"
+          }
+        ]
+      },
+      {
+        "id": 71,
+        "preview": "Prueba 71",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 71"
+          }
+        ]
+      },
+      {
+        "id": 72,
+        "preview": "Prueba 72",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 72"
+          }
+        ]
+      },
+      {
+        "id": 73,
+        "preview": "Prueba 73",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 73"
+          }
+        ]
+      },
+      {
+        "id": 74,
+        "preview": "Prueba 74",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 74"
+          }
+        ]
+      },
+      {
+        "id": 75,
+        "preview": "Prueba 75",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 75"
+          }
+        ]
+      },
+      {
+        "id": 76,
+        "preview": "Prueba 76",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 76"
+          }
+        ]
+      },
+      {
+        "id": 77,
+        "preview": "Prueba 77",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 77"
+          }
+        ]
+      },
+      {
+        "id": 78,
+        "preview": "Prueba 78",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 78"
+          }
+        ]
+      },
+      {
+        "id": 79,
+        "preview": "Prueba 79",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 79"
+          }
+        ]
+      },
+      {
+        "id": 80,
+        "preview": "Prueba 80",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 80"
+          }
+        ]
+      },
+      {
+        "id": 81,
+        "preview": "Prueba 81",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 81"
+          }
+        ]
+      },
+      {
+        "id": 82,
+        "preview": "Prueba 82",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 82"
+          }
+        ]
+      },
+      {
+        "id": 83,
+        "preview": "Prueba 83",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 83"
+          }
+        ]
+      },
+      {
+        "id": 84,
+        "preview": "Prueba 84",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 84"
+          }
+        ]
+      },
+      {
+        "id": 85,
+        "preview": "Prueba 85",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 85"
+          }
+        ]
+      },
+      {
+        "id": 86,
+        "preview": "Prueba 86",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 86"
+          }
+        ]
+      },
+      {
+        "id": 87,
+        "preview": "Prueba 87",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 87"
+          }
+        ]
+      },
+      {
+        "id": 88,
+        "preview": "Prueba 88",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 88"
+          }
+        ]
+      },
+      {
+        "id": 89,
+        "preview": "Prueba 89",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 89"
+          }
+        ]
+      },
+      {
+        "id": 90,
+        "preview": "Prueba 90",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 90"
+          }
+        ]
+      },
+      {
+        "id": 91,
+        "preview": "Prueba 91",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 91"
+          }
+        ]
+      },
+      {
+        "id": 92,
+        "preview": "Prueba 92",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 92"
+          }
+        ]
+      },
+      {
+        "id": 93,
+        "preview": "Prueba 93",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 93"
+          }
+        ]
+      },
+      {
+        "id": 94,
+        "preview": "Prueba 94",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 94"
+          }
+        ]
+      },
+      {
+        "id": 95,
+        "preview": "Prueba 95",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 95"
+          }
+        ]
+      },
+      {
+        "id": 96,
+        "preview": "Prueba 96",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 96"
+          }
+        ]
+      },
+      {
+        "id": 97,
+        "preview": "Prueba 97",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 97"
+          }
+        ]
+      },
+      {
+        "id": 98,
+        "preview": "Prueba 98",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 98"
+          }
+        ]
+      },
+      {
+        "id": 99,
+        "preview": "Prueba 99",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 99"
+          }
+        ]
+      },
+      {
+        "id": 100,
+        "preview": "Prueba 100",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 100"
+          }
+        ]
+      },
+      {
+        "id": 101,
+        "preview": "Prueba 101",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 101"
+          }
+        ]
+      },
+      {
+        "id": 102,
+        "preview": "Prueba 102",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 102"
+          }
+        ]
+      },
+      {
+        "id": 103,
+        "preview": "Prueba 103",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 103"
+          }
+        ]
+      },
+      {
+        "id": 104,
+        "preview": "Prueba 104",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 104"
+          }
+        ]
+      },
+      {
+        "id": 105,
+        "preview": "Prueba 105",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 105"
+          }
+        ]
+      },
+      {
+        "id": 106,
+        "preview": "Prueba 106",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 106"
+          }
+        ]
+      },
+      {
+        "id": 107,
+        "preview": "Prueba 107",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 107"
+          }
+        ]
+      },
+      {
+        "id": 108,
+        "preview": "Prueba 108",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 108"
+          }
+        ]
+      },
+      {
+        "id": 109,
+        "preview": "Prueba 109",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 109"
+          }
+        ]
+      },
+      {
+        "id": 110,
+        "preview": "Prueba 110",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 110"
+          }
+        ]
+      },
+      {
+        "id": 111,
+        "preview": "Prueba 111",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 111"
+          }
+        ]
+      },
+      {
+        "id": 112,
+        "preview": "Prueba 112",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 112"
+          }
+        ]
+      },
+      {
+        "id": 113,
+        "preview": "Prueba 113",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 113"
+          }
+        ]
+      },
+      {
+        "id": 114,
+        "preview": "Prueba 114",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 114"
+          }
+        ]
+      },
+      {
+        "id": 115,
+        "preview": "Prueba 115",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 115"
+          }
+        ]
+      },
+      {
+        "id": 116,
+        "preview": "Prueba 116",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 116"
+          }
+        ]
+      },
+      {
+        "id": 117,
+        "preview": "Prueba 117",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 117"
+          }
+        ]
+      },
+      {
+        "id": 118,
+        "preview": "Prueba 118",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 118"
+          }
+        ]
+      },
+      {
+        "id": 119,
+        "preview": "Prueba 119",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 119"
+          }
+        ]
+      },
+      {
+        "id": 120,
+        "preview": "Prueba 120",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 120"
+          }
+        ]
+      },
+      {
+        "id": 121,
+        "preview": "Prueba 121",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 121"
+          }
+        ]
+      },
+      {
+        "id": 122,
+        "preview": "Prueba 122",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 122"
+          }
+        ]
+      },
+      {
+        "id": 123,
+        "preview": "Prueba 123",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 123"
+          }
+        ]
+      },
+      {
+        "id": 124,
+        "preview": "Prueba 124",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 124"
+          }
+        ]
+      },
+      {
+        "id": 125,
+        "preview": "Prueba 125",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 125"
+          }
+        ]
+      },
+      {
+        "id": 126,
+        "preview": "Prueba 126",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 126"
+          }
+        ]
+      },
+      {
+        "id": 127,
+        "preview": "Prueba 127",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 127"
+          }
+        ]
+      },
+      {
+        "id": 128,
+        "preview": "Prueba 128",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 128"
+          }
+        ]
+      },
+      {
+        "id": 129,
+        "preview": "Prueba 129",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 129"
+          }
+        ]
+      },
+      {
+        "id": 130,
+        "preview": "Prueba 130",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 130"
+          }
+        ]
+      },
+      {
+        "id": 131,
+        "preview": "Prueba 131",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 131"
+          }
+        ]
+      },
+      {
+        "id": 132,
+        "preview": "Prueba 132",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 132"
+          }
+        ]
+      },
+      {
+        "id": 133,
+        "preview": "Prueba 133",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 133"
+          }
+        ]
+      },
+      {
+        "id": 134,
+        "preview": "Prueba 134",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 134"
+          }
+        ]
+      },
+      {
+        "id": 135,
+        "preview": "Prueba 135",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 135"
+          }
+        ]
+      },
+      {
+        "id": 136,
+        "preview": "Prueba 136",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 136"
+          }
+        ]
+      },
+      {
+        "id": 137,
+        "preview": "Prueba 137",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 137"
+          }
+        ]
+      },
+      {
+        "id": 138,
+        "preview": "Prueba 138",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 138"
+          }
+        ]
+      },
+      {
+        "id": 139,
+        "preview": "Prueba 139",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Prueba 139"
+          }
+        ]
+      }
+    ],
+    "data/Main2D_us.carc/common.bmg": [
+      {
+        "id": 0,
+        "preview": "Studio name 0",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 0"
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "preview": "Studio name 1",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 1"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "preview": "Studio name 2",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 2"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "preview": "Studio name 3",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 3"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "preview": "Studio name 4",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 4"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "preview": "Studio name 5",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 5"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "preview": "Studio name 6",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 6"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "preview": "Studio name 7",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 7"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "preview": "Studio name 8",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 8"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "preview": "Studio name 9",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 9"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "preview": "Studio name 10",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 10"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "preview": "Studio name 11",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 11"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "preview": "Studio name 12",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 12"
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "preview": "Studio name 13",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 13"
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "preview": "Studio name 14",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 14"
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "preview": "Studio name 15",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 15"
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "preview": "Studio name 16",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 16"
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "preview": "Studio name 17",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 17"
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "preview": "Studio name 18",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 18"
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "preview": "Studio name 19",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 19"
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "preview": "Studio name 20",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 20"
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "preview": "Studio name 21",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 21"
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "preview": "Studio name 22",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 22"
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "preview": "Studio name 23",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 23"
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "preview": "Studio name 24",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 24"
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "preview": "Studio name 25",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 25"
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "preview": "Studio name 26",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 26"
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "preview": "Studio name 27",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 27"
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "preview": "Studio name 28",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 28"
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "preview": "Studio name 29",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 29"
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "preview": "Studio name 30",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 30"
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "preview": "Studio name 31",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 31"
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "preview": "Studio name 32",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 32"
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "preview": "Studio name 33",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 33"
+          }
+        ]
+      },
+      {
+        "id": 34,
+        "preview": "Studio name 34",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 34"
+          }
+        ]
+      },
+      {
+        "id": 35,
+        "preview": "Studio name 35",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 35"
+          }
+        ]
+      },
+      {
+        "id": 36,
+        "preview": "Studio name 36",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 36"
+          }
+        ]
+      },
+      {
+        "id": 37,
+        "preview": "Studio name 37",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 37"
+          }
+        ]
+      },
+      {
+        "id": 38,
+        "preview": "Studio name 38",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 38"
+          }
+        ]
+      },
+      {
+        "id": 39,
+        "preview": "Studio name 39",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 39"
+          }
+        ]
+      },
+      {
+        "id": 40,
+        "preview": "Studio name 40",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 40"
+          }
+        ]
+      },
+      {
+        "id": 41,
+        "preview": "Studio name 41",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 41"
+          }
+        ]
+      },
+      {
+        "id": 42,
+        "preview": "Studio name 42",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 42"
+          }
+        ]
+      },
+      {
+        "id": 43,
+        "preview": "Studio name 43",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 43"
+          }
+        ]
+      },
+      {
+        "id": 44,
+        "preview": "Studio name 44",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 44"
+          }
+        ]
+      },
+      {
+        "id": 45,
+        "preview": "Studio name 45",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 45"
+          }
+        ]
+      },
+      {
+        "id": 46,
+        "preview": "Studio name 46",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 46"
+          }
+        ]
+      },
+      {
+        "id": 47,
+        "preview": "Studio name 47",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 47"
+          }
+        ]
+      },
+      {
+        "id": 48,
+        "preview": "Studio name 48",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 48"
+          }
+        ]
+      },
+      {
+        "id": 49,
+        "preview": "Studio name 49",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 49"
+          }
+        ]
+      },
+      {
+        "id": 50,
+        "preview": "Studio name 50",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 50"
+          }
+        ]
+      },
+      {
+        "id": 51,
+        "preview": "Studio name 51",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 51"
+          }
+        ]
+      },
+      {
+        "id": 52,
+        "preview": "Studio name 52",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 52"
+          }
+        ]
+      },
+      {
+        "id": 53,
+        "preview": "Studio name 53",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 53"
+          }
+        ]
+      },
+      {
+        "id": 54,
+        "preview": "Studio name 54",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 54"
+          }
+        ]
+      },
+      {
+        "id": 55,
+        "preview": "Studio name 55",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 55"
+          }
+        ]
+      },
+      {
+        "id": 56,
+        "preview": "Studio name 56",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 56"
+          }
+        ]
+      },
+      {
+        "id": 57,
+        "preview": "Studio name 57",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 57"
+          }
+        ]
+      },
+      {
+        "id": 58,
+        "preview": "Studio name 58",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 58"
+          }
+        ]
+      },
+      {
+        "id": 59,
+        "preview": "Studio name 59",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 59"
+          }
+        ]
+      },
+      {
+        "id": 60,
+        "preview": "Studio name 60",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 60"
+          }
+        ]
+      },
+      {
+        "id": 61,
+        "preview": "Studio name 61",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 61"
+          }
+        ]
+      },
+      {
+        "id": 62,
+        "preview": "Studio name 62",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 62"
+          }
+        ]
+      },
+      {
+        "id": 63,
+        "preview": "Studio name 63",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 63"
+          }
+        ]
+      },
+      {
+        "id": 64,
+        "preview": "Studio name 64",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 64"
+          }
+        ]
+      },
+      {
+        "id": 65,
+        "preview": "Studio name 65",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 65"
+          }
+        ]
+      },
+      {
+        "id": 66,
+        "preview": "Studio name 66",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 66"
+          }
+        ]
+      },
+      {
+        "id": 67,
+        "preview": "Studio name 67",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 67"
+          }
+        ]
+      },
+      {
+        "id": 68,
+        "preview": "Studio name 68",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 68"
+          }
+        ]
+      },
+      {
+        "id": 69,
+        "preview": "Studio name 69",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 69"
+          }
+        ]
+      },
+      {
+        "id": 70,
+        "preview": "Studio name 70",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 70"
+          }
+        ]
+      },
+      {
+        "id": 71,
+        "preview": "Studio name 71",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 71"
+          }
+        ]
+      },
+      {
+        "id": 72,
+        "preview": "Studio name 72",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 72"
+          }
+        ]
+      },
+      {
+        "id": 73,
+        "preview": "Studio name 73",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 73"
+          }
+        ]
+      },
+      {
+        "id": 74,
+        "preview": "Studio name 74",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 74"
+          }
+        ]
+      },
+      {
+        "id": 75,
+        "preview": "Studio name 75",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 75"
+          }
+        ]
+      },
+      {
+        "id": 76,
+        "preview": "Studio name 76",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 76"
+          }
+        ]
+      },
+      {
+        "id": 77,
+        "preview": "Studio name 77",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 77"
+          }
+        ]
+      },
+      {
+        "id": 78,
+        "preview": "Studio name 78",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 78"
+          }
+        ]
+      },
+      {
+        "id": 79,
+        "preview": "Studio name 79",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 79"
+          }
+        ]
+      },
+      {
+        "id": 80,
+        "preview": "Studio name 80",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 80"
+          }
+        ]
+      },
+      {
+        "id": 81,
+        "preview": "Studio name 81",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 81"
+          }
+        ]
+      },
+      {
+        "id": 82,
+        "preview": "Studio name 82",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 82"
+          }
+        ]
+      },
+      {
+        "id": 83,
+        "preview": "Studio name 83",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 83"
+          }
+        ]
+      },
+      {
+        "id": 84,
+        "preview": "Studio name 84",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 84"
+          }
+        ]
+      },
+      {
+        "id": 85,
+        "preview": "Studio name 85",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 85"
+          }
+        ]
+      },
+      {
+        "id": 86,
+        "preview": "Studio name 86",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 86"
+          }
+        ]
+      },
+      {
+        "id": 87,
+        "preview": "Studio name 87",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 87"
+          }
+        ]
+      },
+      {
+        "id": 88,
+        "preview": "Studio name 88",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 88"
+          }
+        ]
+      },
+      {
+        "id": 89,
+        "preview": "Studio name 89",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 89"
+          }
+        ]
+      },
+      {
+        "id": 90,
+        "preview": "Studio name 90",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 90"
+          }
+        ]
+      },
+      {
+        "id": 91,
+        "preview": "Studio name 91",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 91"
+          }
+        ]
+      },
+      {
+        "id": 92,
+        "preview": "Studio name 92",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 92"
+          }
+        ]
+      },
+      {
+        "id": 93,
+        "preview": "Studio name 93",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 93"
+          }
+        ]
+      },
+      {
+        "id": 94,
+        "preview": "Studio name 94",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 94"
+          }
+        ]
+      },
+      {
+        "id": 95,
+        "preview": "Studio name 95",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 95"
+          }
+        ]
+      },
+      {
+        "id": 96,
+        "preview": "Studio name 96",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 96"
+          }
+        ]
+      },
+      {
+        "id": 97,
+        "preview": "Studio name 97",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 97"
+          }
+        ]
+      },
+      {
+        "id": 98,
+        "preview": "Studio name 98",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 98"
+          }
+        ]
+      },
+      {
+        "id": 99,
+        "preview": "Studio name 99",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 99"
+          }
+        ]
+      },
+      {
+        "id": 100,
+        "preview": "Studio name 100",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 100"
+          }
+        ]
+      },
+      {
+        "id": 101,
+        "preview": "Studio name 101",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 101"
+          }
+        ]
+      },
+      {
+        "id": 102,
+        "preview": "Studio name 102",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 102"
+          }
+        ]
+      },
+      {
+        "id": 103,
+        "preview": "Studio name 103",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 103"
+          }
+        ]
+      },
+      {
+        "id": 104,
+        "preview": "Studio name 104",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 104"
+          }
+        ]
+      },
+      {
+        "id": 105,
+        "preview": "Studio name 105",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 105"
+          }
+        ]
+      },
+      {
+        "id": 106,
+        "preview": "Studio name 106",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 106"
+          }
+        ]
+      },
+      {
+        "id": 107,
+        "preview": "Studio name 107",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 107"
+          }
+        ]
+      },
+      {
+        "id": 108,
+        "preview": "Studio name 108",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 108"
+          }
+        ]
+      },
+      {
+        "id": 109,
+        "preview": "Studio name 109",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 109"
+          }
+        ]
+      },
+      {
+        "id": 110,
+        "preview": "Studio name 110",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 110"
+          }
+        ]
+      },
+      {
+        "id": 111,
+        "preview": "Studio name 111",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 111"
+          }
+        ]
+      },
+      {
+        "id": 112,
+        "preview": "Studio name 112",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 112"
+          }
+        ]
+      },
+      {
+        "id": 113,
+        "preview": "Studio name 113",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 113"
+          }
+        ]
+      },
+      {
+        "id": 114,
+        "preview": "Studio name 114",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 114"
+          }
+        ]
+      },
+      {
+        "id": 115,
+        "preview": "Studio name 115",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 115"
+          }
+        ]
+      },
+      {
+        "id": 116,
+        "preview": "Studio name 116",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 116"
+          }
+        ]
+      },
+      {
+        "id": 117,
+        "preview": "Studio name 117",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 117"
+          }
+        ]
+      },
+      {
+        "id": 118,
+        "preview": "Studio name 118",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 118"
+          }
+        ]
+      },
+      {
+        "id": 119,
+        "preview": "Studio name 119",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 119"
+          }
+        ]
+      },
+      {
+        "id": 120,
+        "preview": "Studio name 120",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 120"
+          }
+        ]
+      },
+      {
+        "id": 121,
+        "preview": "Studio name 121",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 121"
+          }
+        ]
+      },
+      {
+        "id": 122,
+        "preview": "Studio name 122",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 122"
+          }
+        ]
+      },
+      {
+        "id": 123,
+        "preview": "Studio name 123",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 123"
+          }
+        ]
+      },
+      {
+        "id": 124,
+        "preview": "Studio name 124",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 124"
+          }
+        ]
+      },
+      {
+        "id": 125,
+        "preview": "Studio name 125",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 125"
+          }
+        ]
+      },
+      {
+        "id": 126,
+        "preview": "Studio name 126",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 126"
+          }
+        ]
+      },
+      {
+        "id": 127,
+        "preview": "Studio name 127",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 127"
+          }
+        ]
+      },
+      {
+        "id": 128,
+        "preview": "Studio name 128",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 128"
+          }
+        ]
+      },
+      {
+        "id": 129,
+        "preview": "Studio name 129",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 129"
+          }
+        ]
+      },
+      {
+        "id": 130,
+        "preview": "Studio name 130",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 130"
+          }
+        ]
+      },
+      {
+        "id": 131,
+        "preview": "Studio name 131",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 131"
+          }
+        ]
+      },
+      {
+        "id": 132,
+        "preview": "Studio name 132",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 132"
+          }
+        ]
+      },
+      {
+        "id": 133,
+        "preview": "Studio name 133",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 133"
+          }
+        ]
+      },
+      {
+        "id": 134,
+        "preview": "Studio name 134",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 134"
+          }
+        ]
+      },
+      {
+        "id": 135,
+        "preview": "Studio name 135",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 135"
+          }
+        ]
+      },
+      {
+        "id": 136,
+        "preview": "Studio name 136",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 136"
+          }
+        ]
+      },
+      {
+        "id": 137,
+        "preview": "Studio name 137",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 137"
+          }
+        ]
+      },
+      {
+        "id": 138,
+        "preview": "Studio name 138",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 138"
+          }
+        ]
+      },
+      {
+        "id": 139,
+        "preview": "Studio name 139",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Studio name 139"
+          }
+        ]
+      }
+    ],
+    "data/Studio/demo.carc/language/en.bmg": [
+      {
+        "id": 0,
+        "preview": "Welcome to your next idea.",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Welcome to your next idea."
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "preview": "Take the 〈code〉scenic route.",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Take the "
+          },
+          {
+            "kind": "Code",
+            "value": [
+              26,
+              0,
+              6,
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "Text",
+            "value": "scenic route."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "preview": "Ready when you are.",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Ready when you are."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "preview": "A little colour goes a long way.",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "A little colour goes a long way."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "preview": "Made by you.",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Made by you."
+          }
+        ]
+      }
+    ],
+    "data/Studio/readout.bmg": [
+      {
+        "id": 0,
+        "preview": "Synthetic workspace",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Synthetic workspace"
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "preview": "Nothing here comes from a game.",
+        "tokens": [
+          {
+            "kind": "Text",
+            "value": "Nothing here comes from a game."
+          }
+        ]
+      }
+    ]
+  },
   "names": [
+    {
+      "group": "Cups",
+      "index": 37,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 37"
+    },
+    {
+      "group": "Cups",
+      "index": 38,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 38"
+    },
+    {
+      "group": "Cups",
+      "index": 39,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 39"
+    },
+    {
+      "group": "Cups",
+      "index": 40,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 40"
+    },
+    {
+      "group": "Cups",
+      "index": 41,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 41"
+    },
+    {
+      "group": "Cups",
+      "index": 42,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 42"
+    },
+    {
+      "group": "Cups",
+      "index": 43,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 43"
+    },
+    {
+      "group": "Cups",
+      "index": 44,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 44"
+    },
+    {
+      "group": "Courses",
+      "index": 45,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 45"
+    },
+    {
+      "group": "Courses",
+      "index": 46,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 46"
+    },
+    {
+      "group": "Courses",
+      "index": 47,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 47"
+    },
+    {
+      "group": "Courses",
+      "index": 48,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 48"
+    },
+    {
+      "group": "Courses",
+      "index": 49,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 49"
+    },
+    {
+      "group": "Courses",
+      "index": 50,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 50"
+    },
+    {
+      "group": "Courses",
+      "index": 51,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 51"
+    },
+    {
+      "group": "Courses",
+      "index": 52,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 52"
+    },
+    {
+      "group": "Courses",
+      "index": 53,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 53"
+    },
+    {
+      "group": "Courses",
+      "index": 54,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 54"
+    },
+    {
+      "group": "Courses",
+      "index": 55,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 55"
+    },
+    {
+      "group": "Courses",
+      "index": 56,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 56"
+    },
+    {
+      "group": "Courses",
+      "index": 57,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 57"
+    },
+    {
+      "group": "Courses",
+      "index": 58,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 58"
+    },
+    {
+      "group": "Courses",
+      "index": 59,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 59"
+    },
+    {
+      "group": "Courses",
+      "index": 60,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 60"
+    },
+    {
+      "group": "Courses",
+      "index": 61,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 61"
+    },
+    {
+      "group": "Courses",
+      "index": 62,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 62"
+    },
+    {
+      "group": "Courses",
+      "index": 63,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 63"
+    },
+    {
+      "group": "Courses",
+      "index": 64,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 64"
+    },
+    {
+      "group": "Courses",
+      "index": 65,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 65"
+    },
+    {
+      "group": "Courses",
+      "index": 66,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 66"
+    },
+    {
+      "group": "Courses",
+      "index": 67,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 67"
+    },
+    {
+      "group": "Courses",
+      "index": 68,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 68"
+    },
+    {
+      "group": "Courses",
+      "index": 69,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 69"
+    },
+    {
+      "group": "Courses",
+      "index": 70,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 70"
+    },
+    {
+      "group": "Courses",
+      "index": 71,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 71"
+    },
+    {
+      "group": "Courses",
+      "index": 72,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 72"
+    },
+    {
+      "group": "Courses",
+      "index": 73,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 73"
+    },
+    {
+      "group": "Courses",
+      "index": 74,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 74"
+    },
+    {
+      "group": "Courses",
+      "index": 75,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 75"
+    },
+    {
+      "group": "Courses",
+      "index": 76,
+      "path": "data/Main2D_es.carc/common.bmg",
+      "text": "Prueba 76"
+    },
     {
       "group": "Cups",
       "index": 37,

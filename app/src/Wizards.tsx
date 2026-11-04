@@ -13,7 +13,21 @@ type WheelCentres = [
   [number, number, number],
 ];
 type Flow = (typeof flows)[number];
-const characters = ['MR', 'DK', 'KO', 'KP', 'PC', 'WR', 'YS', 'LG', 'KA', 'DS', 'WL', 'RB', 'HH'];
+const characters = [
+  'Mario',
+  'Donkey Kong',
+  'Toad',
+  'Bowser',
+  'Peach',
+  'Wario',
+  'Yoshi',
+  'Luigi',
+  'Dry Bones',
+  'Daisy',
+  'Waluigi',
+  'R.O.B.',
+  'Shy Guy',
+];
 const square: [number, number][] = [
   [0.2, 0.2],
   [0.8, 0.2],
@@ -22,7 +36,7 @@ const square: [number, number][] = [
 ];
 export function Wizards() {
   const { snapshot, busy, run, set } = useStore();
-  const [flow, setFlow] = useState<Flow>('Character');
+  const [flow, setFlow] = useState<Flow>(useStore.getState().recipe);
   const [source, setSource] = useState('');
   const [slot, setSlot] = useState(0);
   const [base, setBase] = useState(0);
@@ -227,21 +241,31 @@ export function Wizards() {
           </button>
         </header>
         <nav aria-label="Recipe types">
-          {flows.map((f) => (
-            <button
-              key={f}
-              className={flow === f ? 'active' : ''}
-              onClick={() => {
-                setFlow(f);
-                setSource('');
-                setSlot(0);
-              }}
-            >
-              {f}
-            </button>
-          ))}
+          {flows
+            .filter((f) => f !== 'Tables' || useStore.getState().advanced)
+            .map((f) => (
+              <button
+                key={f}
+                className={flow === f ? 'active' : ''}
+                onClick={() => {
+                  setFlow(f);
+                  setSource('');
+                  setSlot(0);
+                }}
+              >
+                {f}
+              </button>
+            ))}
         </nav>
         <div className="wizard-body engine-tools">
+          {!snapshot?.manifest && (
+            <p>
+              Create a project to keep your work.{' '}
+              <button onClick={() => set({ createOpen: true, wizardOpen: false })}>
+                Create project?
+              </button>
+            </p>
+          )}
           {['Character', 'Kart', 'Track', 'Music', 'Items'].includes(flow) && (
             <section>
               <h3>
@@ -784,13 +808,11 @@ export function Wizards() {
                           ? f.path.includes('/kart/mario/kart_MR_a.nsbmd')
                           : f.path.includes('/character/mario/P_MR.nsbmd')),
                     )?.path ?? '';
-                  useScene
-                    .getState()
-                    .set({
-                      reference,
-                      referenceKart: flow === 'Kart' ? slot : 0,
-                      referenceCharacter: flow === 'Character' ? slot : 0,
-                    });
+                  useScene.getState().set({
+                    reference,
+                    referenceKart: flow === 'Kart' ? slot : 0,
+                    referenceCharacter: flow === 'Character' ? slot : 0,
+                  });
                   set({ wizardOpen: false });
                   void openFile(flow === 'Character' ? 'Rig & Animate' : 'Model', model);
                 }}

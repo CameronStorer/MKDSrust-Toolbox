@@ -40,6 +40,9 @@ import { SceneViewport, SceneOutliner, SceneProperties, Overlays, Timeline } fro
 import { TestBench, GameLog } from './panels/TestBench';
 import { useScene } from './scene-view';
 import { AudioWorkspace } from './panels/Audio';
+import { Home } from './panels/Home';
+import { GameBrowser } from './panels/GameBrowser';
+import { saveProject } from './store';
 import { Wizards } from './Wizards';
 const components: Record<string, React.FunctionComponent<IDockviewPanelProps>> = {
   overview: Overview,
@@ -239,12 +242,16 @@ export function App() {
     set,
     run,
   } = useStore();
+  const advanced = useStore((s) => s.advanced);
+  const drafts = useStore((s) => s.drafts);
   const [menu, setMenu] = useState('');
   const [tour, setTour] = useState(false);
   const [compat, setCompat] = useState(false);
   const sceneInfo = useScene((s) => s.info);
   useEffect(() => {
-    void run({ kind: 'Snapshot' });
+    void run({ kind: 'Snapshot' }).then(() => {
+      if (useStore.getState().workspace === 'Text') openWorkspace('Text');
+    });
   }, [run]);
   useEffect(() => {
     document.documentElement.dataset.theme = snapshot?.settings.theme ?? 'dark';
@@ -273,7 +280,10 @@ export function App() {
         const binding = snapshot?.settings.keybindings[c.id] ?? c.shortcut;
         return binding && matchesKey(e, binding);
       });
-      if (command && (!editing || ['view.palette', 'view.settings'].includes(command.id))) {
+      if (
+        command &&
+        (!editing || ['view.palette', 'view.settings', 'file.save'].includes(command.id))
+      ) {
         e.preventDefault();
         invokeCommand(command);
       }
@@ -281,6 +291,45 @@ export function App() {
     window.addEventListener('keydown', key);
     return () => window.removeEventListener('keydown', key);
   }, [snapshot, set]);
+  useEffect(() => {
+    const needsWarning = () => {
+      const s = useStore.getState();
+      return (
+        !!Object.keys(s.drafts).length || !!(s.snapshot?.edited.length && !s.snapshot.ds_export)
+      );
+    };
+    const closing = (e: BeforeUnloadEvent) => {
+      if (needsWarning()) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', closing);
+    let dispose: (() => void) | undefined;
+    let cancelled = false;
+    if (!isMock)
+      void import('@tauri-apps/api/window').then(async ({ getCurrentWindow }) => {
+        const unlisten = await getCurrentWindow().onCloseRequested(async (e) => {
+          if (!needsWarning()) return;
+          e.preventDefault();
+          const { confirm } = await import('@tauri-apps/plugin-dialog');
+          if (
+            await confirm(
+              'Your project has unsaved drafts or changes that have not been exported. Close anyway?',
+              { title: 'Close project', kind: 'warning' },
+            )
+          )
+            await getCurrentWindow().destroy();
+        });
+        if (cancelled) unlisten();
+        else dispose = unlisten;
+      });
+    return () => {
+      cancelled = true;
+      dispose?.();
+      window.removeEventListener('beforeunload', closing);
+    };
+  }, []);
   const icons = [LayoutDashboard, Files, PaletteIcon, Type];
   return (
     <div
@@ -328,7 +377,28 @@ export function App() {
           </div>
         ))}
         <div className="grow" />
-        <button disabled={!snapshot?.manifest} onClick={() => set({ wizardOpen: true })}>Beginner recipes</button>
+        <button
+          className="accent"
+          disabled={!snapshot?.manifest || busy}
+          onClick={() => void saveProject()}
+        >
+          Save
+        </button>
+        <span role="status" className="save-state">
+          {Object.keys(drafts).length
+            ? 'Unsaved changes'
+            : busy
+              ? 'Saving / working…'
+              : snapshot?.manifest
+                ? 'Saved'
+                : ''}
+        </span>
+        <button aria-pressed={advanced} onClick={() => set({ advanced: !advanced })}>
+          Advanced
+        </button>
+        <button disabled={!snapshot?.manifest} onClick={() => set({ wizardOpen: true })}>
+          Beginner recipes
+        </button>
         {isMock && <span className="demo-label">SYNTHETIC DEMO</span>}
         <span className="project-name">
           {snapshot?.manifest?.name ?? 'No project'}
@@ -345,21 +415,29 @@ export function App() {
       </header>
       <nav className="workspace-bar" aria-label="Workspaces">
         <div className="workspace-tabs">
-          {workspaces.map((w, i) => {
-            const Icon = icons[i];
-            return (
-              <button
-                key={w}
-                title={stages[w] ? `Coming in stage ${stages[w]}` : w}
-                disabled={!!stages[w]}
-                className={workspace === w ? 'active' : ''}
-                onClick={() => openWorkspace(w)}
-              >
-                {Icon && <Icon size={13} />}
-                <span>{w}</span>
-              </button>
-            );
-          })}
+          {workspaces
+            .filter(
+              (w) =>
+                advanced ||
+                ['Home', 'Game browser', 'Image gallery', 'Text', 'Audio', 'Test Bench'].includes(
+                  w,
+                ),
+            )
+            .map((w, i) => {
+              const Icon = icons[i];
+              return (
+                <button
+                  key={w}
+                  title={stages[w] ? `Coming in stage ${stages[w]}` : w}
+                  disabled={!!stages[w]}
+                  className={workspace === w ? 'active' : ''}
+                  onClick={() => openWorkspace(w)}
+                >
+                  {Icon && <Icon size={13} />}
+                  <span>{w}</span>
+                </button>
+              );
+            })}
         </div>
         <button
           className="workspace-help icon-button"
@@ -426,13 +504,14 @@ export function App() {
         <span>/</span>
         <strong>{workspace}</strong>
         <div className="grow" />
-        {(workspace === 'Model' || workspace === 'Track' || workspace === 'Rig & Animate') && sceneInfo && (
-          <span>
-            {sceneInfo.budget.polygons.toLocaleString()} polys ·{' '}
-            {sceneInfo.budget.vertices.toLocaleString()} verts · {sceneInfo.issues.length} course
-            issues
-          </span>
-        )}
+        {(workspace === 'Model' || workspace === 'Track' || workspace === 'Rig & Animate') &&
+          sceneInfo && (
+            <span>
+              {sceneInfo.budget.polygons.toLocaleString()} polys ·{' '}
+              {sceneInfo.budget.vertices.toLocaleString()} verts · {sceneInfo.issues.length} course
+              issues
+            </span>
+          )}
         <button onClick={() => set({ paletteOpen: true })}>
           <Search size={12} />
           Search commands<kbd>Ctrl Shift P</kbd>
@@ -474,7 +553,22 @@ export function App() {
         </div>
       ))}
       <main className="workspace" data-testid="workspace">
-        <Dock key={`${workspace}:${layoutVersion}`} />
+        {workspace === 'Home' ? (
+          <Home />
+        ) : workspace === 'Game browser' ? (
+          <GameBrowser />
+        ) : workspace === 'Image gallery' ? (
+          <GameBrowser gallery />
+        ) : !advanced && workspace === 'Text' ? (
+          <div className="friendly-text">
+            <MessageList />
+            <TextEditor />
+          </div>
+        ) : !advanced && workspace === 'Audio' ? (
+          <AudioWorkspace />
+        ) : (
+          <Dock key={`${workspace}:${layoutVersion}`} />
+        )}
       </main>
       <footer className="statusbar">
         <span className="status-icon">

@@ -33,11 +33,13 @@ export function PaintTools({ canvas, path, palette, screen, ready }: Props) {
     void run({ kind: 'CancelGraphic' });
   }, [path, run]);
   const selection = useRef<[Point, Point] | null>(null);
-  const tx = snapshot?.files.find((f) => f.path === path)?.format === 'nsbtx';
+  const tx = ['nsbtx', 'nsbmd'].includes(
+    snapshot?.files.find((f) => f.path === path)?.format ?? '',
+  );
   const editable =
     !!snapshot?.manifest &&
     !screen &&
-    ['ncgr', 'nsbtx'].includes(snapshot?.files.find((f) => f.path === path)?.format ?? '');
+    ['ncgr', 'nsbtx', 'nsbmd'].includes(snapshot?.files.find((f) => f.path === path)?.format ?? '');
   useEffect(() => {
     if (!editable) return;
     let active = true;

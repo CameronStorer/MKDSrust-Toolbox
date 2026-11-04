@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useStore } from './store';
+import { saveProject, useStore } from './store';
 import { pickDirectory, pickFile, savePath } from './backend';
 import { bytes } from './panels/Properties';
 export function ExportDialog() {
@@ -73,7 +73,12 @@ export function ExportDialog() {
           <button
             className="accent"
             disabled={busy || (!rom && !bps)}
-            onClick={() => void run({ kind: 'ExportDs', rom: rom || null, bps: bps || null })}
+            onClick={() =>
+              void saveProject().then(() => {
+                if (!useStore.getState().error)
+                  void run({ kind: 'ExportDs', rom: rom || null, bps: bps || null });
+              })
+            }
           >
             Build DS output
           </button>

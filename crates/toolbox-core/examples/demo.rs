@@ -42,8 +42,10 @@ fn main() -> toolbox_core::Result<()> {
     std::fs::write(
         root.join("app/src/demo-wizards.json"),
         serde_json::to_vec_pretty(&serde_json::json!({
+            "messages": wizard.nodes.iter().filter(|n|n.format=="bmg").map(|n|Ok((n.path.clone(),toolbox_core::preview::preview(wizard.file(&n.path)?)?.messages))).collect::<toolbox_core::Result<std::collections::BTreeMap<_,_>>>()?,
             "catalog": toolbox_core::tables::catalog(None, &wizard)?,
             "names": toolbox_core::names::list(None, &wizard)?,
+            "game_entries": toolbox_core::game::entries(&wizard.nodes, &toolbox_core::tables::catalog(None, &wizard)?, &toolbox_core::names::list(None, &wizard)?),
             "files": wizard.nodes,
         }))?,
     )?;

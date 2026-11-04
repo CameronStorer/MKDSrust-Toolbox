@@ -1,82 +1,75 @@
-# Toolbox status — 2026-11-04
+# Toolbox status - 2026-11-04
 
-Stage 5 A–E have basic end-to-end authoring paths. F has automated export/readback
-and synthetic screenshots; current-output boot verification remains with the maintainer.
-Stages 1–4 remain available. Changes are uncommitted.
+Stage 6 A-H now have a first breadth-first usability pass. Stages 1-5 and the
+expert editors remain available. Changes are uncommitted.
 
-## Done
+## What a beginner can do
 
-- A: bounded BLZ, ARM9 module parameters, typed RAM-addressed tables, overlay
-  recompression/fallback and an uncompressed option for either binary. Overlay storage
-  policy is project metadata, never a ROM member.
-- B: character slot/base selection, automatic orientation with up-axis override,
-  hip cut, fitting, reduction, donor skeleton/rigid assignment and paint brush,
-  race/menu/E models, donor clips, seats and donor race-voice routing. Seated
-  reference/animation preview; rendered or PNG portraits into a chosen cell.
-- C: kart body/texture/shadow generation, donor stats and all thirteen seats,
-  tires, wheel coordinates/picking, placement gizmos with seated reference,
-  ground/centre helpers and speed/acceleration forms.
-- D: material/slope collision, lighting defaults, closed racing-line generation,
-  terrain-height placement, 64 checkpoints, CPU/item routes, starts, respawns,
-  camera, item rows, minimap and D variants. Editable points, route repair and
-  collision compaction Fix buttons. Unrouted objects copy donor MapObj families.
-- KCL: 1024-unit cubic root grid, coordinate shift 10, nonzero Y/Z strides,
-  conservative candidates, shared lists and bounded coarsening. Warn above
-  **150,000 bytes**, refuse above **215,000 bytes**, including export validation.
-  The 6,272-prism / 2,000-unit dense fixture is **173,740 bytes**; vertex/centroid
-  lookups retain candidates across root boundaries. Larger geometry is refused.
-  Every generated track member also stays within the largest matching expanded
-  retail member, measured in memory; manual edits are checked again at export.
-- E: WAV/MIDI music assignment with RAM reporting, allocation-bounded sound
-  replacement, cup order/name-message updates, HUD cells, embedded item retexturing
-  and searchable grouped names. Each recipe is one undoable command.
-- F: synthetic persistence/undo/BPS and opt-in owned-ROM export/readback tests:
-  character, kart, both course-20 variants (14 files), music, effects, icons,
-  embedded textures, names, cups and uncompressed overlays. Original hash checked.
-  All eight recipe screens captured in both themes: `docs/screenshots/recipe-*`.
+1. Open the external USA ROM and create/open a project. Home asks **What do you
+   want to make?** Seven cards open character, kart, track, music, image, text
+   and cup workflows. Home also has recent items/projects and Export for DS.
+2. Use **Game browser** to search friendly names or paths. Characters distinguish
+   race models (P_), far-away opponents (E_), menu models and named clips.
+   Tracks use the loaded cup/course names. Items stay in tabs; Back, Forward
+   and Recently opened retain navigation. Model/image thumbnails are generated
+   locally; course model thumbnails use a top view.
+3. Open **Text**: English (US) is selected first, with separate language/file
+   controls, message groups and optional search across every language/file.
+   Existing control bytes stay in chips. Drafts survive navigation; **Save**,
+   **Ctrl+S** (including inside text fields), or Save message writes them.
+4. Open **Image gallery**: known stems, localized/shared archive pairs and sprite
+   suffixes automatically choose palettes/screens. Swap a palette colour, see
+   its other users, paint individual tiles, or Export PNG / Import PNG with a
+   before/after conversion preview. Embedded item textures support painting,
+   PNG replacement and undoable colour swapping too. Manual pairing is in Details.
+5. Open **Audio**, choose a course theme/menu tune or a voice/effect group, then
+   Play preview. The desktop CSP now permits blob audio. Playback uses the
+   linked bank, renders through the first loop (five-minute safety bound), and
+   has native seeking/duration, Stop and visible errors. Replace this song/sound
+   opens its existing import controls. Conditional SSEQ events now preview.
+6. Use the model cards with GLB/glTF/OBJ. Exact vertex welding uses hashing;
+   quadric reduction batches independent local collapses. **31,600 -> 499
+   triangles takes about 2 seconds in debug**. A generated 31,754-triangle
+   humanoid with 220 bones, matrix nodes and mismatched rest/bind poses runs
+   through character, kart and track wizards in about **1.5-1.7 seconds each**.
+   Tracks auto-reduce to 1,000 triangles, preserve small disconnected surfaces,
+   generate visible fallback textures and generate nonblank Map2D art.
+7. Save As copies authored project folders/patches into an empty folder while
+   retaining the external ROM reference. Closing warns about drafts or changes
+   without a current export. **Advanced** exposes the raw Explorer, original
+   docked workspaces, numeric controls and every previously available tool.
 
-## Limits / remaining verification
+## Remaining limits
 
-The maintainer boot-tested earlier slot-0 character/kart outputs and the coarse KCL
-track fix. **The new root grid, donor voices and current exports need boot tests**;
-no DS hardware/emulator verification is claimed. Native-builder dependency resolution
-was attempted with this task's offline CARGO_HOME: `corosensei` is not cached.
+This is not an exhaustive asset catalog or related-assets page: some labels are
+structural fallbacks, ambiguous image pairs stay in Advanced, and some per-character
+icon/voice associations still need mapping. The new follow-up STAGE6B covers this.
+Text's reading preview uses a system font: NFTR rendering and named meanings for
+all control codes remain. Audio is a bounded basic software mixer, not an exact
+hardware envelope/effects emulator; unsupported commands produce explicit errors.
+Screen/cell repainting still uses the individual tile sheet. FBX/DAE still need
+conversion, and arbitrary animation retargeting remains limited.
 
-Portrait destination/crop is explicit; localized selection/HUD/result cells are not
-all auto-mapped. Tracks supply one camera and no area triggers: inspect intro/goal
-views and retained minimap backgrounds. Height placement uses the highest XZ surface;
-bridges/tunnels need manual edits. Routed donor objects need PATH/POIT wiring.
-Automatic orientation uses the longest source axis. Inherited limits include FBX/DAE,
-arbitrary animation retargeting, 4x4 texture encoding, IPS/xdelta and new top-level
-ROM files. These are not claimed complete.
+The Stage 5 root-grid KCL, current donor voices, fallback textures/minimap and
+current exports still need maintainer boot tests. No new DS hardware/emulator
+verification is claimed. Existing KCL size guards and retail member budgets remain.
 
 ## Verification and run
 
-Passed: `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`,
-`cargo test --workspace` (**79 tests with MKDS_ROM set**), app lint/typecheck,
-6 Vitest tests, production build, Tauri `cargo build`, and **46 Playwright tests**.
-No Nintendo content was added. The owned ROM was read in place; the new retail tests
-keep rebuilt images in RAM. Demo assets/screenshots are generated synthetic data.
+Passed: cargo fmt --check; cargo clippy --workspace --all-targets -- -D warnings;
+cargo test --workspace (**86 tests with MKDS_ROM set**); app lint, typecheck,
+6 Vitest tests, production build, Tauri cargo build; **61 Playwright tests**.
+Home/Game browser/gallery and existing workspaces have both-theme synthetic
+screenshots in docs/screenshots; stage6-* captures include Text, Swap a colour,
+Audio and a wizard. No ROM-derived fixtures/screenshots were added. Owned-ROM
+checks read in place and the new checks keep previews/rebuilt data in memory.
 
-PowerShell from root: set `$env:CARGO_HOME="$PWD/.cache/cargo"` and
-`$env:CARGO_NET_OFFLINE='true'`. In `app/`, run `npm run tauri dev`; open the external
-AMCE revision-0 ROM and a project, then **Beginner recipes**. Apply, inspect and export
-outside the repository. Set `MKDS_ROM` from `docs/STAGE4.md` for local tests.
-Regenerate demos: `cargo run -p toolbox-core --example demo`. For browser checks,
-in `app/` set `PLAYWRIGHT_BROWSERS_PATH=<repo>/.cache/playwright` and
-`MKDSTB_SCREENSHOT_PREVIEW=1`, then `npm run test:e2e`.
+PowerShell from root: set CARGO_HOME to <repo>/.cache/cargo and CARGO_NET_OFFLINE
+to true. Set MKDS_ROM to the external path in docs/STAGE4.md for retail checks.
+In app/, run npm run tauri dev. Open the ROM/project, choose a Home card, Save,
+then Export for DS outside the repository. Regenerate synthetic demos with
+cargo run -p toolbox-core --example demo. For npm run test:e2e, set
+PLAYWRIGHT_BROWSERS_PATH=<repo>/.cache/playwright and MKDSTB_SCREENSHOT_PREVIEW=1.
+The preview-server setting avoids this sandbox's Vite dev optimizer access error.
 
-For each patched output, the maintainer's exact MKDSrust boot-test sequence is:
-
-```text
-mkds_builder <patched.nds> --build --allow-unverified --out <dir>
-<dir>/game.exe --assets <dir>/assets --race course=20,character=0,kart=0,racers=8 --frames 1500
-```
-
-Use an empty output directory outside this repository. Repeat for character, kart,
-track, music/effects and items. For cups/names also run
-`<dir>/game.exe --assets <dir>/assets --list-courses` and inspect the renamed cup and
-race order in the game menu. Automated tests independently check tables/messages;
-a course listing alone does not verify every localized string.
-
-No Git metadata/remotes or builder sources were modified; nothing was pushed.
+No Git metadata/remotes or native-builder sources were changed; nothing was pushed.

@@ -5,6 +5,7 @@ pub mod bench;
 pub mod collision;
 pub mod engine;
 pub mod export;
+pub mod game;
 pub mod graphic;
 pub mod icon;
 pub mod model;

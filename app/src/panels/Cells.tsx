@@ -3,6 +3,7 @@ import { useStore } from '../store';
 import { usePreview } from '../hooks';
 import { binary } from '../backend';
 export function Cells() {
+  const advanced = useStore((s) => s.advanced);
   const snapshot = useStore((s) => s.snapshot);
   const path = snapshot?.selected ?? '';
   const metadata = usePreview(path);
@@ -59,38 +60,41 @@ export function Cells() {
   }, [path, palette, cell, sequence, frame, snapshot]);
   return (
     <div className="panel cell-panel">
-      <div className="source-controls">
-        <label>
-          Palette
-          <select
-            aria-label="Cell palette"
-            value={palette}
-            onChange={(e) => setPalette(e.target.value)}
-          >
-            <option value="">Auto pair NCLR</option>
-            {snapshot?.files
-              .filter((f) => f.format === 'nclr')
-              .map((f) => (
-                <option key={f.path} value={f.path}>
-                  {f.path}
-                </option>
-              ))}
-          </select>
-        </label>
-        <label>
-          Cell bank
-          <select aria-label="Cell bank" value={cell} onChange={(e) => setCell(e.target.value)}>
-            <option value="">Auto pair NCER</option>
-            {snapshot?.files
-              .filter((f) => f.format === 'ncer')
-              .map((f) => (
-                <option key={f.path} value={f.path}>
-                  {f.path}
-                </option>
-              ))}
-          </select>
-        </label>
-      </div>
+      <details open={advanced}>
+        <summary>Details - image pairing</summary>
+        <div className="source-controls">
+          <label>
+            Palette
+            <select
+              aria-label="Cell palette"
+              value={palette}
+              onChange={(e) => setPalette(e.target.value)}
+            >
+              <option value="">Auto pair NCLR</option>
+              {snapshot?.files
+                .filter((f) => f.format === 'nclr')
+                .map((f) => (
+                  <option key={f.path} value={f.path}>
+                    {f.path}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <label>
+            Cell bank
+            <select aria-label="Cell bank" value={cell} onChange={(e) => setCell(e.target.value)}>
+              <option value="">Auto pair NCER</option>
+              {snapshot?.files
+                .filter((f) => f.format === 'ncer')
+                .map((f) => (
+                  <option key={f.path} value={f.path}>
+                    {f.path}
+                  </option>
+                ))}
+            </select>
+          </label>
+        </div>
+      </details>
       <div className="scene-toolbar">
         <label>
           {frames ? 'Sequence' : 'Cell'}

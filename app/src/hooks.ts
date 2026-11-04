@@ -40,14 +40,13 @@ export function usePreview(path: string) {
   return preview;
 }
 export function companion(files: { path: string; format: string }[], path: string, format: string) {
-  const stem = path.replace(/\.[^/.]+$/, '');
+  const entries = useStore.getState().snapshot?.game_entries ?? [];
+  const known = entries.find((e) => e.path === path);
+  if (format === 'nclr' && known?.palette) return known.palette;
+  if (format === 'nscr' && known?.screen) return known.screen;
+  const stem = path.replace(/\.[^/.]+$/, '').toLowerCase();
   return (
-    files.find((f) => f.path === `${stem}.${format}`)?.path ??
-    files.find(
-      (f) =>
-        f.format === format &&
-        f.path.slice(0, f.path.lastIndexOf('/')) === path.slice(0, path.lastIndexOf('/')),
-    )?.path ??
-    ''
+    files.find((f) => f.format === format && f.path.replace(/\.[^/.]+$/, '').toLowerCase() === stem)
+      ?.path ?? ''
   );
 }

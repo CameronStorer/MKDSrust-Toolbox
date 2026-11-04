@@ -1,4 +1,105 @@
 {
+  "game_entries": [
+    {
+      "path": "data/Course/studio.carc/course_collision.kcl",
+      "group": "Tracks",
+      "section": "Other courses",
+      "label": "course collision",
+      "location": "The road, walls and surfaces you can drive on",
+      "palette": null,
+      "screen": null
+    },
+    {
+      "path": "data/Course/studio.carc/course_map.nkm",
+      "group": "Tracks",
+      "section": "Other courses",
+      "label": "course map",
+      "location": "Race starts, CPU routes, items and checkpoints",
+      "palette": null,
+      "screen": null
+    },
+    {
+      "path": "data/Course/studio.carc/course_model.nsbca",
+      "group": "Tracks",
+      "section": "Other courses",
+      "label": "course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "screen": null
+    },
+    {
+      "path": "data/Course/studio.carc/course_model.nsbmd",
+      "group": "Tracks",
+      "section": "Other courses",
+      "label": "course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "screen": null
+    },
+    {
+      "path": "data/Course/studio.carc/course_model.nsbtx",
+      "group": "Tracks",
+      "section": "Other courses",
+      "label": "course model",
+      "location": "The track you see while racing",
+      "palette": null,
+      "screen": null
+    },
+    {
+      "path": "data/Studio/demo.carc/art/studio.ncer",
+      "group": "Menus & HUD",
+      "section": "Screens & icons",
+      "label": "studio",
+      "location": "On a menu or in the race display; inspect the preview to identify this image",
+      "palette": "data/Studio/demo.carc/art/studio.nclr",
+      "screen": null
+    },
+    {
+      "path": "data/Studio/demo.carc/art/studio.ncgr",
+      "group": "Menus & HUD",
+      "section": "Screens & icons",
+      "label": "studio",
+      "location": "On a menu or in the race display; inspect the preview to identify this image",
+      "palette": "data/Studio/demo.carc/art/studio.nclr",
+      "screen": "data/Studio/demo.carc/art/studio.nscr"
+    },
+    {
+      "path": "data/Studio/demo.carc/audio/sound_data.sdat",
+      "group": "Music & sounds",
+      "section": "Songs, voices & sound effects",
+      "label": "Music, character voices & sounds",
+      "location": "Course themes, menu tunes and sounds during play",
+      "palette": null,
+      "screen": null
+    },
+    {
+      "path": "data/Studio/demo.carc/language/en.bmg",
+      "group": "Text",
+      "section": "English (US)",
+      "label": "Menus & messages · English (US)",
+      "location": "Menus & messages · English (US)",
+      "palette": null,
+      "screen": null
+    },
+    {
+      "path": "data/Studio/readout.bmg",
+      "group": "Text",
+      "section": "Shared / language independent",
+      "label": "Menus & messages · Shared / language independent",
+      "location": "Menus & messages · Shared / language independent",
+      "palette": null,
+      "screen": null
+    },
+    {
+      "path": "data/Studio/texture.nsbtx",
+      "group": "Menus & HUD",
+      "section": "Screens & icons",
+      "label": "texture",
+      "location": "On a menu or in the race display; inspect the preview to identify this image",
+      "palette": null,
+      "screen": null
+    }
+  ],
   "wizard_catalog": {
     "courses": [],
     "cups": [],
@@ -222,12 +323,7 @@
   "edited": [
     "data/Studio/demo.carc/art/studio.nclr"
   ],
-  "history": [
-    {
-      "title": "Shift palette toward lavender",
-      "applied": true
-    }
-  ],
+  "history": [],
   "selected": "data/Studio/demo.carc/art/studio.nclr",
   "preview": {
     "cells": [],
@@ -498,9 +594,9 @@
     "height": 0
   },
   "settings": {
-    "allow_pc_only": false,
+    "allow_pc_only": true,
     "play_target": "emulator",
-    "emulator_path": "C:\\Users\\cam\\Desktop\\MKDSrust-windows-x64(2)\\MKDSrust.exe",
+    "emulator_path": "C:\\AI\\reverse-engineering\\tools\\melonDS\\melonDS.exe",
     "flashcart_path": "",
     "race": {
       "course": null,
@@ -518,6 +614,6 @@
   "warnings": [],
   "issues": [],
   "pack": null,
-  "can_undo": true,
+  "can_undo": false,
   "can_redo": false
 }

@@ -62,3 +62,39 @@ pub const COLLISION_TYPES: &[(u16, &str)] = &[
     (21, "Wall 3"),
     (22, "Recalculate route"),
 ];
+
+/// Player-facing character labels, in slot order.
+pub const CHARACTER_NAMES: &[&str] = &[
+    "Mario",
+    "Donkey Kong",
+    "Toad",
+    "Bowser",
+    "Peach",
+    "Wario",
+    "Yoshi",
+    "Luigi",
+    "Dry Bones",
+    "Daisy",
+    "Waluigi",
+    "R.O.B.",
+    "Shy Guy",
+];
+/// Menu/scene sequence ids confirmed in docs/research/TRACKS_AUDIO_CUPS.md.
+pub const SCENE_MUSIC: &[(usize, &str)] = &[
+    (1, "Single-player menu"),
+    (2, "Multiplayer menu"),
+    (3, "Wi-Fi menu"),
+    (6, "Records menu"),
+    (8, "Grand Prix flyover 1"),
+    (9, "Grand Prix flyover 2"),
+    (10, "Grand Prix flyover 3"),
+    (13, "Battle flyover"),
+    (14, "Boss intro"),
+    (43, "Battle theme"),
+    (45, "Boss battle"),
+    (63, "Reward"),
+    (66, "Grand Prix results"),
+    (69, "Credits 1"),
+    (70, "Credits 2"),
+    (75, "Intro"),
+];

@@ -24,6 +24,7 @@ export function Texture() {
 function RasterTexture() {
   const snapshot = useStore((s) => s.snapshot);
   const view = useView();
+  const advanced = useStore((s) => s.advanced);
   const [url, setUrl] = useState('');
   const [error, setError] = useState('');
   const [dimensions, setDimensions] = useState([0, 0]);
@@ -101,7 +102,11 @@ function RasterTexture() {
     <div className="panel texture">
       <div className="toolbar texture-toolbar">
         <ImageIcon size={14} />
-        <span>{file?.name ?? 'Image preview'}</span>
+        <span>
+          {!advanced
+            ? (snapshot?.game_entries.find((e) => e.path === selected)?.label ?? 'Image preview')
+            : (file?.name ?? 'Image preview')}
+        </span>
         <div className="grow" />
         <button title="Zoom out" onClick={() => view.set({ zoom: Math.max(0.5, view.zoom - 0.5) })}>
           <Minus size={14} />
@@ -147,86 +152,93 @@ function RasterTexture() {
           8×8
         </button>
       </div>
-      <div className="source-controls">
-        <label>
-          Tiles
-          <select
-            aria-label="Tile source"
-            value={view.tiles}
-            onChange={(e) => view.set({ tiles: e.target.value })}
-          >
-            <option value="">Follow selection</option>
-            {files
-              .filter((f) => ['ncgr', 'nsbtx', 'nsbmd'].includes(f.format))
-              .map((f) => (
-                <option key={f.path} value={f.path}>
-                  {f.name}
-                </option>
-              ))}
-          </select>
-        </label>
-        <label>
-          Palette
-          <select
-            aria-label="Palette source"
-            value={view.palette}
-            onChange={(e) => view.set({ palette: e.target.value, bank: 0 })}
-          >
-            <option value="">Auto pair</option>
-            {files
-              .filter((f) => f.format === 'nclr')
-              .map((f) => (
-                <option key={f.path} value={f.path}>
-                  {f.name}
-                </option>
-              ))}
-          </select>
-        </label>
-        <label>
-          Screen
-          <select
-            aria-label="Screen source"
-            value={screen}
-            onChange={(e) => view.set({ screen: e.target.value })}
-          >
-            <option value="">Raw tiles</option>
-            {files
-              .filter((f) => f.format === 'nscr')
-              .map((f) => (
-                <option key={f.path} value={f.path}>
-                  {f.name}
-                </option>
-              ))}
-          </select>
-        </label>
-      </div>
-      {metadata.textures.length > 0 && (
+      <details className="format-details" open={advanced}>
+        <summary>Details · file pairing</summary>
         <div className="source-controls">
           <label>
-            Texture
+            Tiles
             <select
-              value={view.texture}
-              onChange={(e) => view.set({ texture: Number(e.target.value) })}
+              aria-label="Tile source"
+              value={view.tiles}
+              onChange={(e) => view.set({ tiles: e.target.value })}
             >
-              {metadata.textures.map((name, i) => (
-                <option key={i} value={i}>
-                  {name}
-                </option>
-              ))}
+              <option value="">Follow selection</option>
+              {files
+                .filter((f) => ['ncgr', 'nsbtx', 'nsbmd'].includes(f.format))
+                .map((f) => (
+                  <option key={f.path} value={f.path}>
+                    {f.name}
+                  </option>
+                ))}
             </select>
           </label>
           <label>
-            Texture palette
-            <select value={view.bank} onChange={(e) => view.set({ bank: Number(e.target.value) })}>
-              {metadata.palettes.map((name, i) => (
-                <option key={i} value={i}>
-                  {name}
-                </option>
-              ))}
+            Palette
+            <select
+              aria-label="Palette source"
+              value={view.palette}
+              onChange={(e) => view.set({ palette: e.target.value, bank: 0 })}
+            >
+              <option value="">Auto pair</option>
+              {files
+                .filter((f) => f.format === 'nclr')
+                .map((f) => (
+                  <option key={f.path} value={f.path}>
+                    {f.name}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <label>
+            Screen
+            <select
+              aria-label="Screen source"
+              value={screen}
+              onChange={(e) => view.set({ screen: e.target.value })}
+            >
+              <option value="">Raw tiles</option>
+              {files
+                .filter((f) => f.format === 'nscr')
+                .map((f) => (
+                  <option key={f.path} value={f.path}>
+                    {f.name}
+                  </option>
+                ))}
             </select>
           </label>
         </div>
-      )}
+        {metadata.textures.length > 0 && (
+          <div className="source-controls">
+            <label>
+              Texture
+              <select
+                value={view.texture}
+                onChange={(e) => view.set({ texture: Number(e.target.value) })}
+              >
+                {metadata.textures.map((name, i) => (
+                  <option key={i} value={i}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Texture palette
+              <select
+                value={view.bank}
+                onChange={(e) => view.set({ bank: Number(e.target.value) })}
+              >
+                {metadata.palettes.map((name, i) => (
+                  <option key={i} value={i}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        )}
+      </details>
+      {screen && <button onClick={() => view.set({ screen: '' })}>Paint individual tiles</button>}
       <PaintTools canvas={canvas} path={path} palette={palette} screen={screen} ready={url} />
       <div
         className="canvas-area checker"
@@ -309,9 +321,34 @@ export function Palette() {
   const files = snapshot?.files ?? [];
   const selected = snapshot?.selected ?? '';
   const file = files.find((f) => f.path === selected);
-  const path =
-    view.palette || (file?.format === 'nclr' ? selected : companion(files, selected, 'nclr'));
-  const preview = usePreview(path);
+  const tx = ['nsbtx', 'nsbmd'].includes(file?.format ?? '');
+  const path = tx
+    ? selected
+    : view.palette || (file?.format === 'nclr' ? selected : companion(files, selected, 'nclr'));
+  const metadata = usePreview(path);
+  const [bankColors, setBankColors] = useState<number[]>([]);
+  useEffect(() => {
+    if (!tx) return;
+    let alive = true;
+    void binary({
+      path,
+      mode: 'palette-colors',
+      texture: view.texture,
+      bank: view.bank,
+      palette: null,
+      screen: null,
+      start: 0,
+      length: 0,
+    })
+      .then((b) => {
+        if (alive) setBankColors(Array.from(new Uint16Array(b)));
+      })
+      .catch((e) => useStore.getState().set({ error: String(e) }));
+    return () => {
+      alive = false;
+    };
+  }, [path, tx, view.texture, view.bank, snapshot]);
+  const preview = tx ? { ...metadata, colors: bankColors } : metadata;
   const [anchor, setAnchor] = useState(0);
   const [hsv, setHsv] = useState([0, 0, 0]);
   useEffect(() => {
@@ -323,7 +360,11 @@ export function Palette() {
   const color = preview.colors[index] ?? 0;
   const rgb = rgb555(color);
   const apply = (indices: number[], colors: number[]) =>
-    void run({ kind: 'Palette', path, indices, colors });
+    void run(
+      tx
+        ? { kind: 'TexturePalette', path, texture: view.texture, bank: view.bank, indices, colors }
+        : { kind: 'Palette', path, indices, colors },
+    );
   return (
     <div className="panel palette-panel">
       <div className="toolbar">
@@ -336,7 +377,11 @@ export function Palette() {
             aria-label="Palette bank"
             type="number"
             min="0"
-            max={Math.max(0, Math.ceil(preview.colors.length / (preview.palette_stride || 16)) - 1)}
+            max={
+              tx
+                ? Math.max(0, metadata.palettes.length - 1)
+                : Math.max(0, Math.ceil(preview.colors.length / (preview.palette_stride || 16)) - 1)
+            }
             value={view.bank}
             onChange={(e) => view.set({ bank: Math.max(0, Number(e.target.value)) })}
           />

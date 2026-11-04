@@ -240,7 +240,27 @@ pub fn merge_vertices(m: &mut Mesh, tolerance: f32) -> Result<()> {
         return Err(error(0, "invalid merge distance"));
     }
     let mut map = vec![];
+    let mut exact = std::collections::HashMap::<Vec<u32>, u32>::new();
     for (i, p) in m.positions.iter().enumerate() {
+        if tolerance == 0. {
+            let bits = |v: f32| if v == 0. { 0 } else { v.to_bits() };
+            let mut key = p.iter().copied().map(bits).collect::<Vec<_>>();
+            if !m.normals.is_empty() {
+                key.extend(m.normals[i].iter().copied().map(bits));
+            }
+            if !m.uvs.is_empty() {
+                key.extend(m.uvs[i].iter().copied().map(bits));
+            }
+            if !m.colors.is_empty() {
+                key.extend(m.colors[i].iter().copied().map(bits));
+            }
+            if !m.joints.is_empty() {
+                key.extend(m.joints[i].iter().map(|&v| v as u32));
+                key.extend(m.weights[i].iter().copied().map(bits));
+            }
+            map.push(*exact.entry(key).or_insert(i as u32));
+            continue;
+        }
         let found = (0..i).find(|&j| {
             p.iter()
                 .zip(m.positions[j])
@@ -279,7 +299,11 @@ pub fn decimate(m: &mut Mesh, target: usize) -> Result<()> {
     while m.indices.len() / 3 > target {
         let mut q = vec![[0f64; 16]; m.positions.len()];
         let mut edges = std::collections::BTreeSet::new();
-        for t in m.indices.chunks_exact(3) {
+        let mut adjacent = vec![Vec::new(); m.positions.len()];
+        for (id, t) in m.indices.chunks_exact(3).enumerate() {
+            for &v in t {
+                adjacent[v as usize].push(id);
+            }
             let p = t
                 .iter()
                 .map(|&i| m.positions[i as usize])
@@ -302,12 +326,20 @@ pub fn decimate(m: &mut Mesh, target: usize) -> Result<()> {
                 edges.insert((a.min(b), a.max(b)));
             }
         }
-        let candidate = edges
+        let mut candidates = edges
             .into_iter()
             .filter_map(|(a, b)| {
                 if !m.joints.is_empty()
                     && (m.joints[a] != m.joints[b] || m.weights[a] != m.weights[b])
                 {
+                    return None;
+                }
+                let shared = adjacent[a]
+                    .iter()
+                    .filter(|&&id| m.indices[id * 3..id * 3 + 3].contains(&(b as u32)))
+                    .count();
+                // Do not erase a small disconnected piece (for example a map floor).
+                if adjacent[a].len() + adjacent[b].len() - shared * 2 < 2 {
                     return None;
                 }
                 let quad: [f64; 16] = std::array::from_fn(|i| q[a][i] + q[b][i]);
@@ -325,11 +357,8 @@ pub fn decimate(m: &mut Mesh, target: usize) -> Result<()> {
                     return None;
                 }
                 // Do not invert remaining faces.
-                for t in m
-                    .indices
-                    .chunks_exact(3)
-                    .filter(|t| t.contains(&(a as u32)) || t.contains(&(b as u32)))
-                {
+                for id in adjacent[a].iter().chain(&adjacent[b]) {
+                    let t = &m.indices[*id * 3..*id * 3 + 3];
                     if t.contains(&(a as u32)) && t.contains(&(b as u32)) {
                         continue;
                     }
@@ -363,21 +392,49 @@ pub fn decimate(m: &mut Mesh, target: usize) -> Result<()> {
                     .sum::<f64>();
                 Some((cost, a, b, p))
             })
-            .min_by(|a, b| a.0.total_cmp(&b.0));
-        let Some((_, a, b, p)) = candidate else {
-            break;
-        };
-        m.positions[a] = p;
-        if !m.uvs.is_empty() {
-            m.uvs[a] = std::array::from_fn(|k| (m.uvs[a][k] + m.uvs[b][k]) * 0.5);
+            .collect::<Vec<_>>();
+        candidates.sort_by(|a, b| {
+            a.0.total_cmp(&b.0)
+                .then_with(|| a.1.cmp(&b.1))
+                .then_with(|| a.2.cmp(&b.2))
+        });
+        let mut touched = vec![false; m.positions.len()];
+        let mut remap: Vec<u32> = (0..m.positions.len() as u32).collect();
+        let mut removed = 0;
+        let mut collapsed = false;
+        for (_, a, b, p) in candidates {
+            if touched[a] || touched[b] {
+                continue;
+            }
+            let shared = adjacent[a]
+                .iter()
+                .filter(|id| m.indices[**id * 3..**id * 3 + 3].contains(&(b as u32)))
+                .count();
+            if m.indices.len() / 3 <= target + removed {
+                break;
+            }
+            // Lock the entire one-ring so batched collapses cannot invert each other's faces.
+            for id in adjacent[a].iter().chain(&adjacent[b]) {
+                for &v in &m.indices[*id * 3..*id * 3 + 3] {
+                    touched[v as usize] = true;
+                }
+            }
+            remap[b] = a as u32;
+            removed += shared;
+            collapsed = true;
+            m.positions[a] = p;
+            if !m.uvs.is_empty() {
+                m.uvs[a] = std::array::from_fn(|k| (m.uvs[a][k] + m.uvs[b][k]) * 0.5);
+            }
+            if !m.colors.is_empty() {
+                m.colors[a] = std::array::from_fn(|k| (m.colors[a][k] + m.colors[b][k]) * 0.5);
+            }
         }
-        if !m.colors.is_empty() {
-            m.colors[a] = std::array::from_fn(|k| (m.colors[a][k] + m.colors[b][k]) * 0.5);
+        if !collapsed {
+            break;
         }
         for i in &mut m.indices {
-            if *i == b as u32 {
-                *i = a as u32;
-            }
+            *i = remap[*i as usize];
         }
         m.indices = m
             .indices

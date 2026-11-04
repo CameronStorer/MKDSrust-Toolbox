@@ -1,7 +1,8 @@
 import { pickDirectory, pickRom, savePath } from './backend';
-import { stages, useStore, workspaces, type Workspace } from './store';
+import { stages, useStore, workspaces, type Workspace, saveProject } from './store';
 import type { Snapshot } from './bindings';
 import { useView } from './view';
+import { language, textPriority } from './friendly';
 import { useScene } from './scene-view';
 export interface Command {
   id: string;
@@ -15,7 +16,12 @@ const always = () => true;
 const project = (s: Snapshot | null) => !!s?.manifest;
 export function openWorkspace(workspace: Workspace) {
   const store = useStore.getState();
-  store.set({ workspace });
+  store.set({
+    workspace,
+    ...(['Explorer', 'Overview', 'Model', 'Track', 'Rig & Animate', 'Code'].includes(workspace)
+      ? { advanced: true }
+      : {}),
+  });
   const formats =
     workspace === 'Text'
       ? ['bmg']
@@ -28,18 +34,24 @@ export function openWorkspace(workspace: Workspace) {
             : [];
   if (
     formats.length &&
-    !store.snapshot?.files.find(
+    (!store.snapshot?.files.find(
       (f) => f.path === store.snapshot?.selected && formats.includes(f.format),
-    )
+    ) ||
+      (workspace === 'Text' && language(store.snapshot?.selected ?? '') !== 'English (US)'))
   ) {
-    const file = store.snapshot?.files.find((f) => f.format === formats[0]);
+    const file =
+      workspace === 'Text'
+        ? [...(store.snapshot?.files ?? [])]
+            .filter((f) => f.format === 'bmg')
+            .sort((a, b) => textPriority(a.path) - textPriority(b.path))[0]
+        : store.snapshot?.files.find((f) => f.format === formats[0]);
     if (file) void store.run({ kind: 'Select', path: file.path });
   }
 }
 export async function openFile(workspace: Workspace, path: string) {
   const store = useStore.getState();
   await store.run({ kind: 'Select', path });
-  if (useStore.getState().snapshot?.selected === path) openWorkspace(workspace);
+  if (useStore.getState().snapshot?.selected === path) store.set({ workspace });
 }
 export async function exportSelection(to: string) {
   const { snapshot, run } = useStore.getState();
@@ -62,7 +74,40 @@ export async function exportSelection(to: string) {
     });
 }
 export const commands: Command[] = [
-  { id: 'project.recipes', title: 'Beginner recipes?', category: 'Project', when: project, run: () => useStore.getState().set({ wizardOpen: true }) },
+  {
+    id: 'file.save',
+    title: 'Save',
+    category: 'File',
+    shortcut: 'Ctrl+S',
+    when: project,
+    run: saveProject,
+  },
+  {
+    id: 'file.saveAs',
+    title: 'Save As?',
+    category: 'File',
+    when: project,
+    run: async () => {
+      await saveProject();
+      if (useStore.getState().error) return;
+      const path = await pickDirectory();
+      if (path) await useStore.getState().run({ kind: 'SaveAs', path });
+    },
+  },
+  {
+    id: 'file.recent',
+    title: 'Open Recent?',
+    category: 'File',
+    when: always,
+    run: () => useStore.getState().set({ workspace: 'Home' }),
+  },
+  {
+    id: 'project.recipes',
+    title: 'Beginner recipes?',
+    category: 'Project',
+    when: project,
+    run: () => useStore.getState().set({ wizardOpen: true }),
+  },
   {
     id: 'file.exportDs',
     title: 'Export for DS…',

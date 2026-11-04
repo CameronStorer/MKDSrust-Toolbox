@@ -8,6 +8,7 @@ fn invalid(s: &str) -> Error {
 }
 #[derive(Clone, Debug, Serialize, Type)]
 pub struct AudioResource {
+    pub bank: Option<u32>,
     pub kind: u8,
     pub index: u32,
     pub name: String,
@@ -30,12 +31,24 @@ pub fn resources(sdat: &Sdat) -> Result<Vec<AudioResource>> {
                 0
             };
             out.push(AudioResource {
+                bank: if kind == 0 {
+                    Some(sdat.bank_for_sequence(i)? as u32)
+                } else {
+                    None
+                },
                 kind: kind as u8,
                 index: i as u32,
                 name: sdat.symbols[kind]
                     .get(i)
                     .and_then(Clone::clone)
                     .unwrap_or_else(|| {
+                        if kind == 0 {
+                            if let Some((_, name)) =
+                                mkds_data::SCENE_MUSIC.iter().find(|(id, _)| *id == i)
+                            {
+                                return (*name).into();
+                            }
+                        }
                         format!(
                             "{} {i}",
                             [
@@ -600,11 +613,46 @@ pub fn preview_sequence(sdat: &Sdat, index: usize, duration: f32) -> Result<Pcm>
     mix(&sequence, &bank, &waves, duration)
 }
 pub fn mix(seq: &Sseq, bank: &Sbnk, waves: &[Option<Swar>], duration: f32) -> Result<Pcm> {
-    let duration = duration.clamp(0.1, 30.);
+    let timeline = if duration == 0. {
+        audio::timeline_once(&seq.events, 48000)?
+    } else {
+        audio::timeline(&seq.events, 48000)?
+    };
+    let natural = timeline
+        .notes
+        .iter()
+        .map(|n| {
+            let end = if n.duration >= 48000 {
+                bank.instruments
+                    .get(n.program as usize)
+                    .and_then(|i| i.note(n.key))
+                    .and_then(|note| {
+                        waves
+                            .get(note.archive as usize)
+                            .and_then(Option::as_ref)
+                            .and_then(|s| s.waves.get(note.wave as usize))
+                    })
+                    .and_then(|w| {
+                        w.samples()
+                            .ok()
+                            .map(|s| s.len() as f64 / w.sample_rate.max(1) as f64)
+                    })
+                    .unwrap_or(1.)
+                    + seconds(n.tick, &timeline.tempos)
+            } else {
+                seconds(n.tick.saturating_add(n.duration), &timeline.tempos)
+            };
+            end
+        })
+        .fold(seconds(timeline.ticks, &timeline.tempos), f64::max);
+    let duration = if duration == 0. {
+        (natural as f32 + 0.1).clamp(0.1, 300.)
+    } else {
+        duration.clamp(0.1, 300.)
+    };
     let rate = 22050u32;
     let count = (duration * rate as f32) as usize;
     let mut pcm = vec![[0f32; 2]; count];
-    let timeline = audio::timeline(&seq.events, 48000)?;
     let mut active = Vec::<(usize, usize)>::new();
     let mut work = 0usize;
     for event in &timeline.notes {
@@ -644,7 +692,7 @@ pub fn mix(seq: &Sseq, bank: &Sbnk, waves: &[Option<Swar>], duration: f32) -> Re
         let gain = event.velocity as f32 / 127. * event.volume as f32 / 127. * 0.25;
         for (i, frame) in pcm.iter_mut().enumerate().take(end).skip(start) {
             work += 1;
-            if work > 30_000_000 {
+            if work > 120_000_000 {
                 return Err(invalid("audio preview work limit exceeded"));
             }
             let t = (i - start) as f64 / rate as f64;
@@ -672,6 +720,9 @@ pub fn mix(seq: &Sseq, bank: &Sbnk, waves: &[Option<Swar>], duration: f32) -> Re
             frame[0] += value * gain * (1. - pan);
             frame[1] += value * gain * pan;
         }
+    }
+    if !pcm.iter().flatten().any(|v| v.abs() > 0.00001) {
+        return Err(invalid("This sequence produced no audible notes. Choose another song or inspect its instruments in Advanced."));
     }
     Ok(Pcm {
         rate,

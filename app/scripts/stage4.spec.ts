@@ -58,7 +58,7 @@ test('audio tree, sample preview and sampled import report', async ({ page }) =>
   page.on('pageerror', (e) => errors.push(String(e)));
   await page.goto('/?workspace=Audio');
   await expect(page.getByRole('tree', { name: 'SDAT tree' })).toBeVisible();
-  await expect(page.getByRole('treeitem', { name: /Original synth tone/ })).toBeVisible();
+  await expect(page.getByRole('treeitem', { name: /course theme/ })).toBeVisible();
   await page.getByRole('treeitem', { name: /Sine waves/ }).click();
   await page.getByRole('button', { name: 'Play preview' }).click();
   await expect(page.getByLabel('Audio preview')).toHaveAttribute('src', /^blob:/);

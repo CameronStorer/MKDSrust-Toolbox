@@ -627,6 +627,53 @@ pub fn track_from(
         .models
         .first_mut()
         .ok_or_else(|| err("source has no model"))?;
+    // Leave room for racers and generated objects in the 2,048-polygon frame.
+    crate::wizard::reduce(m, 1000, 3000)?;
+    let untextured: Vec<_> = m.materials.iter().map(|m| m.texture.is_none()).collect();
+    let (mut textures, mut palettes) = source
+        .textures
+        .take()
+        .map(|t| (t.textures, t.palettes))
+        .unwrap_or_default();
+    for (i, material) in m.materials.iter_mut().enumerate() {
+        if material.texture.is_none() {
+            let colour =
+                if material.diffuse[..3].iter().all(|c| *c < 0.05) || material.diffuse == [1.; 4] {
+                    [0.65, 0.72, 0.55, 1.]
+                } else {
+                    material.diffuse
+                };
+            let rgba: Vec<u8> = colour
+                .iter()
+                .map(|c| (c.clamp(0., 1.) * 255.).round() as u8)
+                .collect();
+            let image = nitro_formats::graphics::Image {
+                width: 8,
+                height: 8,
+                rgba: rgba.repeat(64),
+            };
+            let name = format!("floor_{i}");
+            let (texture, palette) = crate::model::convert_texture(&image, &name, 3, 8)?;
+            material.texture = Some(texture.name.clone());
+            material.palette = Some(palette.name.clone());
+            material.width = 8;
+            material.height = 8;
+            material.diffuse = [1.; 4];
+            textures.push(texture);
+            palettes.push(palette);
+        }
+    }
+    source.textures = Some(nitro_formats::texture::Nsbtx::new(textures, palettes)?);
+    for mesh in &mut m.meshes {
+        if !untextured.get(mesh.material).copied().unwrap_or(false) {
+            continue;
+        }
+        for colour in &mut mesh.colors {
+            if colour[..3].iter().all(|c| *c < 0.01) {
+                *colour = [1.; 4];
+            }
+        }
+    }
     let (lo, hi) = bounds(m)?;
     if hi[0] - lo[0] < 0.01 || hi[2] - lo[2] < 0.01 {
         return Err(err("map needs a nonzero XZ footprint"));

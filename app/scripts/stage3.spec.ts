@@ -46,7 +46,7 @@ test('paint stroke is undoable; PNG conversion previews before apply', async ({ 
   await expect(page.getByRole('button', { name: 'Apply PNG import', exact: true })).toBeHidden();
 });
 test('DS export, imported base provenance and cell playback', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?workspace=Overview');
   await page.getByRole('button', { name: 'Export for DS…', exact: true }).click();
   await page.getByRole('button', { name: 'Choose ROM output…', exact: true }).click();
   await page.getByRole('button', { name: 'Choose patch output…', exact: true }).click();
@@ -67,6 +67,7 @@ test('DS export, imported base provenance and cell playback', async ({ page }) =
     .getByRole('dialog', { name: 'New project', exact: true })
     .getByRole('button', { name: 'Create project', exact: true })
     .click();
+  await page.getByRole('button', { name: 'Overview', exact: true }).click();
   await expect(page.getByText('What this hack changes', { exact: true })).toBeVisible();
   await page.screenshot({ path: path.resolve('../docs/screenshots/imported-base-dark.png') });
   await page.getByRole('button', { name: 'Explorer', exact: true }).click();

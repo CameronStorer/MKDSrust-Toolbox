@@ -18,6 +18,17 @@ use std::path::{Path, PathBuf};
 #[derive(Clone, Debug, Deserialize, Type)]
 #[serde(tag = "kind")]
 pub enum Request {
+    TexturePalette {
+        path: String,
+        texture: u32,
+        bank: u32,
+        indices: Vec<u32>,
+        colors: Vec<u16>,
+    },
+    Save,
+    SaveAs {
+        path: String,
+    },
     Wizard {
         action: crate::wizard::Action,
     },
@@ -140,6 +151,7 @@ pub enum Request {
 }
 #[derive(Clone, Debug, Serialize, Type)]
 pub struct Snapshot {
+    pub game_entries: Vec<crate::game::Entry>,
     pub wizard_catalog: crate::tables::Catalog,
     pub wizard_report: Option<crate::wizard::Report>,
     pub names: Vec<crate::names::Name>,
@@ -268,15 +280,18 @@ impl Service {
                 }
             }
         }
+        let wizard_catalog = session
+            .and_then(|s| crate::tables::catalog(project, s).ok())
+            .unwrap_or_default();
+        let names = session
+            .map(|s| crate::names::list(project, s))
+            .transpose()?
+            .unwrap_or_default();
         Ok(Snapshot {
-            wizard_catalog: session
-                .and_then(|s| crate::tables::catalog(project, s).ok())
-                .unwrap_or_default(),
+            game_entries: crate::game::entries(&files, &wizard_catalog, &names),
+            wizard_catalog,
             wizard_report: self.wizard_report.clone(),
-            names: session
-                .map(|s| crate::names::list(project, s))
-                .transpose()?
-                .unwrap_or_default(),
+            names,
             audio_resources: bytes
                 .filter(|b| b.starts_with(b"SDAT"))
                 .map(|b| {
@@ -332,6 +347,7 @@ impl Service {
         let changes_project = matches!(
             &request,
             Request::Wizard { .. }
+                | Request::TexturePalette { .. }
                 | Request::Model { .. }
                 | Request::GenerateCollision { .. }
                 | Request::PaintCollision { .. }
@@ -350,6 +366,49 @@ impl Service {
                 | Request::ApplyGraphic
         );
         match request {
+            Request::TexturePalette {
+                path,
+                texture,
+                bank,
+                indices,
+                colors,
+            } => {
+                if indices.is_empty() || indices.len() != colors.len() {
+                    return Err(Error::Invalid("choose colours to replace".into()));
+                }
+                let (p, s) = self.editing()?;
+                let original = p.bytes(s, &path)?;
+                let tx = nitro_formats::texture::Nsbtx::parse(&preview::plain(original)?)?;
+                let mut palette = tx
+                    .palettes
+                    .get(bank as usize)
+                    .ok_or_else(|| Error::Invalid("palette outside texture bank".into()))?
+                    .colors
+                    .clone();
+                for (&i, &c) in indices.iter().zip(&colors) {
+                    *palette
+                        .get_mut(i as usize)
+                        .ok_or_else(|| Error::Invalid("colour outside palette".into()))? =
+                        c & 0x7fff;
+                }
+                let t = tx
+                    .textures
+                    .get(texture as usize)
+                    .ok_or_else(|| Error::Invalid("texture outside bank".into()))?;
+                let b = tx.replace(texture as usize, bank as usize, t, Some(&palette))?;
+                let b = if original.first() == Some(&0x10) {
+                    nitro_formats::recompress(original, &b)
+                } else {
+                    b
+                };
+                p.edit(&path, b, "Swap a texture colour", s)?;
+                self.packed = None;
+            }
+            Request::Save => self.editing()?.0.save()?,
+            Request::SaveAs { path } => {
+                let (p, s) = self.editing()?;
+                p.save_as(Path::new(&path), s)?;
+            }
             Request::Wizard { action } => {
                 let (p, s) = self.editing()?;
                 self.wizard_report = Some(crate::wizard::apply(p, s, action)?);
@@ -921,7 +980,7 @@ impl Service {
                 return crate::graphic::paint_data(b, r.texture as usize, r.bank as usize);
             }
             let b = preview::plain(b)?;
-            let colors = if b.starts_with(b"BTX0") {
+            let colors = if b.starts_with(b"BTX0") || b.starts_with(b"BMD0") {
                 nitro_formats::texture::Nsbtx::parse(&b)?
                     .palettes
                     .get(r.bank as usize)
