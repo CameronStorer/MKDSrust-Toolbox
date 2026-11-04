@@ -68,6 +68,14 @@ fn chunk_hashes(b: &[u8]) -> Vec<(String, usize)> {
     }
     out
 }
+/// A ROM file with the project's edits applied (archive members repacked, CARC recompressed by splicing).
+pub fn rebuild_file(
+    path: &str,
+    original: &[u8],
+    edits: &BTreeMap<String, Vec<u8>>,
+) -> Result<Vec<u8>> {
+    rebuild(path, original, edits, 0)
+}
 fn rebuild(
     path: &str,
     original: &[u8],

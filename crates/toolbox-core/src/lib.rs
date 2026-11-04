@@ -1,4 +1,5 @@
 //! Rust owns the ROM session, persistent project, edits and global command history.
+pub mod export;
 pub mod pack;
 pub mod preview;
 pub mod project;

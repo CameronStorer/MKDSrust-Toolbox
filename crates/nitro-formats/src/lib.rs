@@ -1,10 +1,12 @@
 //! Safe, UI-independent Nitro file readers and lossless writers.
 pub mod archive;
 pub mod bmg;
+pub mod bps;
 pub mod detect;
 pub mod graphics;
 pub mod lz77;
 pub mod rom;
+pub mod rom_build;
 pub mod texture;
 pub use lz77::{compress, decompress, recompress};
 

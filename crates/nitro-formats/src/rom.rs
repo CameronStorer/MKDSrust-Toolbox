@@ -26,6 +26,8 @@ pub struct Rom {
     pub revision: u8,
     pub title: String,
     pub files: BTreeMap<String, Range<usize>>,
+    /// Each named file's index in the FAT (its file id).
+    pub file_ids: BTreeMap<String, usize>,
     pub arm9: Range<usize>,
     pub arm7: Range<usize>,
     pub arm9_overlays: Vec<Overlay>,
@@ -53,6 +55,7 @@ impl Rom {
         let names = filenames(&b[fnt.clone()], count)
             .map_err(|e| error(fnt.start + e.offset, e.message))?;
         let mut files = BTreeMap::new();
+        let mut file_ids = BTreeMap::new();
         let mut ranges = vec![];
         for i in 0..count {
             let a = u32le(b, fat.start + i * 8)? as usize;
@@ -65,6 +68,7 @@ impl Rom {
         }
         for (i, name) in names.into_iter().enumerate() {
             if let Some(name) = name {
+                file_ids.insert(name.clone(), i);
                 files.insert(name, ranges[i].clone());
             }
         }
@@ -128,6 +132,7 @@ impl Rom {
                 .trim_end_matches('\0')
                 .into(),
             files,
+            file_ids,
             arm9: range(0x20, 0x2c)?,
             arm7: range(0x30, 0x3c)?,
             arm9_overlays: overlays(range(0x50, 0x54)?)?,
