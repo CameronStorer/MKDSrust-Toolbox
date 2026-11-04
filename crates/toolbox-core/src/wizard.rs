@@ -493,20 +493,102 @@ fn fit(m: &mut Model, donor: &Model) -> Result<()> {
 }
 pub(crate) fn reduce(m: &mut Model, target: usize, vertices: usize) -> Result<()> {
     let total: usize = m.meshes.iter().map(|m| m.indices.len() / 3).sum();
+    let input = m.meshes.clone();
     for mesh in &mut m.meshes {
         let share = ((mesh.indices.len() / 3) * target / total.max(1)).max(1);
         if mesh.indices.len() / 3 > share {
             nitro_formats::model::decimate(mesh, share)?;
         }
     }
-    let tris: usize = m.meshes.iter().map(|m| m.indices.len() / 3).sum();
-    let verts: usize = m.meshes.iter().map(|m| m.positions.len()).sum();
+    let count = |m: &Model| -> (usize, usize) {
+        (
+            m.meshes.iter().map(|m| m.indices.len() / 3).sum(),
+            m.meshes.iter().map(|m| m.positions.len()).sum(),
+        )
+    };
+    let (tris, verts) = count(m);
+    if tris > target || verts > vertices {
+        // Seams (UV islands, separate parts) can stop the careful reduction far above a tiny DS budget, as with
+        // typical downloaded game models. Fall back to vertex clustering on a growing grid, which always converges.
+        // Restart from the input: the careful pass can leave stray far-away vertices on meshes it couldn't finish.
+        m.meshes = input;
+        let (lo, hi) = bounds(m)?;
+        let extent = (0..3).map(|k| hi[k] - lo[k]).fold(0f32, f32::max).max(1e-6);
+        let original = m.meshes.clone();
+        let mut cells = 256f32;
+        loop {
+            m.meshes = original.clone();
+            for mesh in &mut m.meshes {
+                cluster(mesh, lo, extent / cells);
+            }
+            m.meshes.retain(|mesh| !mesh.indices.is_empty());
+            let (t, v) = count(m);
+            if t <= target && v <= vertices || cells < 2. {
+                break;
+            }
+            cells *= 0.85;
+        }
+    }
+    let (tris, verts) = count(m);
     if tris > target || verts > vertices {
         return Err(invalid(
             "safe reduction could not reach the slot budget; simplify the mesh in Model and retry",
         ));
     }
     Ok(())
+}
+/// Merges every vertex in the same grid cell into one (keeping the first vertex's attributes) and drops the
+/// triangles that collapse or repeat.
+fn cluster(m: &mut nitro_formats::model::Mesh, origin: [f32; 3], cell: f32) {
+    let mut first = std::collections::HashMap::new();
+    let remap: Vec<u32> = m
+        .positions
+        .iter()
+        .enumerate()
+        .map(|(i, p)| {
+            let key: [i64; 3] = std::array::from_fn(|k| ((p[k] - origin[k]) / cell).floor() as i64);
+            *first.entry(key).or_insert(i as u32)
+        })
+        .collect();
+    let mut seen = std::collections::HashSet::new();
+    let mut indices = vec![];
+    for t in m.indices.chunks_exact(3) {
+        let t = [
+            remap[t[0] as usize],
+            remap[t[1] as usize],
+            remap[t[2] as usize],
+        ];
+        if t[0] == t[1] || t[1] == t[2] || t[0] == t[2] {
+            continue;
+        }
+        let mut key = t;
+        key.sort_unstable();
+        if seen.insert(key) {
+            indices.extend(t);
+        }
+    }
+    let mut used: Vec<u32> = indices.clone();
+    used.sort_unstable();
+    used.dedup();
+    let new_index: std::collections::HashMap<u32, u32> = used
+        .iter()
+        .enumerate()
+        .map(|(n, &o)| (o, n as u32))
+        .collect();
+    fn pick<T: Copy>(v: &[T], used: &[u32]) -> Vec<T> {
+        if v.is_empty() {
+            vec![]
+        } else {
+            used.iter().map(|&i| v[i as usize]).collect()
+        }
+    }
+    m.positions = pick(&m.positions, &used);
+    m.normals = pick(&m.normals, &used);
+    m.uvs = pick(&m.uvs, &used);
+    m.colors = pick(&m.colors, &used);
+    m.joints = pick(&m.joints, &used);
+    m.weights = pick(&m.weights, &used);
+    m.indices = indices.iter().map(|i| new_index[i]).collect();
 }
 pub fn rigid_rig(m: &mut Model, donor: &Model) -> Result<()> {
     m.bones = donor.bones.clone();
