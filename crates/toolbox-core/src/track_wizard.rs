@@ -603,6 +603,8 @@ pub fn place_object(
     }
     p.edit_many(edits, "Place track object and resources", s)
 }
+/// Height of the lowest point of an imported map.
+pub const MAP_FLOOR_Y: f32 = 600.;
 pub fn track(p: &mut Project, s: &RomSession, o: &TrackOptions) -> Result<Report> {
     let model = crate::model_import::import(std::path::Path::new(&o.source))?;
     track_from(p, s, o, model)
@@ -633,7 +635,9 @@ pub fn track_from(
         ((rect[2] - rect[0]) / (hi[0] - lo[0])).min((rect[3] - rect[1]) / (hi[2] - lo[2])) * 0.85;
     let t = [
         (rect[0] + rect[2] - (lo[0] + hi[0]) * scale) * 0.5,
-        -lo[1] * scale,
+        // Keep the whole collision area above y = 0: with the map's floor at 0 (area minimum below zero) karts
+        // fall through it in game (verified in MKDSrust). Retail courses sit well above zero (Figure-8: about 535).
+        MAP_FLOOR_Y - lo[1] * scale,
         (rect[1] + rect[3] - (lo[2] + hi[2]) * scale) * 0.5,
     ];
     let matrix = math::trs(t, [0., 0., 0., 1.], [scale; 3]);
