@@ -181,6 +181,60 @@ whole-ROM BPS isn't mergeable (standard for ROM hacks), so combine at project le
 - region USA only for now (each region needs its own symbol map);
 - online play (Wiimmfi) out of scope.
 
+## 4b. The beginner path: guided flows (owner's walkthrough, 2026-11-03)
+Every flow is a wizard with sensible defaults taken from the base game. Each step can be skipped, and anything it
+automates can be fixed by hand afterwards. Budgets (polygons, vertices, texture VRAM, palettes, RAM) are enforced
+automatically, and images are resized and colour-reduced for the DS without being asked.
+
+**Character ("New character")**
+1. Drop in any 3D file (glTF/GLB, FBX, OBJ, DAE), rigged or not.
+2. **Auto-reduce:** decimate to the driver budget, and **remove the legs** (a cut plane at the hips, previewed
+   seated in a kart) so no polygons are wasted.
+3. **Auto-rig** to the game's driver skeleton, with weights computed. **Default animations** come from a base character
+   the user picks ("based on Mario"); custom animations are optional.
+4. **Defaults** for voice and sound effects, also from the base character. Optional: their own clips.
+5. Icons and menu portrait: rendered from the model automatically, or the user's own image.
+6. Preview seated in a kart, steering, drifting and winning, then Play.
+
+**Kart ("New kart")**
+1. Drop in any model.
+2. A **placement view** with the base character seated: move, rotate and scale it into place (snap to the seat and
+   ground; "auto-centre under driver").
+3. **Wheels:** click the four wheels (or auto-detect separate wheel meshes) so they spin and steer; or keep the base
+   kart's wheels.
+4. Auto-reduce and textures to DS formats, like characters. Stats (speed, weight...) from a base kart, editable.
+
+**Track ("New track from a model")**
+1. Drop in any map model (even a flat plane).
+2. **Collision generated** from materials and slope: road, offroad, wall, water, lava, fall-off. The user paints
+   fixes on the 3D view with collision brushes.
+3. **Lighting:** a default sky light; the user can place or tune lights.
+4. **Draw the racing line** on a top-down view (pen/polyline). The Toolbox generates the start, checkpoints, CPU
+   routes, item routes and respawns from it. The user can adjust any of them.
+5. **Place things** from a palette of the game's own objects, obstacles and NPCs (drag and drop), plus item box rows
+   along the line.
+6. Minimap generated from the collision/top view.
+7. Validation with Fix buttons, then Play.
+
+**Music & sound**
+- Import any audio file, set the loop points (the waveform view suggests them), and pick quality versus size. Two
+  routes, chosen automatically:
+  - (a) **sampled**: the audio becomes a compressed, looping sample played by a tiny sequence. Sounds like the
+    original, but is limited in length and quality by DS memory;
+  - (b) **MIDI**: import a MIDI (or a converted one) as a sequence with instrument banks. Long songs, small size,
+    "chiptune" sound.
+- Sound effects: replace any effect with an audio clip, which is converted and trimmed.
+
+**Menus**
+- The main menu and other screens are edited with the 2D tools (recolour, repaint, import images) and the text editor.
+- Menu music and sound effects use the audio flow.
+
+**3D editing inside the Toolbox:** what the flows need (transform, cut and delete parts, decimate, assign materials,
+paint collision). Full modelling stays in Blender, with a glTF round trip and live reload.
+
+**Testing everywhere:** Play at any step (emulator, MKDSrust `--race`, flashcart folder).
+**The end:** "Export > Share as patch" writes a BPS that any standard patcher applies to the clean ROM.
+
 ## 5. Architecture
 ```
 MKDSrust-Toolbox/
