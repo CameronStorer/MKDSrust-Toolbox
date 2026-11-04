@@ -145,6 +145,7 @@ impl CourseScene {
                 .into_iter()
                 .collect();
         }
+        if let Some(n) = &nkm {info.issues.extend(crate::track_wizard::validate(n));}
         if let Some(nkm) = &nkm {
             for s in &nkm.sections {
                 for (i, b) in s.entries.iter().enumerate() {

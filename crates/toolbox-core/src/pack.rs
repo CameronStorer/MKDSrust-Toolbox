@@ -237,6 +237,9 @@ pub fn build(project: &Project, session: &RomSession) -> Result<(Vec<u8>, Vec<St
     }
     let mut roots = BTreeSet::new();
     for path in project.edits.keys() {
+        if path.starts_with("system/") {
+            return Err(Error::Invalid("Executable edits require Export for DS as BPS; the v1 package contract only supports NitroFS files".into()));
+        }
         check_path(path)?;
         check_edit_conflicts(project.edits.keys().map(String::as_str), path)?;
         roots.insert(session.root_for(path).unwrap_or(path).to_string());

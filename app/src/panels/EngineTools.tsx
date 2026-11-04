@@ -4,6 +4,11 @@ import { useStore } from '../store';
 import { useScene } from '../scene-view';
 import type { ModelAction, MeshSelection } from '../bindings';
 
+export function RigTools() {
+  const { info, bone, rigBrush, set } = useScene();
+  return <div className="engine-tools"><div className="section-label">RIGID BONE ASSIGNMENT</div><p>Drag over triangles to assign their vertices to one bone. Preview the base clips in the timeline.</p><label>Assign to bone<select aria-label="Rig bone" value={bone} onChange={(e) => set({ bone: Number(e.target.value) })}>{info?.bones.map((b, i) => <option key={i} value={i}>{i} · {b}</option>)}</select></label><button aria-pressed={rigBrush} onClick={() => set({ rigBrush: !rigBrush })}>{rigBrush ? 'Stop painting weights' : 'Paint bone assignments'}</button></div>;
+}
+
 export function ModelTools() {
   const { info, part, set, gizmo, triangle } = useScene();
   const busy = useStore((s) => s.busy);

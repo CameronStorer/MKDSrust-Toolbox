@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
-import { ModelTools, CollisionTools } from './EngineTools';
+import { ModelTools, CollisionTools, RigTools } from './EngineTools';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { binary, inspectScene } from '../backend';
 import { useStore } from '../store';
@@ -10,6 +10,7 @@ import { layerDefaults, useScene, type Layer } from '../scene-view';
 import { exportSelection } from '../commands';
 import type { SceneEntry, SceneInfo } from '../bindings';
 import { bytes } from './Properties';
+import { TrackPoint } from './TrackPoint';
 
 function label(text: string, size: number) {
   const canvas = document.createElement('canvas');
@@ -271,6 +272,7 @@ export function SceneViewport() {
     const raycaster = new THREE.Raycaster();
     let down = new THREE.Vector2();
     const stroke = new Set<number>();
+    const rigStroke = new Map<number, Set<number>>();
     const cast = (e: PointerEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
       raycaster.setFromCamera(
@@ -283,6 +285,15 @@ export function SceneViewport() {
     };
     const paint = (e: PointerEvent) => {
       const state = useScene.getState();
+      if (!track && state.rigBrush && content && useStore.getState().workspace === 'Rig & Animate') {
+        cast(e);
+        const hit = raycaster.intersectObject(content, true).find((hit) => typeof hit.object.userData.part === 'number');
+        if (hit && hit.faceIndex !== undefined && hit.faceIndex !== null) {
+          const part = hit.object.userData.part as number;
+          const faces = rigStroke.get(part) ?? new Set<number>(); faces.add(hit.faceIndex); rigStroke.set(part, faces);
+        }
+        return;
+      }
       if (
         !track ||
         !state.brush ||
@@ -306,6 +317,7 @@ export function SceneViewport() {
       down = new THREE.Vector2(e.clientX, e.clientY);
       if (e.button === 0) {
         stroke.clear();
+        rigStroke.clear();
         paint(e);
       }
     };
@@ -313,6 +325,11 @@ export function SceneViewport() {
       if (e.buttons & 1) paint(e);
     };
     const pointerup = (e: PointerEvent) => {
+      if (e.button === 0 && rigStroke.size) {
+        const state = useScene.getState();
+        if (state.info?.model_path) for (const [part, triangles] of rigStroke) void useStore.getState().run({ kind: 'Wizard', action: { kind: 'RigPaint', path: state.info.model_path, part, triangles: [...triangles], bone: state.bone } });
+        rigStroke.clear(); return;
+      }
       if (e.button === 0 && stroke.size) {
         const state = useScene.getState();
         if (state.info?.kcl_path)
@@ -633,7 +650,7 @@ export function SceneProperties() {
   const budget = info?.budget;
   return (
     <div className="panel properties">
-      {workspace === 'Model' ? <ModelTools /> : <CollisionTools />}
+      {workspace === 'Rig & Animate' ? <RigTools /> : workspace === 'Model' ? <ModelTools /> : <CollisionTools />}
       <div className="section-label">DS BUDGET · GEOMETRY ESTIMATE</div>
       {budget && (
         <>
@@ -660,10 +677,11 @@ export function SceneProperties() {
         </>
       )}
       <div className="section-label">
-        {entry ? `${entry.section} ${entry.index} · READ ONLY` : 'SELECTION'}
+        {entry ? `${entry.section} ${entry.index}` : 'SELECTION'}
       </div>
       {entry ? (
         <>
+          {info?.nkm_path && <TrackPoint key={`${selected}:${entry.raw.join()}`} entry={entry} path={info.nkm_path} />}
           <dl>
             {entry.fields.map(([name, value]) => (
               <div className="budget-row" key={name}>

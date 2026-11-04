@@ -14,6 +14,11 @@ struct Cli {
 }
 #[derive(Subcommand)]
 enum Command {
+    /// Apply a beginner recipe (JSON action) as one undoable project edit.
+    Recipe {
+        project: PathBuf,
+        recipe: PathBuf,
+    },
     Ls {
         rom: PathBuf,
         path: Option<String>,
@@ -199,6 +204,12 @@ fn run(cli: Cli) -> Result<()> {
             {
                 return Err(Error::Invalid("validation failed".into()));
             }
+        }
+        Command::Recipe { project, recipe } => {
+            let action = serde_json::from_slice(&std::fs::read(recipe)?)?;
+            let (mut p, s) = Service::project_session(&project)?;
+            let report = toolbox_core::wizard::apply(&mut p, &s, action)?;
+            println!("{}", serde_json::to_string_pretty(&report)?);
         }
     }
     Ok(())

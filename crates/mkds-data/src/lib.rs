@@ -3,6 +3,28 @@ pub const TEXTURE_VRAM: usize = 512 * 1024;
 pub const PALETTE_VRAM: usize = 96 * 1024;
 pub const MAX_ROM: usize = 256 * 1024 * 1024;
 pub const MAX_MESSAGE_UNITS: usize = 1024;
+pub const ARM9_BASE: u32 = 0x0200_0000;
+pub const CUP_TABLE: u32 = 0x0215_4128;
+pub const COURSE_TABLE: u32 = 0x0215_4228;
+pub const MUSIC_TABLE: u32 = 0x0215_316c;
+pub const MUSIC_BRANCHES: u32 = 0x0202_554c;
+pub const SOUND_HEAP: u32 = 716_800;
+pub const SAMPLE_TARGET: u32 = 250 * 1024;
+pub const CHARACTERS: &[(&str, &str)] = &[
+    ("MR", "mario"),
+    ("DK", "donkey"),
+    ("KO", "kinopio"),
+    ("KP", "koopa"),
+    ("PC", "peach"),
+    ("WR", "wario"),
+    ("YS", "yoshi"),
+    ("LG", "luigi"),
+    ("KA", "karon"),
+    ("DS", "daisy"),
+    ("WL", "waluigi"),
+    ("RB", "robo"),
+    ("HH", "heyho"),
+];
 /// MKDS attributes: type occupies bits 8–12; wall/floor are separate flags.
 /// Layout reference: Mario Kart Toolbox (MIT). Values are format facts.
 pub const fn collision_type(attribute: u16) -> u16 {

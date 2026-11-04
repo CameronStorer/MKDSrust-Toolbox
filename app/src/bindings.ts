@@ -53,14 +53,22 @@ async scene(path: string) : Promise<Result<SceneInfo, string>> {
 
 /** user-defined types **/
 
+export type Action = { kind: "Character"; options: CharacterOptions } | { kind: "Kart"; options: KartOptions } | { kind: "Track"; options: TrackOptions } | { kind: "Cup"; slot: number; courses: [number, number, number, number] } | { kind: "Music"; course: number; source: string; options: SongOptions } | { kind: "Name"; path: string; index: number; text: string } | { kind: "Icon"; tiles: string; palette: string; cells: string; index: number; source: string } | { kind: "Rig"; path: string; part: number; vertices: number[]; bone: number } | { kind: "Table"; overlay: number | null; address: number; values: Value[]; uncompressed: boolean } | { kind: "NkmPoint"; path: string; section: string; index: number; position: [number, number, number] }
 export type AudioResource = { kind: number; index: number; name: string; file: number; bytes: number; samples: number }
 export type BaseChange = { path: string; change: string }
 export type BaseConfig = { clean_sha256: string; patch: string; source_name: string; source_sha256: string }
 export type BenchSnapshot = { courses: Course[]; games: GameInstall[]; running: boolean; logs: string[]; last_run: RunSummary | null }
 export type BinaryRequest = { path: string; mode: string; start: number; length: number; palette: string | null; screen: string | null; texture: number; bank: number }
 export type Budget = { polygons: number; vertices: number; texture_bytes: number; palette_bytes: number; matrices: number; reasons: string[] }
+export type Catalog = { courses: CourseSlot[]; cups: number[][] }
 export type CellFrame = { cell: number; duration: number }
+export type CharacterOptions = { slot: number; base: number; source: string; 
+/**
+ * Fraction of source height to remove before fitting (zero skips cutting).
+ */
+hips: number; rotation: [number, number, number, number] }
 export type Course = { id: number; name: string }
+export type CourseSlot = { id: number; stem: string; variants: boolean; music_record: number | null; sequence: number | null }
 export type ExportResult = { 
 /**
  * ROM files that changed (archive edits roll up to their archive).
@@ -79,24 +87,37 @@ export type GameInstall = { id: string; name: string; path: string }
 export type HistoryItem = { title: string; applied: boolean }
 export type ImportInfo = { width: number; height: number; colors: number; texture_bytes: number; palette_bytes: number }
 export type Issue = { severity: Severity; location: string; message: string; why: string; fix: string | null }
+export type KartOptions = { slot: number; base: number; source: string; tire: string; 
+/**
+ * Kart-object units as displayed in the offset table, FL/FR/RL/RR.
+ */
+wheels: [([number, number, number]), ([number, number, number]), ([number, number, number]), ([number, number, number])] | null; seat: [number, number, number]; translation: [number, number, number]; rotation: [number, number, number, number]; scale: number }
 export type Manifest = { id: string; name: string; version: string; author: string; type: string; description?: string; platforms?: string[] }
 export type MeshSelection = { kind: "Part" } | { kind: "Material"; material: number } | { kind: "Connected"; triangle: number } | { kind: "Box"; minimum: [number, number, number]; maximum: [number, number, number] } | { kind: "Triangles"; triangles: number[] }
 export type ModelAction = { kind: "Import"; source: string } | { kind: "Transform"; part: number; translation: [number, number, number]; rotation: [number, number, number, number]; scale: [number, number, number] } | { kind: "Decimate"; part: number; target: number } | { kind: "Cut"; part: number; normal: [number, number, number]; distance: number; positive: boolean } | { kind: "Delete"; part: number; selection: MeshSelection } | { kind: "Merge"; part: number; distance: number } | { kind: "Normals"; part: number }
 export type ModelPart = { name: string; triangles: number; material: number }
+export type Name = { group: string; path: string; index: number; text: string }
 export type PackResult = { path: string; size: number; warnings: string[] }
 export type Preview = { cells: number[]; sequences: CellFrame[][]; colors: number[]; palette_stride: number; messages: TextMessage[]; textures: string[]; palettes: string[]; width: number; height: number }
 export type RaceSetup = { course: number | null; character: number | null; kart: number | null; racers: number | null }
-export type Request = { kind: "Model"; path: string; action: ModelAction } | { kind: "GenerateCollision"; model: string; path: string } | { kind: "PaintCollision"; path: string; triangles: number[]; attribute: number } | { kind: "ImportSong"; path: string; source: string; options: SongOptions } | { kind: "ReplaceEffect"; path: string; source: string; archive: number; sample: number; rate: number; encoding: number } | { kind: "Snapshot" } | { kind: "OpenRom"; path: string } | { kind: "CreateProject"; path: string; manifest: Manifest } | { kind: "CreateFromBase"; path: string; manifest: Manifest; source: string } | { kind: "ExportDs"; rom: string | null; bps: string | null } | { kind: "ShowInFolder"; path: string } | { kind: "Paint"; path: string; palette: string | null; texture: number; bank: number; points: ([number, number, number])[] } | { kind: "ImportGraphic"; path: string; source: string; palette: string | null; texture: number; bank: number; format: number; dither: boolean } | { kind: "ApplyGraphic" } | { kind: "CancelGraphic" } | { kind: "OpenProject"; path: string } | { kind: "Select"; path: string } | { kind: "Palette"; path: string; indices: number[]; colors: number[] } | { kind: "Text"; path: string; index: number; tokens: TextToken[] } | { kind: "Revert"; path: string } | { kind: "UpdateManifest"; manifest: Manifest } | { kind: "Undo" } | { kind: "Redo" } | { kind: "Pack" } | { kind: "Play"; game: string } | { kind: "Stop" } | { kind: "Reload"; game: string } | { kind: "Courses"; game: string } | { kind: "Validate" } | { kind: "Settings"; settings: Settings } | { kind: "Extract"; path: string; output: string } | { kind: "Export"; path: string; output: string; to: string; palette: string | null; screen: string | null; texture: number; bank: number }
+export type Report = { files: string[]; warnings: string[]; polygons: number }
+export type Request = { kind: "Wizard"; action: Action } | { kind: "Model"; path: string; action: ModelAction } | { kind: "GenerateCollision"; model: string; path: string } | { kind: "PaintCollision"; path: string; triangles: number[]; attribute: number } | { kind: "ImportSong"; path: string; source: string; options: SongOptions } | { kind: "ReplaceEffect"; path: string; source: string; archive: number; sample: number; rate: number; encoding: number } | { kind: "Snapshot" } | { kind: "OpenRom"; path: string } | { kind: "CreateProject"; path: string; manifest: Manifest } | { kind: "CreateFromBase"; path: string; manifest: Manifest; source: string } | { kind: "ExportDs"; rom: string | null; bps: string | null } | { kind: "ShowInFolder"; path: string } | { kind: "Paint"; path: string; palette: string | null; texture: number; bank: number; points: ([number, number, number])[] } | { kind: "ImportGraphic"; path: string; source: string; palette: string | null; texture: number; bank: number; format: number; dither: boolean } | { kind: "ApplyGraphic" } | { kind: "CancelGraphic" } | { kind: "OpenProject"; path: string } | { kind: "Select"; path: string } | { kind: "Palette"; path: string; indices: number[]; colors: number[] } | { kind: "Text"; path: string; index: number; tokens: TextToken[] } | { kind: "Revert"; path: string } | { kind: "UpdateManifest"; manifest: Manifest } | { kind: "Undo" } | { kind: "Redo" } | { kind: "Pack" } | { kind: "Play"; game: string } | { kind: "Stop" } | { kind: "Reload"; game: string } | { kind: "Courses"; game: string } | { kind: "Validate" } | { kind: "Settings"; settings: Settings } | { kind: "Extract"; path: string; output: string } | { kind: "Export"; path: string; output: string; to: string; palette: string | null; screen: string | null; texture: number; bank: number }
 export type RunSummary = { package_size: number; install_path: string; executable: string; exit_code: number | null; stopped: boolean }
 export type SceneEntry = { section: string; index: number; position: [number, number, number] | null; end: [number, number, number] | null; fields: ([string, string])[]; raw: number[] }
 export type SceneInfo = { parts: ModelPart[]; path: string; model_path: string | null; kcl_path: string | null; nkm_path: string | null; materials: string[]; bones: string[]; animations: string[]; entries: SceneEntry[]; budget: Budget; issues: string[]; collision_types: number[] }
 export type Settings = { allow_pc_only: boolean; play_target: string; emulator_path: string; flashcart_path: string; race: RaceSetup; rom_path: string; install_path: string; theme: string; navigation: string; camera_speed: number; keybindings: Partial<{ [key in string]: string }> }
 export type Severity = "Warning" | "Error"
-export type Snapshot = { audio_resources: AudioResource[]; song_report: SongReport | null; graphic_import: ImportInfo | null; base: BaseConfig | null; base_changes: BaseChange[]; ds_export: ExportResult | null; compatibility: string; bench: BenchSnapshot; rom_path: string; game: string; rom_hash: string; project_path: string; manifest: Manifest | null; files: FileNode[]; edited: string[]; history: HistoryItem[]; selected: string; preview: Preview; settings: Settings; warnings: string[]; issues: Issue[]; pack: PackResult | null; can_undo: boolean; can_redo: boolean }
+export type Snapshot = { wizard_catalog: Catalog; wizard_report: Report | null; names: Name[]; audio_resources: AudioResource[]; song_report: SongReport | null; graphic_import: ImportInfo | null; base: BaseConfig | null; base_changes: BaseChange[]; ds_export: ExportResult | null; compatibility: string; bench: BenchSnapshot; rom_path: string; game: string; rom_hash: string; project_path: string; manifest: Manifest | null; files: FileNode[]; edited: string[]; history: HistoryItem[]; selected: string; preview: Preview; settings: Settings; warnings: string[]; issues: Issue[]; pack: PackResult | null; can_undo: boolean; can_redo: boolean }
 export type SongOptions = { sequence: number; bank: number; route: string; rate: number; stereo: boolean; encoding: number; loop_start: number | null; loop_end: number | null }
 export type SongReport = { ram_bytes: number; loop_sample: number | null; route: string }
 export type TextMessage = { id: number; tokens: TextToken[]; preview: string }
 export type TextToken = { kind: "Text"; value: string } | { kind: "Code"; value: number[] }
+export type TrackOptions = { course: number; source: string; 
+/**
+ * Top-down polyline in normalized source bounds, X then Z. The final edge closes automatically.
+ */
+line: ([number, number])[]; width: number; laps: number; item_rows: number }
+export type Value = { kind: "U8"; value: number } | { kind: "U16"; value: number } | { kind: "U32"; value: number } | { kind: "I32"; value: number } | { kind: "Fx32"; value: number }
 
 /** tauri-specta globals **/
 

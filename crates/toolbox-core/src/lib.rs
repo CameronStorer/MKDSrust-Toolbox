@@ -6,8 +6,10 @@ pub mod collision;
 pub mod engine;
 pub mod export;
 pub mod graphic;
+pub mod icon;
 pub mod model;
 pub mod model_import;
+pub mod names;
 pub mod pack;
 pub mod preview;
 pub mod project;
@@ -17,7 +19,10 @@ pub mod session;
 pub mod settings;
 mod source;
 pub mod synthetic;
+pub mod tables;
+pub mod track_wizard;
 pub mod validation;
+pub mod wizard;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {

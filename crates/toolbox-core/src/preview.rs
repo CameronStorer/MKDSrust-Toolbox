@@ -69,7 +69,7 @@ pub fn preview(bytes: &[u8]) -> Result<Preview> {
             })
             .collect();
     }
-    if b.starts_with(b"BTX0") {
+    if b.starts_with(b"BTX0") || (b.starts_with(b"BMD0") && Nsbtx::parse(&b).is_ok()) {
         let t = Nsbtx::parse(&b)?;
         p.textures = t.textures.iter().map(|t| t.name.clone()).collect();
         p.colors = t
@@ -149,7 +149,7 @@ pub fn image(
             rgba,
         });
     }
-    if b.starts_with(b"BTX0") {
+    if b.starts_with(b"BTX0") || b.starts_with(b"BMD0") {
         return Ok(Nsbtx::parse(&b)?.decode(texture, bank)?);
     }
     let screen = if b.starts_with(b"RCSN") {

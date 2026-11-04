@@ -44,6 +44,22 @@ pub fn build_rom(
     let mut changes = BTreeMap::new();
     for path in project.edits.keys() {
         check_path(path)?;
+        if path.starts_with("system/") {
+            let mut bytes = project.bytes(session, path)?.to_vec();
+            if path == nitro_formats::executable::ARM9 {
+                let base = u32::from_le_bytes(session.rom.bytes()[0x28..0x2c].try_into().unwrap());
+                let uncompressed = nitro_formats::executable::module_params(&bytes)
+                    .is_some_and(|at| bytes[at + 20..at + 24] == [0; 4]);
+                bytes = nitro_formats::executable::encode_arm9(
+                    &bytes,
+                    base,
+                    session.rom.arm9.len(),
+                    uncompressed,
+                )?;
+            }
+            changes.insert(path.clone(), bytes);
+            continue;
+        }
         let root = session.root_for(path).ok_or_else(|| {
             Error::Invalid(format!("{path} is a new file; adding files to the ROM isn't supported by Export for DS yet"))
         })?;

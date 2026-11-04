@@ -21,7 +21,7 @@ export function openWorkspace(workspace: Workspace) {
       ? ['bmg']
       : workspace === 'Texture & 2D'
         ? ['nclr', 'ncgr', 'nscr', 'nsbtx', 'ncer', 'nanr']
-        : workspace === 'Model'
+        : workspace === 'Model' || workspace === 'Rig & Animate'
           ? ['nsbmd']
           : workspace === 'Track'
             ? ['nkm', 'kcl', 'nsbmd']
@@ -62,6 +62,7 @@ export async function exportSelection(to: string) {
     });
 }
 export const commands: Command[] = [
+  { id: 'project.recipes', title: 'Beginner recipes?', category: 'Project', when: project, run: () => useStore.getState().set({ wizardOpen: true }) },
   {
     id: 'file.exportDs',
     title: 'Export for DS…',

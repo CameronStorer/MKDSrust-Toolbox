@@ -18,6 +18,8 @@ interface SceneState {
   triangle: number;
   gizmo: 'off' | 'translate' | 'rotate' | 'scale';
   brush: boolean;
+  rigBrush: boolean;
+  bone: number;
   attribute: number;
   info: SceneInfo | null;
   selected: string;
@@ -36,6 +38,8 @@ export const useScene = create<SceneState>((set) => ({
   triangle: 0,
   gizmo: 'off',
   brush: false,
+  rigBrush: false,
+  bone: 0,
   attribute: 0x8000,
   info: null,
   selected: '',

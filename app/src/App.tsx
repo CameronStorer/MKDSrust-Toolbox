@@ -40,6 +40,7 @@ import { SceneViewport, SceneOutliner, SceneProperties, Overlays, Timeline } fro
 import { TestBench, GameLog } from './panels/TestBench';
 import { useScene } from './scene-view';
 import { AudioWorkspace } from './panels/Audio';
+import { Wizards } from './Wizards';
 const components: Record<string, React.FunctionComponent<IDockviewPanelProps>> = {
   overview: Overview,
   audio: AudioWorkspace,
@@ -65,7 +66,7 @@ function Preview() {
   const snapshot = useStore((s) => s.snapshot);
   const file = snapshot?.files.find((f) => f.path === snapshot.selected);
   if (file?.format === 'bmg') return <TextEditor />;
-  if (file && ['nclr', 'ncgr', 'nscr', 'nsbtx', 'ncer', 'nanr'].includes(file.format))
+  if (file && ['nclr', 'ncgr', 'nscr', 'nsbtx', 'nsbmd', 'ncer', 'nanr'].includes(file.format))
     return <Texture />;
   return (
     <div className="panel empty">
@@ -115,7 +116,7 @@ function Dock() {
                 ? 'texture'
                 : workspace === 'Text'
                   ? 'text'
-                  : workspace === 'Model' || workspace === 'Track'
+                  : workspace === 'Model' || workspace === 'Track' || workspace === 'Rig & Animate'
                     ? 'scene'
                     : workspace === 'Audio'
                       ? 'audio'
@@ -138,13 +139,13 @@ function Dock() {
         component:
           workspace === 'Text'
             ? 'messages'
-            : workspace === 'Track' || workspace === 'Model'
+            : workspace === 'Track' || workspace === 'Model' || workspace === 'Rig & Animate'
               ? 'sceneOutliner'
               : 'explorer',
         title:
           workspace === 'Text'
             ? 'Messages'
-            : workspace === 'Track' || workspace === 'Model'
+            : workspace === 'Track' || workspace === 'Model' || workspace === 'Rig & Animate'
               ? 'Outliner'
               : 'Explorer',
         position: { referencePanel: center.id, direction: 'left' },
@@ -155,7 +156,7 @@ function Dock() {
         component:
           workspace === 'Texture & 2D'
             ? 'palette'
-            : workspace === 'Model' || workspace === 'Track'
+            : workspace === 'Model' || workspace === 'Track' || workspace === 'Rig & Animate'
               ? 'sceneProperties'
               : 'properties',
         title: workspace === 'Texture & 2D' ? 'Palette' : 'Properties',
@@ -178,7 +179,7 @@ function Dock() {
           initialHeight: 235,
         });
       }
-      if (workspace === 'Model')
+      if (workspace === 'Model' || workspace === 'Rig & Animate')
         dock.addPanel({
           id: 'timeline',
           component: 'timeline',
@@ -327,6 +328,7 @@ export function App() {
           </div>
         ))}
         <div className="grow" />
+        <button disabled={!snapshot?.manifest} onClick={() => set({ wizardOpen: true })}>Beginner recipes</button>
         {isMock && <span className="demo-label">SYNTHETIC DEMO</span>}
         <span className="project-name">
           {snapshot?.manifest?.name ?? 'No project'}
@@ -424,7 +426,7 @@ export function App() {
         <span>/</span>
         <strong>{workspace}</strong>
         <div className="grow" />
-        {(workspace === 'Model' || workspace === 'Track') && sceneInfo && (
+        {(workspace === 'Model' || workspace === 'Track' || workspace === 'Rig & Animate') && sceneInfo && (
           <span>
             {sceneInfo.budget.polygons.toLocaleString()} polys ·{' '}
             {sceneInfo.budget.vertices.toLocaleString()} verts · {sceneInfo.issues.length} course
@@ -493,6 +495,7 @@ export function App() {
         <span className="stage-label">DS AUTHORING</span>
       </footer>
       {settingsOpen && <Settings />}
+      {useStore((s) => s.wizardOpen) && <Wizards />}
       {exportOpen && <ExportDialog />}
       {createOpen && <CreateDialog />}
       {paletteOpen && <CommandPalette />}

@@ -18,6 +18,9 @@ use std::path::{Path, PathBuf};
 #[derive(Clone, Debug, Deserialize, Type)]
 #[serde(tag = "kind")]
 pub enum Request {
+    Wizard {
+        action: crate::wizard::Action,
+    },
     Model {
         path: String,
         action: crate::engine::ModelAction,
@@ -137,6 +140,9 @@ pub enum Request {
 }
 #[derive(Clone, Debug, Serialize, Type)]
 pub struct Snapshot {
+    pub wizard_catalog: crate::tables::Catalog,
+    pub wizard_report: Option<crate::wizard::Report>,
+    pub names: Vec<crate::names::Name>,
     pub audio_resources: Vec<crate::audio::AudioResource>,
     pub song_report: Option<crate::engine::SongReport>,
     pub graphic_import: Option<crate::graphic::ImportInfo>,
@@ -174,6 +180,7 @@ pub struct BinaryRequest {
     pub bank: u32,
 }
 pub struct Service {
+    pub wizard_report: Option<crate::wizard::Report>,
     pub song_report: Option<crate::engine::SongReport>,
     pub graphic_import: Option<crate::graphic::ImportDraft>,
     pub ds_export: Option<crate::export::ExportResult>,
@@ -189,6 +196,7 @@ pub struct Service {
 impl Default for Service {
     fn default() -> Self {
         Self {
+            wizard_report: None,
             song_report: None,
             graphic_import: None,
             ds_export: None,
@@ -261,6 +269,14 @@ impl Service {
             }
         }
         Ok(Snapshot {
+            wizard_catalog: session
+                .and_then(|s| crate::tables::catalog(project, s).ok())
+                .unwrap_or_default(),
+            wizard_report: self.wizard_report.clone(),
+            names: session
+                .map(|s| crate::names::list(project, s))
+                .transpose()?
+                .unwrap_or_default(),
             audio_resources: bytes
                 .filter(|b| b.starts_with(b"SDAT"))
                 .map(|b| {
@@ -315,7 +331,8 @@ impl Service {
         self.bench.poll()?;
         let changes_project = matches!(
             &request,
-            Request::Model { .. }
+            Request::Wizard { .. }
+                | Request::Model { .. }
                 | Request::GenerateCollision { .. }
                 | Request::PaintCollision { .. }
                 | Request::ImportSong { .. }
@@ -333,6 +350,11 @@ impl Service {
                 | Request::ApplyGraphic
         );
         match request {
+            Request::Wizard { action } => {
+                let (p, s) = self.editing()?;
+                self.wizard_report = Some(crate::wizard::apply(p, s, action)?);
+                self.packed = None;
+            }
             Request::Model { path, action } => {
                 let (p, s) = self.editing()?;
                 crate::engine::model(p, s, &path, action)?;

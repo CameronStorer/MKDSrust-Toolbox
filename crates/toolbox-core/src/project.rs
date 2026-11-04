@@ -280,10 +280,14 @@ impl Project {
         )
     }
     fn store(&mut self, path: &str, bytes: &Option<Vec<u8>>) -> Result<()> {
+        check_path(path)?;
         if self.root.as_os_str().is_empty() {
-            return Err(Error::Invalid(
-                "in-memory projects cannot save to disk".into(),
-            ));
+            if let Some(b) = bytes {
+                self.edits.insert(path.into(), b.clone());
+            } else {
+                self.edits.remove(path);
+            }
+            return Ok(());
         }
         check_path(path)?;
         let dest = self.root.join("edits").join(path);

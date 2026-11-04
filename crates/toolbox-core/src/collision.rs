@@ -19,7 +19,7 @@ impl Default for AttributeTable {
             floor: mkds_data::collision_attribute(0, false, true),
             wall: mkds_data::collision_attribute(8, true, false),
             floor_angle_degrees: 50.,
-            materials: vec![
+            materials: vec![("boost".into(),mkds_data::collision_attribute(18,false,true)),("wading".into(),mkds_data::collision_attribute(3,false,true)),
                 (
                     "road".into(),
                     mkds_data::collision_attribute(0, false, true),
@@ -34,15 +34,15 @@ impl Default for AttributeTable {
                 ),
                 (
                     "water".into(),
-                    mkds_data::collision_attribute(17, false, true),
+                    mkds_data::collision_attribute(3, false, true),
                 ),
                 (
                     "lava".into(),
-                    mkds_data::collision_attribute(10, false, true),
+                    mkds_data::collision_attribute(15, false, false),
                 ),
                 (
                     "fall".into(),
-                    mkds_data::collision_attribute(11, false, true),
+                    mkds_data::collision_attribute(15, false, false),
                 ),
                 (
                     "wall".into(),

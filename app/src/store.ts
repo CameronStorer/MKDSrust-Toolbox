@@ -16,7 +16,6 @@ export const workspaces = [
 ] as const;
 export type Workspace = (typeof workspaces)[number];
 export const stages: Partial<Record<Workspace, number>> = {
-  'Rig & Animate': 5,
   Code: 7,
 };
 interface State {
@@ -29,6 +28,7 @@ interface State {
   exportOpen: boolean;
   createOpen: boolean;
   paletteOpen: boolean;
+  wizardOpen: boolean;
   layoutVersion: number;
   set: (state: Partial<Omit<State, 'set' | 'run'>>) => void;
   run: (request: Request) => Promise<void>;
@@ -45,6 +45,7 @@ export const useStore = create<State>((set) => ({
   exportOpen: false,
   createOpen: false,
   paletteOpen: false,
+  wizardOpen: false,
   layoutVersion: 0,
   set,
   run: (request) => {

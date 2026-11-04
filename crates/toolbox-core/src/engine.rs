@@ -256,8 +256,8 @@ pub fn import_song(
             options.loop_start,
             options.loop_end,
         )?;
-        if song.ram_bytes > 2 * 1024 * 1024 {
-            return Err(Error::Invalid(format!("Sampled song needs {} bytes; reduce rate, use mono or trim below the 2 MiB audio budget",song.ram_bytes)));
+        if song.ram_bytes > mkds_data::SOUND_HEAP as usize {
+            return Err(Error::Invalid(format!("Sampled song needs {} bytes; reduce rate, use mono or trim below the 700 KiB sound heap (aim under 250 KiB)",song.ram_bytes)));
         }
         report = SongReport {
             ram_bytes: song.ram_bytes as u32,

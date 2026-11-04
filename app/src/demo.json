@@ -1,4 +1,10 @@
 {
+  "wizard_catalog": {
+    "courses": [],
+    "cups": []
+  },
+  "wizard_report": null,
+  "names": [],
   "audio_resources": [],
   "song_report": null,
   "graphic_import": null,
@@ -209,12 +215,7 @@
   "edited": [
     "data/Studio/demo.carc/art/studio.nclr"
   ],
-  "history": [
-    {
-      "title": "Shift palette toward lavender",
-      "applied": true
-    }
-  ],
+  "history": [],
   "selected": "data/Studio/demo.carc/art/studio.nclr",
   "preview": {
     "cells": [],
@@ -505,6 +506,6 @@
   "warnings": [],
   "issues": [],
   "pack": null,
-  "can_undo": true,
+  "can_undo": false,
   "can_redo": false
 }

@@ -67,6 +67,22 @@ impl RomSession {
             let bytes = s.rom.file(&path).unwrap_or_default().to_vec();
             s.visit(path, bytes, range.start, None, 0, &mut budget)?;
         }
+        if let Ok(bytes) =
+            nitro_formats::executable::decode_arm9(&s.rom.bytes()[s.rom.arm9.clone()])
+        {
+            s.files
+                .insert(nitro_formats::executable::ARM9.into(), bytes);
+        }
+        for overlay in &s.rom.arm9_overlays {
+            let stored = s.rom.file_by_id(overlay.file_id)?;
+            let bytes = if overlay.flags & 0x0100_0000 != 0 {
+                nitro_formats::blz::decompress(stored)?
+            } else {
+                stored.to_vec()
+            };
+            s.files
+                .insert(nitro_formats::executable::overlay_path(overlay.id), bytes);
+        }
         Ok(s)
     }
     fn visit(

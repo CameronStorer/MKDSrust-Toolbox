@@ -2,10 +2,12 @@
 pub mod animation;
 pub mod archive;
 pub mod audio;
+pub mod blz;
 pub mod bmg;
 pub mod bps;
 pub mod cell;
 pub mod detect;
+pub mod executable;
 mod g3d;
 pub mod graphics;
 pub mod kcl;

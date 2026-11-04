@@ -157,7 +157,7 @@ function RasterTexture() {
           >
             <option value="">Follow selection</option>
             {files
-              .filter((f) => ['ncgr', 'nsbtx'].includes(f.format))
+              .filter((f) => ['ncgr', 'nsbtx', 'nsbmd'].includes(f.format))
               .map((f) => (
                 <option key={f.path} value={f.path}>
                   {f.name}
