@@ -473,7 +473,7 @@ export function App() {
         </button>
         <button
           className="play"
-          title="Pack, install and launch in MKDSrust · F5"
+          title="Play your hack on the target chosen in Test Bench: DS emulator (default), flashcart folder or MKDSrust · F5"
           disabled={!snapshot?.manifest || busy || snapshot?.bench.running}
           onClick={() => {
             openWorkspace('Test Bench');

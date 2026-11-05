@@ -30,3 +30,16 @@ GPL-3.0-compatible, it is credited in `CREDITS.md`, and the file keeps its origi
 
 Our goal: **one app, one project, one Play button**. And everything exports to open formats (glTF, PNG, MIDI, WAV,
 OBJ) so nobody is locked in.
+
+## Where to look first for the features still to come
+Many of the remaining features already have working community workflows. Study these before designing our own.
+Copy code only under the license rule in AGENTS.md; check each license before porting.
+
+| Feature | Look at | What to take |
+|---|---|---|
+| Minimap and course pictures for custom tracks (ours is blank) | [Mario Kart Toolbox](https://github.com/HaroohiePals/MarioKartToolbox) (MIT) | It generates the course picture and the global minimap from the course model. Port its approach. |
+| Music slots per course and menu, weather, kart and shadow model names | [MKDS ARM9 Music Editor](https://github.com/LandonAndEmma/MKDS-ARM9-Music-Editor) (Ermelber's original, NitroShellMKDS) | The arm9 music slot table layout (cross-check with our research table at 0x0215316C). |
+| Code patches for real DS builds: extra track slots, CTGP-style menus | [mkds-re](https://github.com/XorTroll/mkds-re) (MIT), [MKDS-decomp-headers](https://github.com/HaroohiePals/MKDS-decomp-headers) | Hook points and the known code-injection setups. Extra track slots must still boot on a DS. |
+| SSEQ/SBNK/SWAR authoring, MIDI and SF2 round-trip | [Nitro Studio 2 Deluxe](https://github.com/PlatinumLucario/NitroStudio2Deluxe), [VGMTrans](https://github.com/vgmtrans/vgmtrans) | Event mapping between MIDI and SSEQ, bank/instrument layout and sample loop handling. |
+| BPS patches | [Flips](https://github.com/Alcaro/Flips) (GPL-3) | The BPS reference, so our patches apply in the tools people already use. |
+| Testing on a DS without hardware | [melonDS](https://github.com/melonDS-emu/melonDS) (GPL-3) | The default Test Bench target, and the closest stand-in for a real DS. |

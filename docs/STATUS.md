@@ -1,4 +1,13 @@
-# Toolbox status - 2026-11-04
+# Toolbox status - 2026-11-05
+
+**Real hardware first:** every feature below produces a plain ROM hack (patched ROM / BPS) for a DS, flashcart or
+emulator. MKDSrust is an optional play target. Not yet confirmed on a real DS or in melonDS by a human tester.
+
+2026-11-05:
+- Model view: NSBMD texture matrices (scale/rotate/translate) are now applied, so track and object textures tile
+  as on the DS. 358 retail materials use one. They are kept when a model is written back.
+- Top bar: a **Simple | Studio** switch replaces the hidden Advanced button and is remembered between sessions.
+- Model view: the camera stays where the user left it after an edit.
 
 Stage 6 A-H now have a first breadth-first usability pass. Stages 1-5 and the
 expert editors remain available. Changes are uncommitted.

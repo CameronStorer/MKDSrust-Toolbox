@@ -1,14 +1,28 @@
 # MKDSrust Toolbox
 
-A real-hardware-first, all-in-one ROM-hacking studio for **Mario Kart DS**: tracks, karts,
-characters, textures, text, audio and code. Everything it makes plays on a real DS, flashcart or emulator, and
-optionally on PC through [MKDSrust](https://mkdsrust.com). Goal: even a beginner can make a ROM hack.
+**Real hardware first.** An all-in-one ROM-hacking studio for **Mario Kart DS**: characters, karts, tracks,
+textures, text, music and code. Goal: even a beginner can make a ROM hack.
 
-> **Status:** Stages 1–3 implemented at a basic end-to-end level. See [docs/STATUS.md](docs/STATUS.md) for verification and limitations.
+Everything the Toolbox makes is an ordinary ROM hack of your own copy of the game: a patched `.nds` or a shareable
+`.bps` patch that runs on a **real Nintendo DS (flashcart), a DSi/3DS, or any DS emulator** such as melonDS.
+Playing on PC through [MKDSrust](https://mkdsrust.com) is optional. MKDSrust builds itself from the ROM, so a hack
+that works on a DS works there too.
 
-- Bring your own legally dumped ROM. This project contains **no Nintendo material** and never will.
-- Mods are exported as MKDSrust packages (binary patches against your own files), see
-  [docs/PLUGIN_FORMAT.md](docs/PLUGIN_FORMAT.md).
+## Real hardware first, in practice
+
+- **Output is a ROM hack.** *Export for DS* writes a patched ROM and/or a BPS patch, checked to rebuild exactly.
+  Share the BPS: others apply it to their own ROM. MKDSrust mod packages are an optional second format.
+- **DS limits are checked while you edit:** polygons, texture memory, file and archive sizes, and collision size.
+  The DS badge in the top bar shows the result, and wizards reduce models to the DS budget automatically.
+- **Test on the target.** Test Bench defaults to a DS emulator; it can also export to a flashcart folder or launch
+  MKDSrust.
+- **PC-only extras** (Lua scripts, HD) sit behind a setting and are marked "PC only". They never change a DS export.
+
+> **Status:** pre-release. Wizards for characters, karts and tracks are tested in races; see
+> [docs/STATUS.md](docs/STATUS.md) for what is verified and what is still missing (including tests on real hardware).
+
+- Bring your own legally dumped ROM. This project contains **no Nintendo material** and never will. Your ROM is read
+  in place and never changed.
 - Export patched ROMs, BPS, PNG, JSON, GLB and OBJ. MIDI/WAV authoring is later work.
 
 Built with Rust + Tauri, React and three.js. The later Code workspace adds Monaco. Inspired by the community's tools, see

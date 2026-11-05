@@ -4,6 +4,12 @@ Read `docs/SPEC.md` (product and architecture), `docs/PLUGIN_FORMAT.md` (mod pac
 `docs/PRIOR_ART.md` first. Read `docs/STATUS.md`, then the current task: `docs/STAGE6B.md` (stages 1-6 are done).
 
 Hard rules:
+0. **Real hardware first.** Everything the Toolbox makes must work as a plain ROM hack on a real DS, flashcart and
+   DS emulator. Check DS limits (polygons, VRAM, file sizes) where the user edits. A feature that only works in
+   MKDSrust (PC) must sit behind a setting, be labelled "PC only" and never change a DS export.
+   **Reuse what exists:** many features already have open-source workflows or tools on GitHub (see
+   `docs/PRIOR_ART.md`). Study them first and follow their proven approach and format knowledge. Copy code only
+   under rule 2.
 1. **No Nintendo material, ever.** Do not add any ROM, game file, extracted asset, text, sound, or SDK code/binary. Tests
    use synthetic fixtures you generate in code. Tests that need the user's ROM read the path from the `MKDS_ROM` env
    var and are skipped (not failed) when it is unset; they must never write ROM-derived bytes into the repo.
