@@ -139,7 +139,7 @@ test('Home, wizard and Advanced remain reachable', async ({ page }) => {
     fullPage: true,
   });
   await expect(page.getByRole('button', { name: 'Explorer', exact: true })).toHaveCount(0);
-  await page.getByRole('button', { name: 'Advanced', exact: true }).click();
+  await page.getByRole('button', { name: 'Studio', exact: true }).click();
   await page.getByRole('button', { name: 'Explorer', exact: true }).click();
   await expect(page.getByText('Hex view', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Home', exact: true }).click();
@@ -148,4 +148,32 @@ test('Home, wizard and Advanced remain reachable', async ({ page }) => {
     path: path.resolve('../docs/screenshots/stage6-wizard.png'),
     fullPage: true,
   });
+});
+
+test('model edits keep the camera where the user left it', async ({ page }) => {
+  await page.goto('/?workspace=Model');
+  const viewport = page.getByTestId('viewport');
+  await expect(viewport).toHaveAttribute('data-loaded', 'true');
+  await page.waitForTimeout(200);
+  const initial = await viewport.locator('canvas').first().getAttribute('data-camera');
+  const box = await viewport.boundingBox();
+  if (!box) throw new Error('model viewport has no bounds');
+  await page.mouse.move(box.x + box.width * 0.2, box.y + box.height * 0.8);
+  await page.mouse.down({ button: 'middle' });
+  await page.mouse.move(box.x + box.width * 0.35, box.y + box.height * 0.7, { steps: 6 });
+  await page.mouse.up({ button: 'middle' });
+  await page.mouse.wheel(0, -400);
+  const camera = () => viewport.locator('canvas').first().getAttribute('data-camera');
+  await page.waitForTimeout(1500); // let orbit damping settle
+  const before = await camera();
+  expect(before).not.toBe(initial);
+  await page.getByRole('button', { name: 'Import model…' }).click();
+  await page.getByLabel('Target triangles').fill('1');
+  await page.getByRole('button', { name: 'Decimate', exact: true }).click();
+  await expect(page.getByLabel('Model part')).toContainText('1 triangles');
+  await expect(viewport).toHaveAttribute('data-loaded', 'true');
+  await page.waitForTimeout(300);
+  const a = JSON.parse(before ?? '[]') as number[];
+  const b = JSON.parse((await camera()) ?? '[]') as number[];
+  a.forEach((v, k) => expect(Math.abs(v - b[k])).toBeLessThan(Math.abs(v) * 0.01 + 0.01));
 });

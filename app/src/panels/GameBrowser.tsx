@@ -192,7 +192,7 @@ export function GameBrowser({ gallery = false }: { gallery?: boolean }) {
         >
           Recently opened
         </button>
-        <button onClick={() => openWorkspace('Explorer')}>Advanced: raw files & pairing</button>
+        <button onClick={() => openWorkspace('Explorer')}>Studio: raw files & pairing</button>
       </aside>
       <div className="game-content">
         <div className="toolbar">
@@ -252,7 +252,7 @@ export function GameBrowser({ gallery = false }: { gallery?: boolean }) {
           {!list.length && (
             <p>
               No matching {gallery ? 'paired images' : 'items'}. Try a name or path, or inspect
-              Advanced.
+              the Explorer in Studio.
             </p>
           )}
           {list.length > limit && (

@@ -136,6 +136,13 @@ function dispose(object: THREE.Object3D) {
 }
 export function SceneViewport() {
   const host = useRef<HTMLDivElement>(null);
+  const view = useRef<{
+    path: string;
+    position: THREE.Vector3;
+    target: THREE.Vector3;
+    near: number;
+    far: number;
+  } | null>(null);
   const counter = useRef<HTMLSpanElement>(null);
   const workspace = useStore((s) => s.workspace);
   const selected = useStore((s) => s.snapshot?.selected ?? '');
@@ -462,7 +469,16 @@ export function SceneViewport() {
           part: Math.min(useScene.getState().part, Math.max(0, info.parts.length - 1)),
         });
         setLoaded(true);
-        frame();
+        // Edits rebuild the scene: keep the camera where the user left it on the same file.
+        const saved = view.current;
+        if (saved?.path === selected) {
+          camera.position.copy(saved.position);
+          controls.target.copy(saved.target);
+          camera.near = saved.near;
+          camera.far = saved.far;
+          camera.updateProjectionMatrix();
+          controls.update();
+        } else frame();
       })
       .catch((e: unknown) => {
         if (!cancelled) setError(String(e));
@@ -545,6 +561,9 @@ export function SceneViewport() {
         }
       }
       controls.update();
+      renderer.domElement.dataset.camera = JSON.stringify([
+        ...camera.position.toArray(), ...controls.target.toArray(), camera.near, camera.far,
+      ]);
       renderer.render(scene, camera);
       frames++;
       if (time - fpsTime > 500 && counter.current) {
@@ -556,6 +575,13 @@ export function SceneViewport() {
     };
     animationFrame = requestAnimationFrame(render);
     return () => {
+      if (content) view.current = {
+        path: selected,
+        position: camera.position.clone(),
+        target: controls.target.clone(),
+        near: camera.near,
+        far: camera.far,
+      };
       cancelled = true;
       cancelAnimationFrame(animationFrame);
       observer.disconnect();

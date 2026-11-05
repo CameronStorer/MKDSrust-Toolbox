@@ -44,6 +44,7 @@ import { Home } from './panels/Home';
 import { GameBrowser } from './panels/GameBrowser';
 import { saveProject } from './store';
 import { Wizards } from './Wizards';
+import { FilePreview } from './files';
 const components: Record<string, React.FunctionComponent<IDockviewPanelProps>> = {
   overview: Overview,
   audio: AudioWorkspace,
@@ -339,6 +340,7 @@ export function App() {
       }}
     >
       <header className="menubar">
+        <FilePreview />
         <div className="brand-symbol">T</div>
         <span className="app-name">
           MKDSrust <strong>Toolbox</strong>
@@ -393,9 +395,22 @@ export function App() {
                 ? 'Saved'
                 : ''}
         </span>
-        <button aria-pressed={advanced} onClick={() => set({ advanced: !advanced })}>
-          Advanced
-        </button>
+        <div className="mode-switch" role="group" aria-label="Toolbox mode">
+          <button
+            aria-pressed={!advanced}
+            title="Simple: Home, wizards, Game browser, gallery, text, audio and Test Bench"
+            onClick={() => set({ advanced: false })}
+          >
+            Simple
+          </button>
+          <button
+            aria-pressed={advanced}
+            title="Studio: every editor, including Track, Model, Rig & Animate, Explorer, Texture & 2D, Overview and Code"
+            onClick={() => set({ advanced: true })}
+          >
+            Studio
+          </button>
+        </div>
         <button disabled={!snapshot?.manifest} onClick={() => set({ wizardOpen: true })}>
           Beginner recipes
         </button>
@@ -423,8 +438,8 @@ export function App() {
                   w,
                 ),
             )
-            .map((w, i) => {
-              const Icon = icons[i];
+            .map((w) => {
+              const Icon = icons[workspaces.indexOf(w)];
               return (
                 <button
                   key={w}
@@ -438,6 +453,15 @@ export function App() {
                 </button>
               );
             })}
+          {!advanced && (
+            <button
+              className="studio-hint"
+              title="Switch to Studio to see every editor"
+              onClick={() => set({ advanced: true })}
+            >
+              + Track, Model and more editors (Studio)
+            </button>
+          )}
         </div>
         <button
           className="workspace-help icon-button"

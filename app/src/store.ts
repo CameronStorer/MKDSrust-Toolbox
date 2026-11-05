@@ -33,6 +33,13 @@ export function storedList(key: string): string[] {
     return [];
   }
 }
+function storedMode() {
+  try {
+    return localStorage.getItem('toolbox-mode');
+  } catch {
+    return null;
+  }
+}
 export function remember(key: string, value: string) {
   const list = [value, ...storedList(key).filter((v) => v !== value)].slice(0, 20);
   try {
@@ -42,6 +49,7 @@ export function remember(key: string, value: string) {
   }
 }
 interface State {
+  previewPath: string;
   textIndex: number;
   advanced: boolean;
   recipe: Recipe;
@@ -67,8 +75,12 @@ interface State {
 let queue = Promise.resolve();
 const query = new URLSearchParams(location.search).get('workspace');
 export const useStore = create<State>((set, get) => ({
+  previewPath: '',
   textIndex: 0,
-  advanced: !!query && !['Home', 'Game browser', 'Image gallery'].includes(query),
+  // Simple (beginner pages) or Studio (every editor). Remembered between sessions.
+  advanced: query
+    ? !['Home', 'Game browser', 'Image gallery'].includes(query)
+    : storedMode() === 'studio',
   recipe: 'Character',
   drafts: {},
   opened: [],
@@ -170,3 +182,12 @@ export async function saveProject() {
   }
   await store.run({ kind: 'Save' });
 }
+
+useStore.subscribe((s, before) => {
+  if (s.advanced === before.advanced) return;
+  try {
+    localStorage.setItem('toolbox-mode', s.advanced ? 'studio' : 'simple');
+  } catch {
+    /* Storage is optional. */
+  }
+});

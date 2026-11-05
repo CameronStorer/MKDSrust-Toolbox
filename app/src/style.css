@@ -2478,3 +2478,28 @@ canvas {
     width: 200px;
   }
 }
+/* Simple | Studio mode switch */
+.mode-switch {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0 6px;
+}
+.menubar .mode-switch button {
+  padding: 3px 10px;
+  border-radius: 0;
+}
+.menubar .mode-switch button[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.workspace-tabs .studio-hint {
+  opacity: 0.75;
+  font-style: italic;
+  border: 1px dashed var(--line);
+}
+.workspace-tabs .studio-hint:hover {
+  opacity: 1;
+}
