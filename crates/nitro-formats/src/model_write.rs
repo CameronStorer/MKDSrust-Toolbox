@@ -323,14 +323,38 @@ fn encode(
                 | u32::from(m.repeat[0]) << 16
                 | u32::from(m.repeat[1]) << 17
                 | u32::from(m.mirror[0]) << 18
-                | u32::from(m.mirror[1]) << 19,
+                | u32::from(m.mirror[1]) << 19
+                | u32::from(m.tex_mode & 3) << 30,
         );
         put32(&mut d, 24, 0xffffffff);
-        put16(&mut d, 30, 1);
         put16(&mut d, 32, m.width);
         put16(&mut d, 34, m.height);
         put32(&mut d, 36, 4096);
         put32(&mut d, 40, 4096);
+        // Texture matrix: 0x2 scale is one, 0x4 no rotation, 0x8 no translation.
+        let fx = |v: f32| ((v * 4096.).round() as i32) as u32;
+        let mut flags = u16::from(m.tex_scale != [1., 1.] || m.tex_rotate != [0., 1.] || m.tex_translate != [0., 0.]);
+        if m.tex_scale == [1., 1.] {
+            flags |= 2
+        } else {
+            d.extend(fx(m.tex_scale[0]).to_le_bytes());
+            d.extend(fx(m.tex_scale[1]).to_le_bytes());
+        }
+        if m.tex_rotate == [0., 1.] {
+            flags |= 4
+        } else {
+            let h = |v: f32| (v * 4096.).round() as i16 as u16 as u32;
+            d.extend((h(m.tex_rotate[0]) | h(m.tex_rotate[1]) << 16).to_le_bytes());
+        }
+        if m.tex_translate == [0., 0.] {
+            flags |= 8
+        } else {
+            d.extend(fx(m.tex_translate[0]).to_le_bytes());
+            d.extend(fx(m.tex_translate[1]).to_le_bytes());
+        }
+        put16(&mut d, 30, flags);
+        let size = d.len() as u16;
+        put16(&mut d, 2, size);
         material_data.push(d);
     }
     b.extend(offset_dictionary(

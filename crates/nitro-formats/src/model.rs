@@ -33,6 +33,44 @@ pub struct Material {
     pub repeat: [bool; 2],
     pub mirror: [bool; 2],
     pub double_sided: bool,
+    /// Texture matrix (NitroSystem, Maya rules): applied by the DS only when `tex_mode` is 1
+    /// (texcoord source). Retail tracks use the scale to tile road and wall textures.
+    #[serde(default)]
+    pub tex_mode: u8,
+    #[serde(default = "one2")]
+    pub tex_scale: [f32; 2],
+    /// sin, cos
+    #[serde(default = "rot0")]
+    pub tex_rotate: [f32; 2],
+    #[serde(default)]
+    pub tex_translate: [f32; 2],
+}
+fn one2() -> [f32; 2] {
+    [1., 1.]
+}
+fn rot0() -> [f32; 2] {
+    [0., 1.]
+}
+impl Material {
+    /// True when the DS transforms this material's texture coordinates.
+    pub fn has_tex_matrix(&self) -> bool {
+        self.tex_mode == 1
+            && (self.tex_scale != [1., 1.] || self.tex_rotate != [0., 1.] || self.tex_translate != [0., 0.])
+    }
+    /// Maps a normalised (s/width, t/height) coordinate the way the DS texture matrix does.
+    /// Maya-style SRT: Maya's V axis runs bottom-up, the DS T axis top-down.
+    pub fn transform_uv(&self, uv: [f32; 2]) -> [f32; 2] {
+        if !self.has_tex_matrix() {
+            return uv;
+        }
+        let [sx, sy] = self.tex_scale;
+        let [sin, cos] = self.tex_rotate;
+        let [tx, ty] = self.tex_translate;
+        let (u, v) = (uv[0], 1. - uv[1]);
+        let (u, v) = (u * sx, v * sy);
+        let (u, v) = (u * cos - v * sin, u * sin + v * cos);
+        [u + tx, 1. - (v + ty)]
+    }
 }
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Mesh {
@@ -185,6 +223,35 @@ fn parse_model(b: &[u8], name: String) -> Result<Model> {
         let color = u32le(b, p + 4)?;
         let attr = u32le(b, p + 12)?;
         let tex = u32le(b, p + 20)?;
+        // Matrix parts beyond the record's own size are treated as absent.
+        let size = (u16le(b, p + 2)? as usize).max(44);
+        let mut flags = u16le(b, p + 30)?;
+        let need = |f: u16| {
+            44 + if f & 2 == 0 { 8 } else { 0 } + if f & 4 == 0 { 4 } else { 0 } + if f & 8 == 0 { 8 } else { 0 }
+        };
+        if need(flags) > size {
+            flags |= 14
+        }
+        let mut extra = p + 44;
+        let mut fx32 = || -> Result<f32> {
+            let v = u32le(b, extra)? as i32 as f32 / 4096.;
+            extra += 4;
+            Ok(v)
+        };
+        let tex_scale = if flags & 2 == 0 { [fx32()?, fx32()?] } else { [1., 1.] };
+        let tex_rotate = if flags & 4 == 0 {
+            let v = u32le(b, extra)?;
+            extra += 4;
+            [(v & 0xffff) as u16 as i16 as f32 / 4096., (v >> 16) as u16 as i16 as f32 / 4096.]
+        } else {
+            [0., 1.]
+        };
+        let mut fx32 = || -> Result<f32> {
+            let v = u32le(b, extra)? as i32 as f32 / 4096.;
+            extra += 4;
+            Ok(v)
+        };
+        let tex_translate = if flags & 8 == 0 { [fx32()?, fx32()?] } else { [0., 0.] };
         materials.push(Material {
             name,
             texture: None,
@@ -200,6 +267,10 @@ fn parse_model(b: &[u8], name: String) -> Result<Model> {
             repeat: [tex & (1 << 16) != 0, tex & (1 << 17) != 0],
             mirror: [tex & (1 << 18) != 0, tex & (1 << 19) != 0],
             double_sided: attr & 0xc0 == 0xc0,
+            tex_mode: (tex >> 30) as u8,
+            tex_scale,
+            tex_rotate,
+            tex_translate,
         });
     }
     for (off, is_texture) in [(0, true), (2, false)] {

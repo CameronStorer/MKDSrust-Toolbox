@@ -223,7 +223,7 @@ pub fn glb(
                         let id = images.len();
                         images.push(json!({"bufferView":view,"mimeType":"image/png","name":name}));
                         let wrap = |i| {
-                            if material.mirror[i] {
+                            if material.mirror[i] && material.repeat[i] {
                                 33648
                             } else if material.repeat[i] {
                                 10497
@@ -269,7 +269,13 @@ pub fn glb(
                 if mesh.indices.is_empty() {
                     continue;
                 }
-                let mut attrs = json!({"POSITION":buffer.floats(&mesh.positions,"VEC3",true),"NORMAL":buffer.floats(&mesh.normals,"VEC3",false),"TEXCOORD_0":buffer.floats(&mesh.uvs,"VEC2",false),"COLOR_0":buffer.floats(&mesh.colors,"VEC4",false)});
+                let uvs = match model.materials.get(mesh.material) {
+                    Some(m) if m.has_tex_matrix() => {
+                        mesh.uvs.iter().map(|uv| m.transform_uv(*uv)).collect::<Vec<_>>()
+                    }
+                    _ => mesh.uvs.clone(),
+                };
+                let mut attrs = json!({"POSITION":buffer.floats(&mesh.positions,"VEC3",true),"NORMAL":buffer.floats(&mesh.normals,"VEC3",false),"TEXCOORD_0":buffer.floats(&uvs,"VEC2",false),"COLOR_0":buffer.floats(&mesh.colors,"VEC4",false)});
                 let skinned = !world.is_empty()
                     && mesh.weights.len() == mesh.positions.len()
                     && mesh.joints.len() == mesh.positions.len()

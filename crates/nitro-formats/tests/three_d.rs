@@ -60,3 +60,23 @@ fn gx_model_and_joint_frames() {
         let _ = Nsbmd::parse(&b[..end]);
     }
 }
+
+#[test]
+fn texture_matrix_roundtrips_and_maps_uvs() {
+    let mut n = Nsbmd::parse(&synthetic::nsbmd()).unwrap();
+    {
+        let m = &mut n.models[0].materials[0];
+        m.tex_mode = 1;
+        m.tex_scale = [1., 7.];
+        m.tex_translate = [0.25, 0.];
+    }
+    let back = Nsbmd::parse(&n.write().unwrap()).unwrap();
+    let m = &back.models[0].materials[0];
+    assert_eq!((m.tex_mode, m.tex_scale, m.tex_rotate, m.tex_translate), (1, [1., 7.], [0., 1.], [0.25, 0.]));
+    // Maya rule: V scales about the bottom edge, so t=1 (bottom) stays put.
+    assert_eq!(m.transform_uv([0., 1.]), [0.25, 1.]);
+    assert_eq!(m.transform_uv([0.5, 0.]), [0.75, -6.]);
+    let mut none = back.models[0].materials[0].clone();
+    none.tex_mode = 0;
+    assert_eq!(none.transform_uv([0.3, 0.4]), [0.3, 0.4]);
+}

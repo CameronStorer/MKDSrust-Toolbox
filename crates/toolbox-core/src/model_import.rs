@@ -50,6 +50,10 @@ pub fn default_material(name: String) -> Material {
         repeat: [true; 2],
         mirror: [false; 2],
         double_sided: true,
+        tex_mode: 0,
+        tex_scale: [1.; 2],
+        tex_rotate: [0., 1.],
+        tex_translate: [0.; 2],
     }
 }
 pub fn import(path: &Path) -> Result<Nsbmd> {
