@@ -2034,7 +2034,7 @@ dependencies = [
 
 [[package]]
 name = "mkds-data"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "serde",
 ]
@@ -2098,7 +2098,7 @@ checksum = "650eef8c711430f1a879fdd01d4745a7deea475becfb90269c06775983bbf086"
 
 [[package]]
 name = "nitro-formats"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "qbsdiff",
  "serde",
@@ -3987,7 +3987,7 @@ checksum = "06bdbd8cfc056b8d2e2e85f29b56a3bdbecb527cef81eb39e3e7b98af4652770"
 
 [[package]]
 name = "toolbox-app"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "nitro-formats",
  "serde",
@@ -4003,7 +4003,7 @@ dependencies = [
 
 [[package]]
 name = "toolbox-cli"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "clap",
  "nitro-formats",
@@ -4014,7 +4014,7 @@ dependencies = [
 
 [[package]]
 name = "toolbox-core"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "directories",
  "jpeg-decoder",
