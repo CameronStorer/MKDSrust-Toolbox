@@ -51,55 +51,11 @@ pub fn text_group(path: &str, index: usize) -> &'static str {
 /// Pair exact stems, known screen suffixes and shared/localized archive variants.
 /// Ambiguous matches stay in Advanced rather than displaying an unrelated palette.
 pub fn companion(files: &[FileNode], path: &str, format: &str) -> Option<String> {
-    let stem = path.rsplit_once('.')?.0.to_ascii_lowercase();
-    let normalize = |s: &str| {
-        let mut s = s.to_ascii_lowercase();
-        for code in ["us", "es", "fr", "ge", "it"] {
-            s = s.replace(&format!("_{code}.carc"), ".carc");
-        }
-        s
-    };
-    let stem = normalize(&stem);
-    let mut targets = vec![stem.clone()];
-    let root = stem.strip_suffix(".nce").unwrap_or(&stem);
-    if format == "nclr" {
-        targets.extend([format!("{root}_o"), format!("{root}_b")]);
-    }
-    if format == "ncgr" {
-        targets.push(format!("{root}_o"));
-    }
-    if format == "nscr" {
-        if let Some(base) = stem.strip_suffix("_b") {
-            targets.push(format!("{base}_picture"));
-        }
-        if stem.ends_with("/local") {
-            targets.push(format!("{stem}2"));
-        }
-    }
-    for target in targets {
-        let matches: Vec<_> = files
-            .iter()
-            .filter(|f| {
-                f.format == format
-                    && normalize(f.path.rsplit_once('.').map_or("", |v| v.0)) == target
-            })
-            .collect();
-        if let Some(f) = matches
-            .iter()
-            .find(|f| language(&f.path) == language(path))
-            .or_else(|| {
-                matches
-                    .iter()
-                    .find(|f| language(&f.path).starts_with("Shared"))
-            })
-            .or_else(|| (matches.len() == 1).then(|| &matches[0]))
-        {
-            return Some(f.path.clone());
-        }
-    }
-    None
+    crate::associations::companion(files, path, format)
 }
+
 pub fn entries(files: &[FileNode], catalog: &Catalog, names: &[Name]) -> Vec<Entry> {
+    let index = crate::associations::ImageIndex::new(files);
     files
         .iter()
         .filter(|f| {
@@ -260,10 +216,10 @@ pub fn entries(files: &[FileNode], catalog: &Catalog, names: &[Name]) -> Vec<Ent
                 location = "Unused developer reference; the game does not load this archive".into();
             }
             let palette = (f.format == "ncgr" || f.format == "ncer")
-                .then(|| companion(files, &f.path, "nclr"))
+                .then(|| index.companion(&f.path, "nclr"))
                 .flatten();
             let screen = (f.format == "ncgr")
-                .then(|| companion(files, &f.path, "nscr"))
+                .then(|| index.companion(&f.path, "nscr"))
                 .flatten();
             Entry {
                 path: f.path.clone(),

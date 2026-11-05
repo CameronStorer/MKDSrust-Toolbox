@@ -1,3 +1,4 @@
+import { FileLink, LinkedText } from './files';
 import { useState } from 'react';
 import { saveProject, useStore } from './store';
 import { pickDirectory, pickFile, savePath } from './backend';
@@ -94,13 +95,13 @@ export function ExportDialog() {
                 {result.patch_size !== null && `· BPS: ${bytes(result.patch_size)}`}
               </p>
               {result.changed.map((p) => (
-                <div className="mono" key={p}>
-                  {p}
+                <div key={p}>
+                  <FileLink path={p} />
                 </div>
               ))}
               {result.warnings.map((w) => (
                 <p className="issue" key={w}>
-                  {w}
+                  <LinkedText text={w} />
                 </p>
               ))}
               {[result.rom_written, result.patch_written]

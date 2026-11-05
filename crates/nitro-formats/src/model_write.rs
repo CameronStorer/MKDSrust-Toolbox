@@ -333,7 +333,9 @@ fn encode(
         put32(&mut d, 40, 4096);
         // Texture matrix: 0x2 scale is one, 0x4 no rotation, 0x8 no translation.
         let fx = |v: f32| ((v * 4096.).round() as i32) as u32;
-        let mut flags = u16::from(m.tex_scale != [1., 1.] || m.tex_rotate != [0., 1.] || m.tex_translate != [0., 0.]);
+        let mut flags = u16::from(
+            m.tex_scale != [1., 1.] || m.tex_rotate != [0., 1.] || m.tex_translate != [0., 0.],
+        );
         if m.tex_scale == [1., 1.] {
             flags |= 2
         } else {

@@ -1,0 +1,30 @@
+export const fileTypes: Record<string, [string, string]> = {
+  carc: ['Archive', '▣'],
+  narc: ['Archive', '▣'],
+  ncgr: ['Image', '▧'],
+  nscr: ['Image', '▧'],
+  ncer: ['Image', '▧'],
+  nclr: ['Palette', '◉'],
+  nsbmd: ['Model', '◇'],
+  nsbtx: ['Texture', '▧'],
+  nsbca: ['Animation', '▷'],
+  nsbta: ['Animation', '▷'],
+  nsbtp: ['Animation', '▷'],
+  nanr: ['Animation', '▷'],
+  nsbma: ['Animation', '▷'],
+  nsbva: ['Animation', '▷'],
+  kcl: ['Collision', '△'],
+  nkm: ['Track layout', '⌖'],
+  bmg: ['Text', 'T'],
+  sdat: ['Audio', '♫'],
+  sseq: ['Audio', '♫'],
+  swav: ['Audio', '♫'],
+  sbnk: ['Audio', '♫'],
+  swar: ['Audio', '♫'],
+  strm: ['Audio', '♫'],
+  arm: ['Code', '≡'],
+  bin: ['Data', '≡'],
+};
+export function otherLanguage(path: string) {
+  return /_(es|fr|ge|it)([./]|$)/i.test(path);
+}

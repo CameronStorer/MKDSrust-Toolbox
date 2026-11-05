@@ -1,3 +1,4 @@
+import { FileLink, LinkedText } from './files';
 import { useState } from 'react';
 import type { Action } from './bindings';
 import { pickFile } from './backend';
@@ -38,8 +39,8 @@ export function Wizards() {
   const { snapshot, busy, run, set } = useStore();
   const [flow, setFlow] = useState<Flow>(useStore.getState().recipe);
   const [source, setSource] = useState('');
-  const [slot, setSlot] = useState(0);
-  const [base, setBase] = useState(0);
+  const [slot, setSlot] = useState(useStore.getState().recipeSlot ?? 0);
+  const [base, setBase] = useState(useStore.getState().recipeSlot ?? 0);
   const [hips, setHips] = useState(0.45);
   const [up, setUp] = useState('auto');
   const [tire, setTire] = useState('M');
@@ -50,7 +51,7 @@ export function Wizards() {
   const [portraitCell, setPortraitCell] = useState(0);
   const [wheels, setWheels] = useState('');
   const [seat, setSeat] = useState(0);
-  const [course, setCourse] = useState(22);
+  const [course, setCourse] = useState(useStore.getState().recipeSlot ?? 22);
   const [line, setLine] = useState<[number, number][]>(square);
   const [width, setWidth] = useState(150);
   const [laps, setLaps] = useState(3);
@@ -67,10 +68,13 @@ export function Wizards() {
   const [query, setQuery] = useState('');
   const [nameIndex, setNameIndex] = useState(0);
   const [name, setName] = useState('');
-  const [tiles, setTiles] = useState('data/Scene/Race_us.carc/race_s_o.NCGR');
-  const [palette, setPalette] = useState('data/Scene/Race.carc/race_s_o.NCLR');
-  const [cells, setCells] = useState('data/Scene/Race.carc/race_s.NCER');
-  const [cell, setCell] = useState(0);
+  const recipePair = snapshot?.pairings.find((p) => p.path === useStore.getState().recipeAsset);
+  const [tiles, setTiles] = useState(recipePair?.tiles ?? 'data/Scene/Race_us.carc/race_s_o.NCGR');
+  const [palette, setPalette] = useState(
+    recipePair?.palette ?? 'data/Scene/Race.carc/race_s_o.NCLR',
+  );
+  const [cells, setCells] = useState(recipePair?.cells ?? 'data/Scene/Race.carc/race_s.NCER');
+  const [cell, setCell] = useState(useStore.getState().recipeCell);
   const [address, setAddress] = useState('0x02154128');
   const [value, setValue] = useState('20');
   const [valueType, setValueType] = useState<'U8' | 'U16' | 'U32' | 'I32' | 'Fx32'>('U32');
@@ -825,12 +829,16 @@ export function Wizards() {
             <section className="recipe-result" aria-live="polite">
               <h3>Applied · {snapshot.wizard_report.files.length} files</h3>
               {snapshot.wizard_report.warnings.map((w) => (
-                <p key={w}>{w}</p>
+                <p key={w}>
+                  <LinkedText text={w} />
+                </p>
               ))}
               <details>
                 <summary>Changed files</summary>
                 {snapshot.wizard_report.files.map((p) => (
-                  <div key={p}>{p}</div>
+                  <div key={p}>
+                    <FileLink path={p} />
+                  </div>
                 ))}
               </details>
             </section>

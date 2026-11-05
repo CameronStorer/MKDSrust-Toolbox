@@ -1,72 +1,45 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   ChevronDown,
   ChevronRight,
   Folder,
-  File,
   Archive,
-  Palette,
-  Type,
-  Image,
   Search,
   Download,
   ExternalLink,
 } from 'lucide-react';
 import { useStore, select } from '../store';
-import { exportSelection, openWorkspace, openFile } from '../commands';
-import type { FileNode } from '../bindings';
-interface TreeRow {
-  path: string;
-  name: string;
-  depth: number;
-  folder: boolean;
-  file?: FileNode;
-}
+import { exportSelection, openWorkspace } from '../commands';
+import { openAsset } from '../files';
+import { fileType, treeRows, useExplorer } from '../explorer-view';
 export function Explorer() {
   const snapshot = useStore((s) => s.snapshot);
-  const [query, setQuery] = useState('');
-  const [closed, setClosed] = useState(new Set<string>());
+  const view = useExplorer();
+  const { query, closed, languages, grouped } = view;
+  const setQuery = (query: string) => useExplorer.setState({ query });
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const ref = useRef<HTMLDivElement>(null);
-  const rows = useMemo(() => {
-    const all = new Map<string, TreeRow>();
-    for (const file of snapshot?.files ?? []) {
-      const parts = file.path.split('/');
-      parts.forEach((name, i) => {
-        const path = parts.slice(0, i + 1).join('/');
-        if (!all.has(path)) all.set(path, { path, name, depth: i, folder: i < parts.length - 1 });
-      });
-      all.set(file.path, {
-        path: file.path,
-        name: file.name,
-        depth: parts.length - 1,
-        folder: file.archive,
-        file,
-      });
-    }
-    return [...all.values()]
-      .sort((a, b) => a.path.localeCompare(b.path))
-      .filter((row) => {
-        if (query) return row.path.toLowerCase().includes(query.toLowerCase());
-        const parts = row.path.split('/');
-        return !parts.some(
-          (_, i) => i < parts.length - 1 && closed.has(parts.slice(0, i + 1).join('/')),
-        );
-      });
-  }, [snapshot?.files, query, closed]);
+  const rows = useMemo(
+    () => treeRows(snapshot?.files ?? [], { query, closed, languages, grouped }),
+    [snapshot?.files, query, closed, languages, grouped],
+  );
   const virtual = useVirtualizer({
     count: rows.length,
     getScrollElement: () => ref.current,
     estimateSize: () => 27,
     overscan: 12,
+    initialOffset: useExplorer.getState().scroll,
   });
+  useEffect(() => {
+    if (!view.reveal) return;
+    const index = rows.findIndex((r) => r.path === view.reveal);
+    if (index >= 0) virtual.scrollToIndex(index, { align: 'auto' });
+    useExplorer.setState({ reveal: '' });
+  }, [view.reveal, rows, virtual]);
   const toggle = (path: string) =>
-    setClosed((old) => {
-      const s = new Set(old);
-      if (s.has(path)) s.delete(path);
-      else s.add(path);
-      return s;
+    useExplorer.setState({
+      closed: closed.includes(path) ? closed.filter((p) => p !== path) : [...closed, path],
     });
   return (
     <div className="panel explorer" onClick={() => setMenu(null)}>
@@ -80,24 +53,56 @@ export function Explorer() {
         />
         <kbd>/</kbd>
       </div>
+      <div className="explorer-controls">
+        <button onClick={() => useExplorer.setState({ closed: [] })}>Expand all</button>
+        <button
+          onClick={() =>
+            useExplorer.setState({
+              closed: treeRows(snapshot?.files ?? [], {
+                query: '',
+                closed: [],
+                languages: true,
+                grouped,
+              })
+                .filter((r) => r.folder)
+                .map((r) => r.path),
+            })
+          }
+        >
+          Collapse all
+        </button>
+        <label>
+          <input
+            type="checkbox"
+            checked={grouped}
+            onChange={(e) => useExplorer.setState({ grouped: e.target.checked })}
+          />
+          Group by type
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={languages}
+            onChange={(e) => useExplorer.setState({ languages: e.target.checked })}
+          />
+          Show other languages
+        </label>
+      </div>
       <div className="tree-source">
         <span className="dot" /> ROM FILESYSTEM <span>{snapshot?.files.length ?? 0}</span>
       </div>
-      <div ref={ref} className="tree-scroll" role="tree" aria-label="ROM files">
+      <div
+        ref={ref}
+        className="tree-scroll"
+        role="tree"
+        aria-label="ROM files"
+        onScroll={(e) => useExplorer.setState({ scroll: e.currentTarget.scrollTop })}
+      >
         <div style={{ height: virtual.getTotalSize(), position: 'relative' }}>
           {virtual.getVirtualItems().map((item) => {
             const row = rows[item.index];
-            const Icon = row.folder
-              ? row.file?.archive
-                ? Archive
-                : Folder
-              : row.file?.format === 'nclr'
-                ? Palette
-                : row.file?.format === 'bmg'
-                  ? Type
-                  : ['ncgr', 'nscr', 'nsbtx'].includes(row.file?.format ?? '')
-                    ? Image
-                    : File;
+            const [type, glyph] = fileType(row.file);
+            const Icon = row.folder ? (row.file?.archive ? Archive : Folder) : null;
             const edited = snapshot?.edited.some(
               (p) => p === row.path || p.startsWith(row.path + '/'),
             );
@@ -105,9 +110,9 @@ export function Explorer() {
               <button
                 key={row.path}
                 role="treeitem"
-                aria-selected={snapshot?.selected === row.path}
-                aria-expanded={row.folder ? !closed.has(row.path) : undefined}
-                className={`tree-row ${snapshot?.selected === row.path ? 'selected' : ''}`}
+                aria-selected={(view.selection || snapshot?.selected) === row.path}
+                aria-expanded={row.folder ? !closed.includes(row.path) : undefined}
+                className={`tree-row ${(view.selection || snapshot?.selected) === row.path ? 'selected' : ''}`}
                 style={{
                   position: 'absolute',
                   top: item.start,
@@ -115,21 +120,14 @@ export function Explorer() {
                   paddingLeft: 10 + row.depth * 13,
                 }}
                 onClick={() => {
+                  useExplorer.setState({ selection: row.path });
                   if (row.folder) toggle(row.path);
                   if (row.file) select(row.path);
                 }}
                 onDoubleClick={() => {
-                  if (row.file?.format === 'bmg') void openFile('Text', row.path);
-                  if (
-                    ['nclr', 'ncgr', 'nscr', 'nsbtx', 'ncer', 'nanr'].includes(
-                      row.file?.format ?? '',
-                    )
-                  )
-                    void openFile('Texture & 2D', row.path);
-                  if (row.file?.format === 'nsbmd') void openFile('Model', row.path);
-                  if (['nkm', 'kcl'].includes(row.file?.format ?? ''))
-                    void openFile('Track', row.path);
+                  if (row.file) openAsset(row.path);
                 }}
+                title={row.folder ? row.hint : type + ': ' + row.path}
                 onKeyDown={(e) => {
                   if (row.folder && ['ArrowLeft', 'ArrowRight'].includes(e.key)) {
                     e.preventDefault();
@@ -146,19 +144,24 @@ export function Explorer() {
               >
                 <span className="chevron">
                   {row.folder ? (
-                    closed.has(row.path) ? (
+                    closed.includes(row.path) ? (
                       <ChevronRight size={12} />
                     ) : (
                       <ChevronDown size={12} />
                     )
                   ) : null}
                 </span>
-                <Icon size={14} className={row.file?.category.toLowerCase()} />
-                <span className="tree-name">{row.name}</span>
-                {edited && <span className="edited-dot" title="Edited" />}
-                {row.file && !row.folder && (
-                  <span className="file-ext">{row.file.format.toUpperCase()}</span>
+                {Icon ? (
+                  <Icon size={14} />
+                ) : (
+                  <span className="type-icon" aria-hidden="true">
+                    {glyph}
+                  </span>
                 )}
+                <span className="tree-name">{row.name}</span>
+                {row.folder && <span className="folder-hint">{row.hint}</span>}
+                {edited && <span className="edited-dot" title="Edited" />}
+                {row.file && !row.folder && <span className="file-ext">{type}</span>}
               </button>
             );
           })}

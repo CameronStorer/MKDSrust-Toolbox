@@ -1,3 +1,4 @@
+import { FileLink, LinkedText } from '../files';
 import { useEffect, useState } from 'react';
 import {
   ArrowUpRight,
@@ -11,7 +12,7 @@ import {
   BookOpen,
   ChevronRight,
 } from 'lucide-react';
-import { useStore, select, draft as registerDraft } from '../store';
+import { useStore, draft as registerDraft } from '../store';
 import { commands, invokeCommand, openWorkspace } from '../commands';
 import { bytes } from './Properties';
 import type { Manifest } from '../bindings';
@@ -107,7 +108,7 @@ export function Overview() {
           </p>
           {snapshot.base_changes.map((c) => (
             <div className="change-row" key={c.path}>
-              <span className="mono">{c.path}</span>
+              <FileLink path={c.path} />
               <span>{c.change}</span>
             </div>
           ))}
@@ -148,15 +149,7 @@ export function Overview() {
         </div>
         {snapshot.edited.map((path) => (
           <div className="change-row" key={path}>
-            <button
-              onClick={() => {
-                select(path);
-                openWorkspace('Explorer');
-              }}
-            >
-              <span className="edited-dot" />
-              <span className="mono">{path}</span>
-            </button>
+            <FileLink path={path} />
             <span className="change-tag">Modified</span>
             <button
               aria-label={`Revert ${path}`}
@@ -179,7 +172,9 @@ export function Overview() {
               <strong>Package built · {bytes(snapshot.pack.size)}</strong>
               <code>{snapshot.pack.path}</code>
               {snapshot.pack.warnings.map((w) => (
-                <p key={w}>{w}</p>
+                <p key={w}>
+                  <LinkedText text={w} />
+                </p>
               ))}
             </div>
           </div>

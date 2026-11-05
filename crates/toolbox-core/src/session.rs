@@ -34,6 +34,7 @@ pub struct RomSession {
     pub sha256: String,
     pub nodes: Vec<FileNode>,
     pub warnings: Vec<String>,
+    pub pairings: Vec<crate::associations::Pairing>,
     files: BTreeMap<String, Vec<u8>>,
 }
 impl RomSession {
@@ -58,6 +59,7 @@ impl RomSession {
             sha256,
             nodes: vec![],
             warnings,
+            pairings: vec![],
             files: BTreeMap::new(),
         };
         let paths = s.rom.files.keys().cloned().collect::<Vec<_>>();
@@ -87,6 +89,7 @@ impl RomSession {
                 vec![0],
             );
         }
+        s.pairings = crate::associations::resolve(&s);
         Ok(s)
     }
     fn visit(

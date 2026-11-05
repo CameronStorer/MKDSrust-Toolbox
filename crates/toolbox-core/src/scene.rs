@@ -59,37 +59,42 @@ pub struct CourseScene {
 impl CourseScene {
     pub fn load(project: Option<&Project>, session: &RomSession, path: &str) -> Result<Self> {
         let parent = path.rsplit_once('/').map_or("", |p| p.0);
-        let siblings = session
-            .nodes
-            .iter()
-            .filter(|n| n.path.rsplit_once('/').map_or("", |p| p.0) == parent)
-            .collect::<Vec<_>>();
+        let course = parent.starts_with("data/Course/")
+            && (path.ends_with("/course_map.nkm")
+                || path.ends_with("/course_collision.kcl")
+                || path.ends_with("/course_model.nsbmd")
+                || path.ends_with("/course_model_V.nsbmd"));
         let find = |ext: &str| -> Option<String> {
-            let stem = path.rsplit_once('.').map_or(path, |v| v.0);
-            let stem = if path.ends_with(".nsbca") {
-                ["_drive", "_spin", "_win", "_lose"]
-                    .iter()
-                    .find_map(|suffix| stem.strip_suffix(suffix))
-                    .unwrap_or(stem)
-            } else {
-                stem
-            };
+            let stem = mkds_data::assets::model_stem(path);
             let exact = format!("{stem}.{ext}");
-            if let Some(n) = siblings
+            if let Some(n) = session
+                .nodes
                 .iter()
                 .find(|n| n.path.eq_ignore_ascii_case(&exact))
             {
                 return Some(n.path.clone());
             }
-            if path.ends_with(&format!(".{ext}")) {
-                Some(path.into())
-            } else {
-                siblings
+            if course && ["nsbmd", "kcl", "nkm"].contains(&ext) {
+                let name = match ext {
+                    "nsbmd" => "course_model.nsbmd",
+                    "kcl" => "course_collision.kcl",
+                    _ => "course_map.nkm",
+                };
+                return session
+                    .nodes
                     .iter()
-                    .filter(|n| n.format == ext)
-                    .min_by_key(|n| (!n.name.starts_with("course_model"), n.path.clone()))
-                    .map(|n| n.path.clone())
+                    .find(|n| n.path.eq_ignore_ascii_case(&format!("{parent}/{name}")))
+                    .map(|n| n.path.clone());
             }
+            session
+                .nodes
+                .iter()
+                .find(|n| {
+                    n.format == ext
+                        && mkds_data::assets::normalized(&n.path)
+                            == mkds_data::assets::normalized(&exact)
+                })
+                .map(|n| n.path.clone())
         };
         let bytes = |p: &str| -> Result<Vec<u8>> {
             preview::plain(match project {
@@ -111,15 +116,17 @@ impl CourseScene {
             .as_ref()
             .map(|p| Ok::<_, Error>(Nsbmd::parse(&bytes(p)?)?))
             .transpose()?;
-        let texture_path = model_path
-            .as_ref()
-            .and_then(|path| {
-                let exact = path.replace(".nsbmd", ".nsbtx");
-                [exact.clone(), exact.replace(".carc/", "Tex.carc/")]
-                    .into_iter()
-                    .find(|p| session.file(p).is_ok())
-            })
-            .or_else(|| find("nsbtx"));
+        let texture_path = model_path.as_ref().and_then(|p| {
+            mkds_data::assets::texture_candidates(p)
+                .iter()
+                .find_map(|candidate| {
+                    session
+                        .nodes
+                        .iter()
+                        .find(|n| n.path.eq_ignore_ascii_case(candidate))
+                        .map(|n| n.path.clone())
+                })
+        });
         let textures = texture_path
             .map(|p| Ok::<_, Error>(Nsbtx::parse(&bytes(&p)?)?))
             .transpose()?;
@@ -130,10 +137,26 @@ impl CourseScene {
             .map(|p| Ok::<_, Error>(Nkm::parse(&bytes(&p)?)?))
             .transpose()?;
         let mut animations = vec![];
-        for n in &siblings {
-            if n.format == "nsbca" {
+        for n in &session.nodes {
+            if n.format == "nsbca"
+                && model_path
+                    .as_ref()
+                    .is_some_and(|m| mkds_data::assets::model_animation(m, &n.path))
+            {
                 match bytes(&n.path).and_then(|b| Ok(animation::parse(&b)?)) {
-                    Ok(a) => animations.extend(a),
+                    Ok(mut a) => {
+                        for clip in &mut a {
+                            if !["_drive.", "_spin.", "_win.", "_lose."]
+                                .iter()
+                                .any(|suffix| n.name.contains(suffix))
+                            {
+                                continue;
+                            }
+                            clip.name =
+                                format!("{} - {}", n.name.trim_end_matches(".nsbca"), clip.name);
+                        }
+                        animations.extend(a);
+                    }
                     Err(e) => info.issues.push(format!("{}: {e}", n.name)),
                 }
             }

@@ -5,6 +5,7 @@ import { useView } from './view';
 export const workspaces = [
   'Home',
   'Game browser',
+  'Related assets',
   'Image gallery',
   'Overview',
   'Explorer',
@@ -49,6 +50,10 @@ export function remember(key: string, value: string) {
   }
 }
 interface State {
+  relatedPage: string;
+  recipeSlot: number | null;
+  recipeAsset: string;
+  recipeCell: number;
   previewPath: string;
   textIndex: number;
   advanced: boolean;
@@ -75,11 +80,15 @@ interface State {
 let queue = Promise.resolve();
 const query = new URLSearchParams(location.search).get('workspace');
 export const useStore = create<State>((set, get) => ({
+  relatedPage: 'character:0',
+  recipeSlot: null,
+  recipeAsset: '',
+  recipeCell: 0,
   previewPath: '',
   textIndex: 0,
   // Simple (beginner pages) or Studio (every editor). Remembered between sessions.
   advanced: query
-    ? !['Home', 'Game browser', 'Image gallery'].includes(query)
+    ? !['Home', 'Game browser', 'Image gallery', 'Related assets'].includes(query)
     : storedMode() === 'studio',
   recipe: 'Character',
   drafts: {},
@@ -133,6 +142,16 @@ export const useStore = create<State>((set, get) => ({
             state.navigation[state.navigationIndex] === request.path
               ? state.navigation
               : [...state.navigation.slice(0, state.navigationIndex + 1), request.path];
+          const pair = snapshot.pairings?.find((p) => p.path === request.path);
+          useView
+            .getState()
+            .set({
+              palette: pair?.palette ?? '',
+              tiles: '',
+              screen: pair?.screen ?? '',
+              texture: 0,
+              bank: 0,
+            });
           set({
             textIndex: 0,
             opened: [...state.opened.filter((p) => p !== request.path), request.path],
@@ -184,6 +203,8 @@ export async function saveProject() {
 }
 
 useStore.subscribe((s, before) => {
+  if (!s.wizardOpen && before.wizardOpen)
+    useStore.setState({ recipeSlot: null, recipeAsset: '', recipeCell: 0 });
   if (s.advanced === before.advanced) return;
   try {
     localStorage.setItem('toolbox-mode', s.advanced ? 'studio' : 'simple');

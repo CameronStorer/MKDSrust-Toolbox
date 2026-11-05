@@ -98,3 +98,4 @@ pub const SCENE_MUSIC: &[(usize, &str)] = &[
     (70, "Credits 2"),
     (75, "Intro"),
 ];
+pub mod assets;

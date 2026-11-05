@@ -40,6 +40,11 @@ export function usePreview(path: string) {
   return preview;
 }
 export function companion(files: { path: string; format: string }[], path: string, format: string) {
+  const pair = useStore.getState().snapshot?.pairings?.find((p) => p.path === path);
+  if (pair)
+    return (
+      { nclr: pair.palette, ncgr: pair.tiles, nscr: pair.screen, ncer: pair.cells }[format] ?? ''
+    );
   const entries = useStore.getState().snapshot?.game_entries ?? [];
   const known = entries.find((e) => e.path === path);
   if (format === 'nclr' && known?.palette) return known.palette;

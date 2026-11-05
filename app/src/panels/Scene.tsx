@@ -29,7 +29,7 @@ function label(text: string, size: number) {
   return sprite;
 }
 const key = (e: SceneEntry) => `${e.section}:${e.index}`;
-function overlays(info: SceneInfo, size: number) {
+export function overlays(info: SceneInfo, size: number) {
   const root = new THREE.Group();
   const entries = info.entries;
   for (const layer of Object.keys(layerDefaults).filter((k) => k !== 'KCL') as Layer[]) {
@@ -122,7 +122,7 @@ function overlays(info: SceneInfo, size: number) {
   }
   return root;
 }
-function dispose(object: THREE.Object3D) {
+export function dispose(object: THREE.Object3D) {
   object.traverse((o) => {
     if (o instanceof THREE.Mesh || o instanceof THREE.Line || o instanceof THREE.Sprite) {
       if ('geometry' in o) o.geometry.dispose();
@@ -455,6 +455,35 @@ export function SceneViewport() {
         }
         content = gltf.scene;
         scene.add(content);
+        const attachments =
+          useStore
+            .getState()
+            .snapshot?.related_pages.flatMap((p) => p.assets)
+            .find((a) => a.path === selected)?.attachments ?? [];
+        for (const attachment of attachments) {
+          const data = await binary({
+            path: attachment.path,
+            mode: 'glb',
+            start: 0,
+            length: 0,
+            palette: null,
+            screen: null,
+            texture: 0,
+            bank: 0,
+          });
+          const object = (await new GLTFLoader().parseAsync(data, '')).scene;
+          if (cancelled) {
+            dispose(object);
+            return;
+          }
+          object.position.fromArray(attachment.position).divideScalar(16);
+          object.scale.setScalar(attachment.scale);
+          object.traverse((o) => {
+            o.userData.attachment = true;
+            delete o.userData.part;
+          });
+          content.add(object);
+        }
         if (referenceScene) scene.add(referenceScene);
         clips = gltf.animations;
         mixer = new THREE.AnimationMixer(content);
@@ -464,8 +493,16 @@ export function SceneViewport() {
           markerRoot = overlays(info, size);
           scene.add(markerRoot);
         }
+        const autoplay =
+          format === 'nsbca' ||
+          useStore
+            .getState()
+            .snapshot?.pairings.find((p) => p.path === selected)
+            ?.animations.some((p) => /_(drive|win)\.nsbca$/i.test(p));
         useScene.setState({
           info,
+          animation: clips.length && autoplay ? 0 : -1,
+          playing: clips.length > 0 && !!autoplay,
           part: Math.min(useScene.getState().part, Math.max(0, info.parts.length - 1)),
         });
         setLoaded(true);
@@ -500,7 +537,12 @@ export function SceneViewport() {
       ) {
         let target: THREE.Object3D | undefined;
         content.traverse((object) => {
-          if (object instanceof THREE.Mesh && object.userData.part === state.part) target = object;
+          if (
+            object instanceof THREE.Mesh &&
+            !object.userData.attachment &&
+            object.userData.part === state.part
+          )
+            target = object;
         });
         if (target && transform.object !== target) transform.attach(target);
         transform.setMode(state.gizmo);
@@ -562,7 +604,10 @@ export function SceneViewport() {
       }
       controls.update();
       renderer.domElement.dataset.camera = JSON.stringify([
-        ...camera.position.toArray(), ...controls.target.toArray(), camera.near, camera.far,
+        ...camera.position.toArray(),
+        ...controls.target.toArray(),
+        camera.near,
+        camera.far,
       ]);
       renderer.render(scene, camera);
       frames++;
@@ -575,13 +620,14 @@ export function SceneViewport() {
     };
     animationFrame = requestAnimationFrame(render);
     return () => {
-      if (content) view.current = {
-        path: selected,
-        position: camera.position.clone(),
-        target: controls.target.clone(),
-        near: camera.near,
-        far: camera.far,
-      };
+      if (content)
+        view.current = {
+          path: selected,
+          position: camera.position.clone(),
+          target: controls.target.clone(),
+          near: camera.near,
+          far: camera.far,
+        };
       cancelled = true;
       cancelAnimationFrame(animationFrame);
       observer.disconnect();

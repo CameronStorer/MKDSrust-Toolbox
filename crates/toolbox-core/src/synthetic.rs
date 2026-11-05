@@ -259,7 +259,39 @@ pub fn wizard_rom() -> Vec<u8> {
             a.insert(file.into(), vec![0; stride * 50]);
         }
     }
+    for name in ["KartModelMainA", "KartModelMenu"] {
+        let a = archives.get_mut(name).unwrap();
+        for size in ["S", "M", "L"] {
+            a.insert(format!("kart/tire/kart_tire_{size}.nsbmd"), model.clone());
+            a.insert(format!("kart/tire/kart_tire_{size}.nsbtx"), tx.clone());
+        }
+        for (code, _) in mkds_data::CHARACTERS {
+            a.insert(format!("emblem/{code}_emblem.nsbtx"), tx.clone());
+        }
+        let offsets = a.get_mut("kartoffsetdata.bin").unwrap();
+        for slot in 0..37 {
+            let at = slot * 224;
+            let name = format!("kart_tire_{}", ["M", "S", "L"][slot % 3]);
+            offsets[at..at + name.len()].copy_from_slice(name.as_bytes());
+            offsets[at + 16..at + 20].copy_from_slice(&4096i32.to_le_bytes());
+            for (i, position) in [[-1., 0., 1.], [1., 0., 1.], [-1., 0., -1.], [1., 0., -1.]]
+                .iter()
+                .enumerate()
+            {
+                for (axis, value) in position.iter().enumerate() {
+                    let start = at + 20 + i * 12 + axis * 4;
+                    offsets[start..start + 4]
+                        .copy_from_slice(&((*value * 4096.) as i32).to_le_bytes());
+                }
+            }
+        }
+    }
     for (name, entries) in archives {
+        if name == "KartModelMenu" {
+            for (path, bytes) in &entries {
+                files.insert(format!("data/KartModelMenu/{path}"), bytes.clone());
+            }
+        }
         files.insert(
             format!("data/{name}.carc"),
             nitro_formats::compress(&Narc::new(entries).unwrap().write()),

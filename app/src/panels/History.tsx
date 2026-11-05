@@ -1,3 +1,4 @@
+import { FileLink, LinkedText } from '../files';
 import { History as HistoryIcon, Undo2, Redo2, Check } from 'lucide-react';
 import { useStore } from '../store';
 export function History() {
@@ -28,7 +29,16 @@ export function History() {
           <div className={`history-row ${h.applied ? '' : 'muted'}`} key={i}>
             <span className="history-index">{String(i + 1).padStart(2, '0')}</span>
             <Check size={12} style={{ visibility: h.applied ? 'visible' : 'hidden' }} />
-            <span>{h.title}</span>
+            <span>
+              <span>
+                <LinkedText text={h.title} />
+              </span>
+              {h.paths.map((p) => (
+                <FileLink key={p} path={p}>
+                  {p.split('/').pop()}
+                </FileLink>
+              ))}
+            </span>
           </div>
         ))}
         {!snapshot?.history.length && (

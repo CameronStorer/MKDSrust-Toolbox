@@ -13,10 +13,24 @@ use std::{
 };
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(untagged)]
+#[serde(untagged, deny_unknown_fields)]
 pub enum Entry {
-    Patch { patch: String },
-    Add { add: String },
+    Patch {
+        patch: String,
+    },
+    Add {
+        add: String,
+    },
+    Archive {
+        archive: BTreeMap<String, MemberPatch>,
+    },
+}
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct MemberPatch {
+    pub patch: String,
+    pub source_sha256: String,
+    pub target_sha256: String,
 }
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct PackageManifest {
@@ -204,6 +218,17 @@ fn screen_add(
     Ok(())
 }
 pub fn build(project: &Project, session: &RomSession) -> Result<(Vec<u8>, Vec<String>)> {
+    build_with_mode(project, session, true)
+}
+/// Current native game overlays accept v1/v2 only. Test Bench retains that contract until migrated.
+pub fn build_legacy(project: &Project, session: &RomSession) -> Result<(Vec<u8>, Vec<String>)> {
+    build_with_mode(project, session, false)
+}
+fn build_with_mode(
+    project: &Project,
+    session: &RomSession,
+    member_patches: bool,
+) -> Result<(Vec<u8>, Vec<String>)> {
     if session.clean.is_some() {
         let base_changes = crate::base::changes(session)?;
         if base_changes
@@ -226,7 +251,7 @@ pub fn build(project: &Project, session: &RomSession) -> Result<(Vec<u8>, Vec<St
             })
             .collect();
         let flattened = Project::in_memory(&clean, project.config.manifest.clone(), edits)?;
-        return build(&flattened, &clean);
+        return build_with_mode(&flattened, &clean, member_patches);
     }
     validate_manifest(&project.config.manifest)?;
     if project.config.rom_sha256 != session.sha256 {
@@ -306,6 +331,22 @@ pub fn build(project: &Project, session: &RomSession) -> Result<(Vec<u8>, Vec<St
             if edited == retail {
                 continue;
             }
+            if member_patches
+                && detect::detect(retail, &path).is_some_and(|f| f.category == "Archive")
+            {
+                let archive = crate::archive_delta::make(
+                    &path,
+                    retail,
+                    &edited,
+                    &mut payloads,
+                    &mut warnings,
+                )?;
+                if !archive.is_empty() {
+                    manifest.format = 3;
+                    manifest.files.insert(path, Entry::Archive { archive });
+                }
+                continue;
+            }
             let mut patch = vec![];
             qbsdiff::Bsdiff::new(retail, &edited).compare(&mut patch)?;
             if retail.len() >= 65536 && patch.len() * 100 >= retail.len() * 60 {
@@ -372,7 +413,14 @@ pub fn pack(project: &Project, session: &RomSession) -> Result<PackResult> {
             "use build() for an in-memory project".into(),
         ));
     }
-    let (bytes, warnings) = build(project, session)?;
+    let (bytes, mut warnings) = build(project, session)?;
+    if project.edits.keys().any(|path| {
+        session
+            .root_for(path)
+            .is_some_and(|root| session.nodes.iter().any(|n| n.path == root && n.archive))
+    }) {
+        warnings.push("Member patches require a format 3 launcher and site screener. Until those are updated, share Export for DS as BPS. Test Bench uses a legacy package for the current native game.".into());
+    }
     let dir = project.root.join("build");
     ensure_no_symlinks(&project.root, &dir)?;
     std::fs::create_dir_all(&dir)?;

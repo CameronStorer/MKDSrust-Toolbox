@@ -178,7 +178,7 @@ pub fn apply(p: &mut Project, s: &RomSession, action: Action) -> Result<Report> 
                 return Err(invalid("choose kart 0..36"));
             }
             for archive in ["KartModelMainA", "KartModelMenu"] {
-                let path = format!("data/{archive}.carc/kartoffsetdata.bin");
+                let path = used_menu_path(s, &format!("data/{archive}.carc/kartoffsetdata.bin"));
                 let mut bytes = draft.bytes(s, &path)?.to_vec();
                 for (i, wheel) in wheels.into_iter().enumerate() {
                     crate::tables::write(
@@ -221,7 +221,7 @@ pub fn apply(p: &mut Project, s: &RomSession, action: Action) -> Result<Report> 
                 ));
             }
             for (archive, stride) in [("KartModelMainA", 152), ("KartModelMenu", 148)] {
-                let path = format!("data/{archive}.carc/kartphysicalparam.bin");
+                let path = used_menu_path(s, &format!("data/{archive}.carc/kartphysicalparam.bin"));
                 let mut bytes = draft.bytes(s, &path)?.to_vec();
                 crate::tables::write(
                     &mut bytes,
@@ -706,14 +706,20 @@ fn driver_materials(
     }
     Ok(Nsbtx::new(textures, palettes)?)
 }
+fn used_menu_path(s: &RomSession, path: &str) -> String {
+    mkds_data::assets::used_duplicate(path)
+        .filter(|p| s.file(p).is_ok())
+        .unwrap_or_else(|| path.into())
+}
 fn existing_model_path(s: &RomSession, suffix: &str, menu: bool) -> Result<String> {
     s.nodes
         .iter()
-        .find(|n| {
+        .filter(|n| {
             n.path.ends_with(suffix)
                 && n.path.contains("KartModelMenu") == menu
                 && !n.path.contains("KartModelMain.carc")
         })
+        .min_by_key(|n| n.path.contains("KartModelMenu.carc/"))
         .map(|n| n.path.clone())
         .ok_or_else(|| invalid("base/slot model is absent from the ROM"))
 }
@@ -817,7 +823,7 @@ pub fn character_from(
         .write()?,
     );
     for archive in ["KartModelMainA", "KartModelMenu"] {
-        let path = format!("data/{archive}.carc/kartoffsetdata.bin");
+        let path = used_menu_path(s, &format!("data/{archive}.carc/kartoffsetdata.bin"));
         let mut bytes = p.bytes(s, &path)?.to_vec();
         for kart in 0..37 {
             let start = kart * 224 + 16 + 13 * 4;
@@ -985,7 +991,7 @@ pub fn kart_from(
             ("kartmenuparam.bin", 12),
             ("kartAIparam.bin", 160),
         ] {
-            let path = format!("data/{archive}.carc/{file}");
+            let path = used_menu_path(s, &format!("data/{archive}.carc/{file}"));
             if s.file(&path).is_err() {
                 continue;
             }

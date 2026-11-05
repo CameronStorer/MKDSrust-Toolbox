@@ -1,3 +1,4 @@
+import { FileLink, LinkedText } from './files';
 import { ExportDialog, CreateDialog } from './ProjectDialogs';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -27,6 +28,7 @@ import {
 import { useStore, workspaces, stages } from './store';
 import { commands, invokeCommand, matchesKey, openWorkspace } from './commands';
 import { isMock } from './backend';
+import { RelatedAssets } from './panels/RelatedAssets';
 import { Overview } from './panels/Overview';
 import { Explorer } from './panels/Explorer';
 import { History } from './panels/History';
@@ -434,9 +436,15 @@ export function App() {
             .filter(
               (w) =>
                 advanced ||
-                ['Home', 'Game browser', 'Image gallery', 'Text', 'Audio', 'Test Bench'].includes(
-                  w,
-                ),
+                [
+                  'Home',
+                  'Game browser',
+                  'Related assets',
+                  'Image gallery',
+                  'Text',
+                  'Audio',
+                  'Test Bench',
+                ].includes(w),
             )
             .map((w) => {
               const Icon = icons[workspaces.indexOf(w)];
@@ -503,14 +511,7 @@ export function App() {
               </p>
               {snapshot?.issues.map((issue, i) => (
                 <div className="issue" key={i}>
-                  <button
-                    onClick={() => {
-                      openWorkspace('Explorer');
-                      void run({ kind: 'Select', path: issue.location });
-                    }}
-                  >
-                    {issue.location}
-                  </button>
+                  <FileLink path={issue.location} />
                   <p>{issue.message}</p>
                   <small>{issue.why}</small>
                 </div>
@@ -573,12 +574,14 @@ export function App() {
       )}
       {snapshot?.warnings.map((w) => (
         <div className="warning-banner" key={w}>
-          {w}
+          <LinkedText text={w} />
         </div>
       ))}
       <main className="workspace" data-testid="workspace">
         {workspace === 'Home' ? (
           <Home />
+        ) : workspace === 'Related assets' ? (
+          <RelatedAssets />
         ) : workspace === 'Game browser' ? (
           <GameBrowser />
         ) : workspace === 'Image gallery' ? (
@@ -600,7 +603,13 @@ export function App() {
         </span>
         <span>{busy ? 'Working…' : notice}</span>
         <span className="status-separator" />
-        <span>{snapshot?.selected || 'Select a file to get started'}</span>
+        <span>
+          {snapshot?.selected ? (
+            <FileLink path={snapshot.selected} />
+          ) : (
+            'Select a file to get started'
+          )}
+        </span>
         <div className="grow" />
         <button disabled={!snapshot?.manifest} onClick={() => void run({ kind: 'Validate' })}>
           {snapshot?.issues.length ?? 0} issues

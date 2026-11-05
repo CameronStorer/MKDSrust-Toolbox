@@ -164,7 +164,21 @@ test('model edits keep the camera where the user left it', async ({ page }) => {
   await page.mouse.up({ button: 'middle' });
   await page.mouse.wheel(0, -400);
   const camera = () => viewport.locator('canvas').first().getAttribute('data-camera');
-  await page.waitForTimeout(1500); // let orbit damping settle
+  // Wait for orbit damping to settle at the actual rendering frame rate.
+  let previousCamera = JSON.parse((await camera()) ?? '[]') as number[];
+  let stableSamples = 0;
+  await expect
+    .poll(
+      async () => {
+        const next = JSON.parse((await camera()) ?? '[]') as number[];
+        const difference = Math.max(...next.map((v, i) => Math.abs(v - previousCamera[i])));
+        previousCamera = next;
+        stableSamples = difference < 0.001 ? stableSamples + 1 : 0;
+        return stableSamples;
+      },
+      { intervals: [100, 200, 250], timeout: 10000 },
+    )
+    .toBeGreaterThanOrEqual(3);
   const before = await camera();
   expect(before).not.toBe(initial);
   await page.getByRole('button', { name: 'Import model…' }).click();

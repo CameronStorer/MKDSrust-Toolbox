@@ -23,7 +23,7 @@ fn patch_result(zip: &[u8], session: &RomSession) -> Vec<(String, Vec<u8>)> {
         .read_to_string(&mut metadata)
         .unwrap();
     let manifest: PackageManifest = serde_json::from_str(&metadata).unwrap();
-    assert_eq!(manifest.format, 1);
+    assert!([1, 3].contains(&manifest.format));
     assert_eq!(manifest.game, "AMCE");
     let mut out = vec![];
     for (path, entry) in manifest.files {
@@ -41,6 +41,27 @@ fn patch_result(zip: &[u8], session: &RomSession) -> Vec<(String, Vec<u8>)> {
                     .unwrap()
                     .apply(session.rom.file(&path).unwrap(), Cursor::new(&mut edited))
                     .unwrap();
+                out.push((path, edited));
+            }
+            Entry::Archive { archive: members } => {
+                let payloads = members
+                    .values()
+                    .map(|member| {
+                        let mut bytes = vec![];
+                        archive
+                            .by_name(&member.patch)
+                            .unwrap()
+                            .read_to_end(&mut bytes)
+                            .unwrap();
+                        (member.patch.clone(), bytes)
+                    })
+                    .collect();
+                let edited = toolbox_core::archive_delta::apply(
+                    session.rom.file(&path).unwrap(),
+                    &members,
+                    &payloads,
+                )
+                .unwrap();
                 out.push((path, edited));
             }
             Entry::Add { .. } => panic!("unexpected add"),

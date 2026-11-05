@@ -1,3 +1,4 @@
+import { PairingDetails } from './Properties';
 import { Cells } from './Cells';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -152,6 +153,7 @@ function RasterTexture() {
           8×8
         </button>
       </div>
+      <PairingDetails path={selected} />
       <details className="format-details" open={advanced}>
         <summary>Details · file pairing</summary>
         <div className="source-controls">

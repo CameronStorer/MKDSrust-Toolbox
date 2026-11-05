@@ -57,19 +57,37 @@ fn user_rom_roundtrips_and_palette_patch() {
     let mut z = zip::ZipArchive::new(Cursor::new(zip)).unwrap();
     let m: PackageManifest = serde_json::from_reader(z.by_name("manifest.json").unwrap()).unwrap();
     let root = s.root_for(&path).unwrap();
-    let Entry::Patch { patch } = &m.files[root] else {
-        panic!("existing ROM file must be patched")
+    let result = match &m.files[root] {
+        Entry::Patch { patch } => {
+            let mut patch_bytes = vec![];
+            z.by_name(patch)
+                .unwrap()
+                .read_to_end(&mut patch_bytes)
+                .unwrap();
+            let mut result = vec![];
+            qbsdiff::Bspatch::new(&patch_bytes)
+                .unwrap()
+                .apply(s.rom.file(root).unwrap(), Cursor::new(&mut result))
+                .unwrap();
+            result
+        }
+        Entry::Archive { archive } => {
+            let payloads = archive
+                .values()
+                .map(|m| {
+                    let mut bytes = vec![];
+                    z.by_name(&m.patch)
+                        .unwrap()
+                        .read_to_end(&mut bytes)
+                        .unwrap();
+                    (m.patch.clone(), bytes)
+                })
+                .collect();
+            toolbox_core::archive_delta::apply(s.rom.file(root).unwrap(), archive, &payloads)
+                .unwrap()
+        }
+        Entry::Add { .. } => panic!("existing ROM file must be patched"),
     };
-    let mut patch_bytes = vec![];
-    z.by_name(patch)
-        .unwrap()
-        .read_to_end(&mut patch_bytes)
-        .unwrap();
-    let mut result = vec![];
-    qbsdiff::Bspatch::new(&patch_bytes)
-        .unwrap()
-        .apply(s.rom.file(root).unwrap(), Cursor::new(&mut result))
-        .unwrap();
     let mut current = root.to_string();
     let mut bytes = result;
     while current != path {

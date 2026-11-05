@@ -222,6 +222,15 @@ pub fn cell_image(
     }
 }
 pub fn find_companion(session: &RomSession, path: &str, ext: &str) -> Option<String> {
+    if let Some(pair) = session.pairings.iter().find(|p| p.path == path) {
+        return match ext {
+            "ncgr" => pair.tiles.clone(),
+            "nclr" => pair.palette.clone(),
+            "nscr" => pair.screen.clone(),
+            "ncer" => pair.cells.clone(),
+            _ => None,
+        };
+    }
     crate::game::companion(&session.nodes, path, ext)
 }
 pub fn png(image: &Image) -> Result<Vec<u8>> {

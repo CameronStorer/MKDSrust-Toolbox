@@ -339,8 +339,7 @@ impl Bench {
             }
             (vec![], folder.clone())
         } else {
-            let packed = pack::pack(project, session)?;
-            let bytes = std::fs::read(&packed.path)?;
+            let (bytes, _) = pack::build_legacy(project, session)?;
             let dest = install(&root, &folder, &project.config.manifest.id, &bytes)?;
             (bytes, dest)
         };

@@ -55,7 +55,9 @@ impl Material {
     /// True when the DS transforms this material's texture coordinates.
     pub fn has_tex_matrix(&self) -> bool {
         self.tex_mode == 1
-            && (self.tex_scale != [1., 1.] || self.tex_rotate != [0., 1.] || self.tex_translate != [0., 0.])
+            && (self.tex_scale != [1., 1.]
+                || self.tex_rotate != [0., 1.]
+                || self.tex_translate != [0., 0.])
     }
     /// Maps a normalised (s/width, t/height) coordinate the way the DS texture matrix does.
     /// Maya-style SRT: Maya's V axis runs bottom-up, the DS T axis top-down.
@@ -227,7 +229,9 @@ fn parse_model(b: &[u8], name: String) -> Result<Model> {
         let size = (u16le(b, p + 2)? as usize).max(44);
         let mut flags = u16le(b, p + 30)?;
         let need = |f: u16| {
-            44 + if f & 2 == 0 { 8 } else { 0 } + if f & 4 == 0 { 4 } else { 0 } + if f & 8 == 0 { 8 } else { 0 }
+            44 + if f & 2 == 0 { 8 } else { 0 }
+                + if f & 4 == 0 { 4 } else { 0 }
+                + if f & 8 == 0 { 8 } else { 0 }
         };
         if need(flags) > size {
             flags |= 14
@@ -238,11 +242,18 @@ fn parse_model(b: &[u8], name: String) -> Result<Model> {
             extra += 4;
             Ok(v)
         };
-        let tex_scale = if flags & 2 == 0 { [fx32()?, fx32()?] } else { [1., 1.] };
+        let tex_scale = if flags & 2 == 0 {
+            [fx32()?, fx32()?]
+        } else {
+            [1., 1.]
+        };
         let tex_rotate = if flags & 4 == 0 {
             let v = u32le(b, extra)?;
             extra += 4;
-            [(v & 0xffff) as u16 as i16 as f32 / 4096., (v >> 16) as u16 as i16 as f32 / 4096.]
+            [
+                (v & 0xffff) as u16 as i16 as f32 / 4096.,
+                (v >> 16) as u16 as i16 as f32 / 4096.,
+            ]
         } else {
             [0., 1.]
         };
@@ -251,7 +262,11 @@ fn parse_model(b: &[u8], name: String) -> Result<Model> {
             extra += 4;
             Ok(v)
         };
-        let tex_translate = if flags & 8 == 0 { [fx32()?, fx32()?] } else { [0., 0.] };
+        let tex_translate = if flags & 8 == 0 {
+            [fx32()?, fx32()?]
+        } else {
+            [0., 0.]
+        };
         materials.push(Material {
             name,
             texture: None,

@@ -92,3 +92,60 @@ an xdelta/BPS patch for flash carts / emulators. Never distribute the patched RO
   Scripts run only from enabled mods, in load order, and never in `--timing exact` acceptance runs.
 - The API is documented in MKDSrust-Docs `4_docs/LUA_SCRIPTING_DESIGN.md`. Owner decisions: raw-memory access will be
   allowed in published mods with a badge; online play is out of scope.
+
+## Format 3: decompressed archive-member patches (Toolbox Stage 6B)
+
+Format 3 adds an `archive` entry alongside the unchanged `patch` and `add` entries. Readers supporting format 3 must
+also accept formats 1 and 2. Older readers must reject format 3 clearly; they cannot safely treat it as format 1.
+Script fields retain format 2's rules (and remain PC only); Toolbox does not generate scripts.
+
+```json
+{
+  "format": 3,
+  "type": "character",
+  "id": "author.my-driver",
+  "name": "My driver",
+  "version": "1.0.0",
+  "author": "Author",
+  "game": "AMCE",
+  "platforms": ["pc", "ds"],
+  "files": {
+    "data/KartModelSub.carc": {
+      "archive": {
+        "character/mario/P_MR.nsbmd": {
+          "patch": "patches/driver.bsdiff",
+          "source_sha256": "<64 lowercase hexadecimal characters>",
+          "target_sha256": "<64 lowercase hexadecimal characters>"
+        }
+      }
+    }
+  }
+}
+```
+
+- The outer target is an existing NitroFS NARC/CARC. `archive` is a nonempty map of existing **relative member
+  paths**, including folders. Nested archives use paths such as `sub/inner.carc/art/image.ncgr`. Resolve each archive's
+  actual member names, not filesystem paths. No member additions, deletions or reordering in this version.
+- Each record contains exactly `patch`, `source_sha256`, `target_sha256`. Reject unknown/ambiguous entry fields,
+  unsafe paths, case collisions, and a member path that is also an ancestor of another target. The usual 200-character
+  path, extension, ZIP and symlink restrictions still apply, including to every patch payload path.
+- Decompress the outer archive (LZ77 type 0x10 if present). Walk NARC members; decompress a targeted leaf if compressed.
+  Check its SHA-256 against `source_sha256`, apply BSDIFF40 to the **decompressed** bytes, then verify `target_sha256`.
+  Repack containing NARCs and recompress every container/leaf that was compressed. Keep all other members intact.
+  Untouched archives are never rebuilt. No full retail member is included in the package.
+- Apply against the current file after earlier enabled mods. Different members of the same archive combine; two mods
+  touching the same member fail the source hash check unless the later patch explicitly targets the earlier result.
+  On any failure, discard the whole mod's staged changes and report the member path; never leave a half-applied mod.
+- Consumers bound nesting to 8, each decompressed member/container and patch output to 64 MiB, and cumulative expansion
+  and patch output to 256 MiB per archive operation. Read the BSDIFF target-size hint before allocation/application.
+- Site screening indexes decompressed archive members using hashes/sizes only. Verify the source hash against that
+  member, apply the 60% manual-review threshold to that member's **decompressed source size** (64 KiB exemption
+  unchanged), check patch headers/output bounds, and recursively screen authored `add` files as before. Quarantine,
+  no-retail-content rules and DS limits remain mandatory. A small member patch must not be compared with the compressed
+  CARC's hash or size.
+
+`toolbox_core::archive_delta::apply` is the bounded in-memory reference consumer, with synthetic tests for nested
+archives, wrong sources, missing paths and combining disjoint members. Export for DS still uses the normal ROM
+rebuilder and needs no format-3 launcher. Toolbox's Test Bench intentionally builds a legacy v1 package for the current
+native overlay until the launcher/game/site migration is installed. The exact integration work is recorded in
+`docs/STATUS.md`; no external repositories are changed by Stage 6B Run 1.

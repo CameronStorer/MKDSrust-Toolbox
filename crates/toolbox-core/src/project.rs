@@ -71,6 +71,13 @@ pub enum Command {
     },
 }
 impl Command {
+    fn paths(&self) -> Vec<String> {
+        match self {
+            Self::File { path, .. } => vec![path.clone()],
+            Self::Batch { commands, .. } => commands.iter().flat_map(Self::paths).collect(),
+            Self::Manifest { .. } => vec![],
+        }
+    }
     fn apply(&self, project: &mut Project, forward: bool) -> Result<()> {
         match self {
             Self::Batch { commands, .. } => {
@@ -123,6 +130,7 @@ pub struct History {
 pub struct HistoryItem {
     pub title: String,
     pub applied: bool,
+    pub paths: Vec<String>,
 }
 impl Project {
     /// An ephemeral project for headless checks; this constructor never touches the filesystem.
@@ -500,6 +508,7 @@ impl Project {
             .map(|(i, c)| HistoryItem {
                 title: c.title(),
                 applied: i < self.history.cursor,
+                paths: c.paths(),
             })
             .collect()
     }

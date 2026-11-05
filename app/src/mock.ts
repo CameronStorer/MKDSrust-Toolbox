@@ -7,6 +7,8 @@ import wizardData from './demo-wizards.json';
 let sceneState = structuredClone(sceneData);
 import type { SceneInfo } from './bindings';
 export async function scene(path: string): Promise<SceneInfo> {
+  const fixture = (wizardData.scenes as unknown as Record<string, SceneInfo>)[path];
+  if (fixture && !path.includes('/Course/')) return clone(fixture);
   const tuple = (v: number[] | null): [number, number, number] | null =>
     v ? [v[0], v[1], v[2]] : null;
   return {
@@ -24,6 +26,8 @@ import { rgb555 } from './colors';
 import type { Request, Snapshot, BinaryRequest, TextToken } from './bindings';
 const clone = <T>(v: T): T => structuredClone(v);
 const state = clone(demo) as Snapshot;
+state.pairings.push(...clone(wizardData.pairings));
+state.related_pages = clone(wizardData.related_pages) as Snapshot['related_pages'];
 state.wizard_catalog = clone(wizardData.catalog);
 state.names = clone(wizardData.names);
 state.game_entries.push(
@@ -102,7 +106,11 @@ function updatePreview() {
     width: file?.format === 'nsbtx' ? 8 : assets.width,
     height: file?.format === 'nsbtx' ? 8 : assets.height,
   };
-  state.history = history.map((h, i) => ({ title: h.title, applied: i < cursor }));
+  state.history = history.map((h, i) => ({
+    title: h.title,
+    applied: i < cursor,
+    paths: h.newEdited.filter((p) => !h.oldEdited.includes(p)),
+  }));
   state.can_undo = cursor > 0;
   state.can_redo = cursor < history.length;
 }
@@ -433,10 +441,21 @@ export async function dispatch(r: Request): Promise<Snapshot> {
     cursor++;
   }
   updatePreview();
+  const used = state.selected.replace(/^data\/KartModelMenu\.carc\//, 'data/KartModelMenu/');
+  state.warnings =
+    used !== state.selected && state.files.some((f) => f.path === used)
+      ? [
+          `${state.selected} is a stale duplicate. The game uses ${used}; edit the loose file instead.`,
+        ]
+      : [];
   return clone(state);
 }
 export async function binary(r: BinaryRequest): Promise<ArrayBuffer> {
   if (r.mode === 'audio-wav') return (await fetch('/demo/tone.wav')).arrayBuffer();
+  if (r.mode === 'glb' && !r.path.includes('/Course/')) {
+    const animated = state.pairings.find((p) => p.path === r.path)?.animations.length;
+    return (await fetch(`/demo/${animated ? 'driver' : 'static'}.glb`)).arrayBuffer();
+  }
   if (r.mode === 'glb' || r.mode === 'course-glb' || r.mode === 'seated-reference')
     return (await fetch(`/demo/${r.mode === 'glb' ? 'model' : 'course'}.glb`)).arrayBuffer();
   if (r.mode === 'palette-colors') return Uint16Array.from(colors).buffer;

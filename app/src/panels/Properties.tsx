@@ -1,3 +1,4 @@
+import { FileLink } from '../files';
 import { ChevronDown, Info, ShieldQuestion } from 'lucide-react';
 import { useStore } from '../store';
 export const bytes = (n: number) =>
@@ -37,11 +38,13 @@ export function Properties() {
             <dd>{snapshot?.edited.includes(file.path) ? 'Project edit' : 'ROM · read only'}</dd>
           </dl>
           <label className="property-path">
-            Path<code>{file.path}</code>
+            Path
+            <FileLink path={file.path} />
           </label>
           {file.parent && (
             <p className="muted inset">Offset is relative to the uncompressed archive.</p>
           )}
+          <PairingDetails path={file.path} />
         </>
       ) : (
         <div className="empty">Select a file to inspect it.</div>
@@ -65,6 +68,7 @@ export function Properties() {
       {snapshot?.issues.length ? (
         snapshot.issues.map((i, n) => (
           <div className="issue" key={n}>
+            <FileLink path={i.location} />
             <strong>{i.message}</strong>
             <p>{i.why}</p>
             {i.fix === 'track-routes' && (
@@ -99,5 +103,31 @@ export function Properties() {
         </p>
       )}
     </div>
+  );
+}
+
+export function PairingDetails({ path }: { path: string }) {
+  const pair = useStore((s) => s.snapshot?.pairings?.find((p) => p.path === path));
+  if (!pair) return null;
+  return (
+    <details className="pairing-details">
+      <summary>Automatically paired assets</summary>
+      {(['tiles', 'palette', 'screen', 'cells', 'textures', 'face_animation'] as const).map(
+        (kind) =>
+          pair[kind] && (
+            <p key={kind}>
+              {kind.replace('_', ' ')}: <FileLink path={pair[kind]} />
+            </p>
+          ),
+      )}
+      {pair.animations.map((p) => (
+        <p key={p}>
+          Clip: <FileLink path={p} />
+        </p>
+      ))}
+      {!pair.palette && !pair.textures && !pair.animations.length && (
+        <p>No confirmed external pair; embedded resources may be used.</p>
+      )}
+    </details>
   );
 }

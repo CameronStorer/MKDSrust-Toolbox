@@ -28,6 +28,11 @@ fn main() -> toolbox_core::Result<()> {
     let mut service = Service {
         session: Some(session),
         project: Some(project),
+        settings: toolbox_core::settings::Settings {
+            install_path: "/MKDSrust".into(),
+            rom_path: "/user/roms/synthetic.nds".into(),
+            ..Default::default()
+        },
         persist_settings: false,
         ..Service::default()
     };
@@ -47,6 +52,9 @@ fn main() -> toolbox_core::Result<()> {
             "names": toolbox_core::names::list(None, &wizard)?,
             "game_entries": toolbox_core::game::entries(&wizard.nodes, &toolbox_core::tables::catalog(None, &wizard)?, &toolbox_core::names::list(None, &wizard)?),
             "files": wizard.nodes,
+            "related_pages": toolbox_core::related::pages(None, &wizard, &toolbox_core::tables::catalog(None, &wizard)?, &toolbox_core::names::list(None, &wizard)?),
+            "scenes": wizard.nodes.iter().filter(|n| n.format=="nsbmd" || n.format=="nsbca").map(|n| Ok((n.path.clone(), toolbox_core::scene::CourseScene::load(None, &wizard, &n.path)?.info))).collect::<toolbox_core::Result<std::collections::BTreeMap<_,_>>>()?,
+            "pairings": wizard.pairings,
         }))?,
     )?;
     let session = service.session.as_ref().unwrap();
@@ -75,6 +83,22 @@ fn main() -> toolbox_core::Result<()> {
     std::fs::create_dir_all(root.join("app/public/demo"))?;
     std::fs::write(root.join("app/public/demo/course.glb"), scene.glb(true)?)?;
     std::fs::write(root.join("app/public/demo/model.glb"), scene.glb(false)?)?;
+    for (name, path) in [
+        (
+            "driver",
+            "data/KartModelSub.carc/character/mario/P_MR.nsbmd",
+        ),
+        (
+            "static",
+            "data/KartModelMainA.carc/character/mario/E_MR.nsbmd",
+        ),
+    ] {
+        let scene = toolbox_core::scene::CourseScene::load(None, &wizard, path)?;
+        std::fs::write(
+            root.join(format!("app/public/demo/{name}.glb")),
+            scene.glb(false)?,
+        )?;
+    }
     let sound = nitro_formats::audio::Sdat::parse(&synthetic::sound_fixture())?;
     std::fs::write(
         root.join("app/src/demo-audio.json"),

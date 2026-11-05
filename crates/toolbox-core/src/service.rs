@@ -169,6 +169,8 @@ pub struct Snapshot {
     pub project_path: String,
     pub manifest: Option<Manifest>,
     pub files: Vec<FileNode>,
+    pub pairings: Vec<crate::associations::Pairing>,
+    pub related_pages: Vec<crate::related::RelatedPage>,
     pub edited: Vec<String>,
     pub history: Vec<HistoryItem>,
     pub selected: String,
@@ -252,6 +254,14 @@ impl Service {
             })
         };
         let mut warnings = session.map(|s| s.warnings.clone()).unwrap_or_default();
+        if let Some(used) = mkds_data::assets::used_duplicate(&self.selected)
+            .filter(|path| session.is_some_and(|s| s.file(path).is_ok()))
+        {
+            warnings.push(format!(
+                "{} is a stale duplicate. The game uses {}; edit the loose file instead.",
+                self.selected, used
+            ));
+        }
         let preview = match bytes.map(preview::preview).transpose() {
             Ok(p) => p.unwrap_or_default(),
             Err(e) => {
@@ -288,7 +298,22 @@ impl Service {
             .transpose()?
             .unwrap_or_default();
         Ok(Snapshot {
-            game_entries: crate::game::entries(&files, &wizard_catalog, &names),
+            related_pages: session
+                .map(|s| crate::related::pages(project, s, &wizard_catalog, &names))
+                .unwrap_or_default(),
+            pairings: session.map(|s| s.pairings.clone()).unwrap_or_default(),
+            game_entries: crate::game::entries(&files, &wizard_catalog, &names)
+                .into_iter()
+                .map(|mut entry| {
+                    if let Some(pair) =
+                        session.and_then(|s| s.pairings.iter().find(|p| p.path == entry.path))
+                    {
+                        entry.palette.clone_from(&pair.palette);
+                        entry.screen.clone_from(&pair.screen);
+                    }
+                    entry
+                })
+                .collect(),
             wizard_catalog,
             wizard_report: self.wizard_report.clone(),
             names,

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { Entry } from '../bindings';
+import { showRelated } from './RelatedAssets';
 import { binary } from '../backend';
 import { useStore, storedList } from '../store';
 import { openFile, openWorkspace } from '../commands';
@@ -127,7 +128,16 @@ export function GameBrowser({ gallery = false }: { gallery?: boolean }) {
   const [group, setGroup] = useState('');
   const [limit, setLimit] = useState(40);
   const [recent, setRecent] = useState(false);
-  const entries = snapshot?.game_entries ?? [];
+  const entries = (snapshot?.game_entries ?? []).filter(
+    (e) =>
+      !e.path.includes('/KartModelMain.carc/') &&
+      !(
+        e.path.includes('/KartModelMenu.carc/') &&
+        snapshot?.files.some(
+          (f) => f.path === e.path.replace('/KartModelMenu.carc/', '/KartModelMenu/'),
+        )
+      ),
+  );
   const images = entries.filter(
     (e) =>
       ['ncgr', 'ncer', 'nsbtx', 'nsbmd'].includes(
@@ -162,6 +172,9 @@ export function GameBrowser({ gallery = false }: { gallery?: boolean }) {
         <button className={!group ? 'active' : ''} onClick={() => setGroup('')}>
           All {gallery ? 'images' : 'game content'}
         </button>
+        {!gallery && (
+          <button onClick={() => showRelated('character:0')}>Character, kart & track pages</button>
+        )}
         {groups.map((g) => (
           <details open key={g}>
             <summary onClick={() => setGroup(g)}>{g}</summary>
@@ -251,8 +264,8 @@ export function GameBrowser({ gallery = false }: { gallery?: boolean }) {
           ))}
           {!list.length && (
             <p>
-              No matching {gallery ? 'paired images' : 'items'}. Try a name or path, or inspect
-              the Explorer in Studio.
+              No matching {gallery ? 'paired images' : 'items'}. Try a name or path, or inspect the
+              Explorer in Studio.
             </p>
           )}
           {list.length > limit && (
@@ -265,6 +278,13 @@ export function GameBrowser({ gallery = false }: { gallery?: boolean }) {
           <section className="game-preview">
             <div className="toolbar">
               <strong>{selected.label}</strong>
+              {snapshot?.related_pages
+                .filter((p) => p.assets.some((a) => a.path === selected.path))
+                .map((p) => (
+                  <button key={p.id} onClick={() => showRelated(p.id)}>
+                    Related: {p.title}
+                  </button>
+                ))}
               <span>{selected.location}</span>
               <div className="grow" />
               <button

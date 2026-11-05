@@ -16,9 +16,16 @@ Any code ported from another project is listed here with its license, and keeps 
 | [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) | SIL OFL 1.1 | Bundled hex/numeric font, via Fontsource; license in `app/public/licenses/JetBrainsMono-OFL.txt` |
 | [Lucide](https://lucide.dev) | ISC | UI icons (`lucide-react`) |
 | [qbsdiff](https://github.com/hucsmn/qbsdiff) | MIT | BSDIFF40 patch creation and test application |
+| [Tinke](https://github.com/pleonex/tinke) | GPL-3.0 | Explorer workflow reference: typed file activation, nested archives and expand-all; independent implementation, no code copied |
+| [EveryFileExplorer](https://github.com/Gericom/EveryFileExplorer) | GPL-3.0 | Explorer workflow reference: categories/icons and retained expansion/selection; independent implementation, no code copied |
+| [NitroPaint](https://github.com/Garhoogin/NitroPaint) | BSD-2-Clause | Linked palette/character/screen workflow reference; independent catalog-based association rules, no code copied |
 
 `crates/nitro-formats/src/lz77.rs` preserves the original builder module header and carries a provenance/SPDX header.
 The KCL header check in `detect.rs` is also ported from that module. Archive parsing and writing use one bounded
 implementation in `archive.rs`; unused builder format tables and duplicate archive helpers have been removed.
 No game assets, SDK code or extracted data are included. Demo JSON, image and screenshots are generated from
 `toolbox-core::synthetic`; the Toolbox application icon is original geometric artwork.
+
+Stage 6B's model association and related-course views also reference MKTB's `G3dModelManager` and `MkdsBinaryCourse`
+(MIT): named texture resources, separate main/Tex archives, and explicit local/global minimap combinations.
+The sources studied and the resulting choices are recorded in `docs/research/STAGE6B_WORKFLOWS.md`.

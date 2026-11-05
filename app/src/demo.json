@@ -52,7 +52,7 @@
       "label": "studio",
       "location": "On a menu or in the race display; inspect the preview to identify this image",
       "palette": "data/Studio/demo.carc/art/studio.nclr",
-      "screen": null
+      "screen": "data/Studio/demo.carc/art/studio.nscr"
     },
     {
       "path": "data/Studio/demo.carc/art/studio.ncgr",
@@ -116,20 +116,14 @@
   "compatibility": "DS OK",
   "bench": {
     "courses": [],
-    "games": [
-      {
-        "id": "MKDSrust",
-        "name": "Native game",
-        "path": "C:\\Users\\cam\\Desktop\\MKDSrust-windows-x64(2)\\games\\MKDSrust"
-      }
-    ],
+    "games": [],
     "running": false,
     "logs": [],
     "last_run": null
   },
   "rom_path": "/user/roms/synthetic.nds",
   "game": "AMCE",
-  "rom_hash": "c05679cdb4015084ff43c2e9261c18f7a52bae59dc5905fe86e97759662d5138",
+  "rom_hash": "22adead05cee97b5e9f91a11c1bed06bdb616f8ba0793b7f4c9d31d3eab14371",
   "project_path": "/projects/colour-study",
   "manifest": {
     "id": "studio.colour-study",
@@ -318,6 +312,3741 @@
       "compressed": false,
       "archive": false,
       "parent": null
+    }
+  ],
+  "pairings": [
+    {
+      "path": "data/Course/studio.carc/course_model.nsbca",
+      "tiles": null,
+      "palette": null,
+      "screen": null,
+      "cells": null,
+      "textures": "data/Course/studio.carc/course_model.nsbtx",
+      "animations": [
+        "data/Course/studio.carc/course_model.nsbca"
+      ],
+      "face_animation": null
+    },
+    {
+      "path": "data/Course/studio.carc/course_model.nsbmd",
+      "tiles": null,
+      "palette": null,
+      "screen": null,
+      "cells": null,
+      "textures": "data/Course/studio.carc/course_model.nsbtx",
+      "animations": [
+        "data/Course/studio.carc/course_model.nsbca"
+      ],
+      "face_animation": null
+    },
+    {
+      "path": "data/Studio/demo.carc/art/studio.nanr",
+      "tiles": "data/Studio/demo.carc/art/studio.ncgr",
+      "palette": "data/Studio/demo.carc/art/studio.nclr",
+      "screen": "data/Studio/demo.carc/art/studio.nscr",
+      "cells": "data/Studio/demo.carc/art/studio.ncer",
+      "textures": null,
+      "animations": [],
+      "face_animation": null
+    },
+    {
+      "path": "data/Studio/demo.carc/art/studio.ncer",
+      "tiles": "data/Studio/demo.carc/art/studio.ncgr",
+      "palette": "data/Studio/demo.carc/art/studio.nclr",
+      "screen": "data/Studio/demo.carc/art/studio.nscr",
+      "cells": "data/Studio/demo.carc/art/studio.ncer",
+      "textures": null,
+      "animations": [],
+      "face_animation": null
+    },
+    {
+      "path": "data/Studio/demo.carc/art/studio.ncgr",
+      "tiles": "data/Studio/demo.carc/art/studio.ncgr",
+      "palette": "data/Studio/demo.carc/art/studio.nclr",
+      "screen": "data/Studio/demo.carc/art/studio.nscr",
+      "cells": "data/Studio/demo.carc/art/studio.ncer",
+      "textures": null,
+      "animations": [],
+      "face_animation": null
+    },
+    {
+      "path": "data/Studio/demo.carc/art/studio.nclr",
+      "tiles": "data/Studio/demo.carc/art/studio.ncgr",
+      "palette": "data/Studio/demo.carc/art/studio.nclr",
+      "screen": "data/Studio/demo.carc/art/studio.nscr",
+      "cells": "data/Studio/demo.carc/art/studio.ncer",
+      "textures": null,
+      "animations": [],
+      "face_animation": null
+    },
+    {
+      "path": "data/Studio/demo.carc/art/studio.nscr",
+      "tiles": "data/Studio/demo.carc/art/studio.ncgr",
+      "palette": "data/Studio/demo.carc/art/studio.nclr",
+      "screen": "data/Studio/demo.carc/art/studio.nscr",
+      "cells": "data/Studio/demo.carc/art/studio.ncer",
+      "textures": null,
+      "animations": [],
+      "face_animation": null
+    }
+  ],
+  "related_pages": [
+    {
+      "id": "character:0",
+      "kind": "Character",
+      "slot": 0,
+      "title": "Mario",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:0",
+        "kart:1",
+        "kart:2"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:1",
+      "kind": "Character",
+      "slot": 1,
+      "title": "Donkey Kong",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 1,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 1,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:3",
+        "kart:4",
+        "kart:5"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:2",
+      "kind": "Character",
+      "slot": 2,
+      "title": "Toad",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 2,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 2,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:6",
+        "kart:7",
+        "kart:8"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:3",
+      "kind": "Character",
+      "slot": 3,
+      "title": "Bowser",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 3,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 3,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:9",
+        "kart:10",
+        "kart:11"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:4",
+      "kind": "Character",
+      "slot": 4,
+      "title": "Peach",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 4,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 4,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:12",
+        "kart:13",
+        "kart:14"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:5",
+      "kind": "Character",
+      "slot": 5,
+      "title": "Wario",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 5,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 5,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:15",
+        "kart:16",
+        "kart:17"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:6",
+      "kind": "Character",
+      "slot": 6,
+      "title": "Yoshi",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 6,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 6,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:18",
+        "kart:19",
+        "kart:20"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:7",
+      "kind": "Character",
+      "slot": 7,
+      "title": "Luigi",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 7,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 7,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:21",
+        "kart:22",
+        "kart:23"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:8",
+      "kind": "Character",
+      "slot": 8,
+      "title": "Dry Bones",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 8,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 8,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:24",
+        "kart:25",
+        "kart:26"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:9",
+      "kind": "Character",
+      "slot": 9,
+      "title": "Daisy",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 9,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 9,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:27",
+        "kart:28",
+        "kart:29"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:10",
+      "kind": "Character",
+      "slot": 10,
+      "title": "Waluigi",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 10,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 10,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:30",
+        "kart:31",
+        "kart:32"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:11",
+      "kind": "Character",
+      "slot": 11,
+      "title": "R.O.B.",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 11,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 11,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:33",
+        "kart:34",
+        "kart:35"
+      ],
+      "stats": []
+    },
+    {
+      "id": "character:12",
+      "kind": "Character",
+      "slot": 12,
+      "title": "Shy Guy",
+      "assets": [
+        {
+          "label": "Race driver",
+          "usage": "The detailed driver sitting in the kart during a race.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Far-away driver",
+          "usage": "The simpler driver used when detailed rendering is off.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu driver",
+          "usage": "The driver on the character selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (L)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 12,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Head icon (M)",
+          "usage": "Shared icon sheet in lists and results; character cell order is inferred.",
+          "path": null,
+          "mode": "cell",
+          "index": 12,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Voice",
+          "usage": "Voice samples from the bank referenced by this character's voice events; choose a sample and Play.",
+          "path": null,
+          "mode": "audio",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "kart:36"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:0",
+      "kind": "Kart",
+      "slot": 0,
+      "title": "Mario Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:0"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:1",
+      "kind": "Kart",
+      "slot": 1,
+      "title": "Mario kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:0"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:2",
+      "kind": "Kart",
+      "slot": 2,
+      "title": "Mario kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:0"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:3",
+      "kind": "Kart",
+      "slot": 3,
+      "title": "Donkey Kong Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:1"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:4",
+      "kind": "Kart",
+      "slot": 4,
+      "title": "Donkey Kong kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:1"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:5",
+      "kind": "Kart",
+      "slot": 5,
+      "title": "Donkey Kong kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:1"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:6",
+      "kind": "Kart",
+      "slot": 6,
+      "title": "Toad Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:2"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:7",
+      "kind": "Kart",
+      "slot": 7,
+      "title": "Toad kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:2"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:8",
+      "kind": "Kart",
+      "slot": 8,
+      "title": "Toad kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:2"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:9",
+      "kind": "Kart",
+      "slot": 9,
+      "title": "Bowser Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:3"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:10",
+      "kind": "Kart",
+      "slot": 10,
+      "title": "Bowser kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:3"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:11",
+      "kind": "Kart",
+      "slot": 11,
+      "title": "Bowser kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:3"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:12",
+      "kind": "Kart",
+      "slot": 12,
+      "title": "Peach Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:4"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:13",
+      "kind": "Kart",
+      "slot": 13,
+      "title": "Peach kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:4"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:14",
+      "kind": "Kart",
+      "slot": 14,
+      "title": "Peach kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:4"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:15",
+      "kind": "Kart",
+      "slot": 15,
+      "title": "Wario Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:5"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:16",
+      "kind": "Kart",
+      "slot": 16,
+      "title": "Wario kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:5"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:17",
+      "kind": "Kart",
+      "slot": 17,
+      "title": "Wario kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:5"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:18",
+      "kind": "Kart",
+      "slot": 18,
+      "title": "Yoshi Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:6"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:19",
+      "kind": "Kart",
+      "slot": 19,
+      "title": "Yoshi kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:6"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:20",
+      "kind": "Kart",
+      "slot": 20,
+      "title": "Yoshi kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:6"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:21",
+      "kind": "Kart",
+      "slot": 21,
+      "title": "Luigi Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:7"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:22",
+      "kind": "Kart",
+      "slot": 22,
+      "title": "Luigi kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:7"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:23",
+      "kind": "Kart",
+      "slot": 23,
+      "title": "Luigi kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:7"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:24",
+      "kind": "Kart",
+      "slot": 24,
+      "title": "Dry Bones Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:8"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:25",
+      "kind": "Kart",
+      "slot": 25,
+      "title": "Dry Bones kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:8"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:26",
+      "kind": "Kart",
+      "slot": 26,
+      "title": "Dry Bones kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:8"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:27",
+      "kind": "Kart",
+      "slot": 27,
+      "title": "Daisy Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:9"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:28",
+      "kind": "Kart",
+      "slot": 28,
+      "title": "Daisy kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:9"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:29",
+      "kind": "Kart",
+      "slot": 29,
+      "title": "Daisy kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:9"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:30",
+      "kind": "Kart",
+      "slot": 30,
+      "title": "Waluigi Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:10"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:31",
+      "kind": "Kart",
+      "slot": 31,
+      "title": "Waluigi kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:10"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:32",
+      "kind": "Kart",
+      "slot": 32,
+      "title": "Waluigi kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:10"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:33",
+      "kind": "Kart",
+      "slot": 33,
+      "title": "R.O.B. Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:11"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:34",
+      "kind": "Kart",
+      "slot": 34,
+      "title": "R.O.B. kart 2",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:11"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:35",
+      "kind": "Kart",
+      "slot": 35,
+      "title": "R.O.B. kart 3",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:11"
+      ],
+      "stats": []
+    },
+    {
+      "id": "kart:36",
+      "kind": "Kart",
+      "slot": 36,
+      "title": "Shy Guy Standard kart",
+      "assets": [
+        {
+          "label": "Race body",
+          "usage": "The kart body during a race; wheels use the offset table.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Menu body",
+          "usage": "The kart on the kart selection screen.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (S)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (M)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Wheels (L)",
+          "usage": "Separate tire models spin and steer at the four wheel positions.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Shadow",
+          "usage": "The untextured ground shadow under the kart.",
+          "path": null,
+          "mode": "model",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        },
+        {
+          "label": "Emblem",
+          "usage": "The sticker applied to the kart at runtime; Standard kart ownership follows the selected character.",
+          "path": null,
+          "mode": "image",
+          "index": 0,
+          "audio_kind": 0,
+          "attachments": []
+        }
+      ],
+      "links": [
+        "character:12"
+      ],
+      "stats": []
     }
   ],
   "edited": [
@@ -594,9 +4323,9 @@
     "height": 0
   },
   "settings": {
-    "allow_pc_only": true,
+    "allow_pc_only": false,
     "play_target": "emulator",
-    "emulator_path": "C:\\AI\\reverse-engineering\\tools\\melonDS\\melonDS.exe",
+    "emulator_path": "",
     "flashcart_path": "",
     "race": {
       "course": null,
@@ -604,8 +4333,8 @@
       "kart": null,
       "racers": null
     },
-    "rom_path": "C:\\Users\\cam\\Desktop\\gamefile.nds",
-    "install_path": "C:\\Users\\cam\\Desktop\\MKDSrust-windows-x64(2)",
+    "rom_path": "/user/roms/synthetic.nds",
+    "install_path": "/MKDSrust",
     "theme": "dark",
     "navigation": "Blender",
     "camera_speed": 1.0,
