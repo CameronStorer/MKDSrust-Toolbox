@@ -181,7 +181,8 @@ pub fn nsbmd() -> Vec<u8> {
     b[23] = 1;
     b[24] = 1;
     b[25] = 1;
-    put32(&mut b, 32, 128 * 4096);
+    put32(&mut b, 28, 128 * 4096);
+    put32(&mut b, 32, 32);
     put32(&mut b, 36, 32);
     put16(&mut b, 40, 8);
     put16(&mut b, 42, 2);

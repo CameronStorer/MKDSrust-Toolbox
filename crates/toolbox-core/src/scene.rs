@@ -191,8 +191,29 @@ impl CourseScene {
         })
     }
     pub fn glb(&self, collision: bool) -> Result<Vec<u8>> {
+        // Course models are drawn 16x by the game; scale them to collision/route units so overlays line up.
+        let scaled = self
+            .model
+            .as_ref()
+            .filter(|_| {
+                self.info
+                    .model_path
+                    .as_deref()
+                    .is_some_and(|p| p.contains("/course_model"))
+            })
+            .map(|m| {
+                let mut m = m.clone();
+                for model in &mut m.models {
+                    for mesh in &mut model.meshes {
+                        for p in &mut mesh.positions {
+                            *p = p.map(|v| v * mkds_data::COURSE_MODEL_SCALE);
+                        }
+                    }
+                }
+                m
+            });
         model::glb(
-            self.model.as_ref(),
+            scaled.as_ref().or(self.model.as_ref()),
             self.textures.as_ref(),
             &self.animations,
             if collision { self.kcl.as_ref() } else { None },

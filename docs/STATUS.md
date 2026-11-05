@@ -8,6 +8,16 @@ emulator. MKDSrust is an optional play target. Not yet confirmed on a real DS or
   as on the DS. 358 retail materials use one. They are kept when a model is written back.
 - Top bar: a **Simple | Studio** switch replaces the hidden Advanced button and is remembered between sessions.
 - Model view: the camera stays where the user left it after an edit.
+- Track wizard, touch-screen maps: the race's default zoomed map (`local2`/`local3`) is now a top-down picture of
+  the new map with the racing line as road, placed by the slot's rectangle-table-2 square. The overview (`global`)
+  is drawn in the retail style with the slot's measured transform. Both were blank before.
+- **Black floor fixed (race-verified in MKDSrust):** three model-writer bugs made generated course models
+  invisible. (1) The model info header was 4 bytes off: position scale 0 and an empty bounding box. (2) Course shapes
+  used per-vertex matrix restores, which the game's course drawing doesn't set up. Single-node models are now written
+  like retail courses: header position scale plus POSSCALE. (3) The game draws course models 16x (`COURSE_MODEL_SCALE`),
+  so the wizard wrote tracks 16x too big. The reader now applies POSSCALE from the right header field, so retail
+  models load at true size, and the Track view scales course models 16x to line up with collision and routes. A retail
+  Figure-8 model run through our reader and writer renders correctly in game.
 
 Stage 6 A-H now have a first breadth-first usability pass. Stages 1-5 and the
 expert editors remain available. Changes are uncommitted.

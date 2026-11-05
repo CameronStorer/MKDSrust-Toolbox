@@ -7,12 +7,7 @@ use crate::{
     wizard::{bounds, Report},
     Error, Result,
 };
-use nitro_formats::{
-    graphics::{Ncgr, Nscr},
-    math,
-    model::Nsbmd,
-    nkm::Nkm,
-};
+use nitro_formats::{math, model::Nsbmd, nkm::Nkm};
 use serde::Deserialize;
 use specta::Type;
 use std::collections::BTreeMap;
@@ -565,6 +560,8 @@ pub fn track_from(
         .ok_or_else(|| err("choose a course slot"))?;
     let arm = p.bytes(s, nitro_formats::executable::ARM9)?;
     let rect = map_rectangle(arm, o.course, false)?;
+    // The zoomed map's square; a slot without one keeps a plain zoomed map.
+    let local_rect = map_rectangle(arm, o.course, true).unwrap_or([0.; 4]);
     let m = source
         .models
         .first_mut()
@@ -727,6 +724,14 @@ pub fn track_from(
         let tex_root = root.replace(".carc", "Tex.carc");
         let texture_path = format!("{tex_root}/course_model.nsbtx");
         let mut course_model = source.clone();
+        // The game draws course models 16x (retail: model units x 16 = collision units, e.g. Mario Circuit).
+        for model in &mut course_model.models {
+            for mesh in &mut model.meshes {
+                for p in &mut mesh.positions {
+                    *p = p.map(|v| v / mkds_data::COURSE_MODEL_SCALE);
+                }
+            }
+        }
         if s.file(&texture_path).is_ok() {
             course_model.textures = None;
         }
@@ -746,19 +751,17 @@ pub fn track_from(
                 map_note = Some(map.note);
             }
         }
-        // Zoomed layers: the retail art shows the old course, so replace it with a plain backdrop.
-        edits.insert(
-            format!("{tex_root}/Map2D/local.NCGR"),
-            Ncgr::new(32, 1, 4, false, vec![0; 64 * 32])?.write(),
-        );
-        for layer in ["local2", "local3"] {
-            let path = format!("{tex_root}/Map2D/{layer}.NSCR");
-            // Keep the slot's screen size (retail: 512x512).
-            if let Ok(old) = s.file(&path).and_then(crate::preview::plain) {
-                let old = Nscr::parse(&old)?;
-                let n = old.entries.len();
-                edits.insert(path, Nscr::new(old.width, old.height, &vec![0; n])?.write());
-            }
+        // Zoomed layers (the race's default touch-screen view): a top-down picture of the new map.
+        if let Some(files) = crate::course_map::local_maps(
+            s,
+            root,
+            local_rect,
+            &source.models[0],
+            source.textures.as_ref(),
+            &line,
+            o.width,
+        )? {
+            edits.extend(files);
         }
     }
     let limits = file_budgets(s)?;

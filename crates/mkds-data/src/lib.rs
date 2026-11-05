@@ -37,6 +37,9 @@ pub const fn collision_attribute(kind: u16, wall: bool, floor: bool) -> u16 {
 pub const RETAIL_COLLISION_TYPES: &[u16] = &[
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
 ];
+/// The game draws `course_model.nsbmd` at 16x its model units (collision and map data use the scaled units;
+/// measured: Mario Circuit model 270.09 x 16 = collision 4321.99).
+pub const COURSE_MODEL_SCALE: f32 = 16.;
 pub const COLLISION_TYPES: &[(u16, &str)] = &[
     (0, "Road"),
     (1, "Slippery road"),

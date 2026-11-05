@@ -374,6 +374,238 @@ fn colours(img: &[u8]) -> (u8, u8) {
     (fill, outline.unwrap_or(3) as u8)
 }
 
+/// Generated files: (ROM path, bytes).
+pub type Files = Vec<(String, Vec<u8>)>;
+
+/// Zoomed touch-screen map (the race's default view). `local2.NSCR` covers the slot's rectangle-table-2 square
+/// (Figure-8: 6000 world units on 512x512, no rotation; 88% road overlap measured). `local3.NSCR`, when the slot has
+/// one, covers the neighbouring square on the side where the retail road continues. Both share `local.NCGR` (8bpp,
+/// at most 1024 tiles) and `local.NCLR`.
+pub fn local_maps(
+    s: &RomSession,
+    root: &str,
+    rect: [f32; 4],
+    model: &nitro_formats::model::Model,
+    textures: Option<&nitro_formats::texture::Nsbtx>,
+    line: &[[f32; 3]],
+    width: f32,
+) -> Result<Option<Files>> {
+    let tex_root = root.replace(".carc", "Tex.carc");
+    let read = |p: &str| -> Result<Vec<u8>> { crate::preview::plain(s.file(p)?) };
+    let Ok(first) = read(&format!("{tex_root}/Map2D/local2.NSCR")) else {
+        return Ok(None);
+    };
+    let first = Nscr::parse(&first)?;
+    let (sw, sh) = (first.width as usize, first.height as usize);
+    if sw < 8 || sh < 8 || rect[2] <= rect[0] {
+        return Ok(None);
+    }
+    let scale = sw as f32 / (rect[2] - rect[0]);
+    let span = [sw as f32 / scale, sh as f32 / scale];
+    let mut origins = vec![[rect[0], rect[1]]];
+    if s.file(&format!("{tex_root}/Map2D/local3.NSCR")).is_ok() {
+        // The side where most retail road lies.
+        let road: Vec<[f32; 3]> = read(&format!("{root}/course_collision.kcl"))
+            .ok()
+            .and_then(|b| Kcl::parse(&b).ok())
+            .and_then(|k| k.triangles().ok())
+            .map(|t| {
+                t.into_iter()
+                    .filter(|t| ROAD.contains(&mkds_data::collision_type(t.attribute)))
+                    .flat_map(|t| t.positions)
+                    .collect()
+            })
+            .unwrap_or_default();
+        let inside = |o: [f32; 2], p: &[f32; 3]| {
+            p[0] >= o[0] && p[0] < o[0] + span[0] && p[2] >= o[1] && p[2] < o[1] + span[1]
+        };
+        let best = [[span[0], 0.], [-span[0], 0.], [0., span[1]], [0., -span[1]]]
+            .iter()
+            .map(|d| [rect[0] + d[0], rect[1] + d[1]])
+            .max_by_key(|o| road.iter().filter(|p| inside(*o, p)).count())
+            .unwrap_or([rect[0] + span[0], rect[1]]);
+        origins.push(best);
+    }
+    // Flat material colours: each material's average texture colour times its diffuse colour.
+    let colours: Vec<[f32; 3]> = model
+        .materials
+        .iter()
+        .map(|m| {
+            let mut c = [m.diffuse[0], m.diffuse[1], m.diffuse[2]];
+            let texture = textures.zip(m.texture.as_ref()).and_then(|(bank, name)| {
+                let t = bank.textures.iter().position(|t| &t.name == name)?;
+                let p = m
+                    .palette
+                    .as_ref()
+                    .and_then(|n| bank.palettes.iter().position(|p| &p.name == n))
+                    .unwrap_or(0);
+                bank.decode(t, p).ok()
+            });
+            if let Some(img) = texture {
+                let (mut sum, mut n) = ([0f32; 3], 0f32);
+                for px in img.rgba.chunks_exact(4).filter(|px| px[3] > 0) {
+                    for k in 0..3 {
+                        sum[k] += px[k] as f32 / 255.;
+                    }
+                    n += 1.;
+                }
+                if n > 0. {
+                    c = [0, 1, 2].map(|k| c[k] * sum[k] / n);
+                }
+            }
+            c
+        })
+        .collect();
+    let (iw, ih) = (sw * origins.len(), sh);
+    let mut rgb = vec![[0.30f32, 0.55, 0.25]; iw * ih];
+    let mut depth = vec![f32::NEG_INFINITY; iw * ih];
+    for (k, o) in origins.iter().enumerate() {
+        let (x0, x1) = (k * sw, (k + 1) * sw);
+        let px = |p: [f32; 3]| [(p[0] - o[0]) * scale + x0 as f32, (p[2] - o[1]) * scale];
+        for mesh in &model.meshes {
+            let colour = colours.get(mesh.material).copied().unwrap_or([0.6; 3]);
+            for ids in mesh.indices.chunks_exact(3) {
+                let v = [0, 1, 2].map(|i| mesh.positions[ids[i] as usize]);
+                let height = (v[0][1] + v[1][1] + v[2][1]) / 3.;
+                raster(&v.map(px), iw, ih, x0, x1, |i| {
+                    if height >= depth[i] {
+                        depth[i] = height;
+                        rgb[i] = colour;
+                    }
+                });
+            }
+        }
+        // The racing line as road with a light edge, as on retail maps.
+        let pts: Vec<[f32; 2]> = line.iter().map(|p| px(*p)).collect();
+        let core = (width * 0.5 * scale).max(3.);
+        for (r, c) in [(core + 1.5, [0.95f32; 3]), (core, [0.42; 3])] {
+            for i in 0..pts.len() {
+                let (a, b) = (pts[i], pts[(i + 1) % pts.len()]);
+                let (dx, dy) = (b[0] - a[0], b[1] - a[1]);
+                let len = (dx * dx + dy * dy).sqrt().max(1e-3);
+                let (nx, ny) = (-dy / len * r, dx / len * r);
+                let q = [
+                    [a[0] + nx, a[1] + ny],
+                    [b[0] + nx, b[1] + ny],
+                    [b[0] - nx, b[1] - ny],
+                    [a[0] - nx, a[1] - ny],
+                ];
+                for tri in [[q[0], q[1], q[2]], [q[0], q[2], q[3]]] {
+                    raster(&tri, iw, ih, x0, x1, |i| rgb[i] = c);
+                }
+                for j in 0..16 {
+                    let at = |j: usize| {
+                        let t = j as f32 / 16. * std::f32::consts::TAU;
+                        [a[0] + r * t.cos(), a[1] + r * t.sin()]
+                    };
+                    raster(&[a, at(j), at(j + 1)], iw, ih, x0, x1, |i| rgb[i] = c);
+                }
+            }
+        }
+    }
+    let image = nitro_formats::graphics::Image {
+        width: iw as u32,
+        height: ih as u32,
+        rgba: rgb
+            .iter()
+            .flat_map(|c| {
+                let [r, g, b] = c.map(|v| (v.clamp(0., 1.) * 255.).round() as u8);
+                [r, g, b, 255]
+            })
+            .collect(),
+    };
+    let (palette, indices) = crate::graphic::quantize(&image, 256, false, false);
+    // One shared 8bpp tile set of at most 1024 tiles: rare tiles fall back to their closest kept tile.
+    let per_row = sw / 8;
+    let per = per_row * (sh / 8);
+    let tile_at = |k: usize, t: usize| -> Vec<u8> {
+        let (tx, ty) = (t % per_row, t / per_row);
+        (0..64)
+            .map(|p| indices[(ty * 8 + p / 8) * iw + k * sw + tx * 8 + p % 8])
+            .collect()
+    };
+    let mut counts: std::collections::HashMap<Vec<u8>, usize> = Default::default();
+    for k in 0..origins.len() {
+        for t in 0..per {
+            *counts.entry(tile_at(k, t)).or_default() += 1;
+        }
+    }
+    let mut kept: Vec<(Vec<u8>, usize)> = counts.into_iter().collect();
+    kept.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
+    kept.truncate(1024);
+    let kept: Vec<Vec<u8>> = kept.into_iter().map(|k| k.0).collect();
+    let lookup: std::collections::HashMap<&Vec<u8>, usize> =
+        kept.iter().enumerate().map(|(i, t)| (t, i)).collect();
+    let mut files = vec![];
+    for (k, layer) in ["local2", "local3"].iter().enumerate().take(origins.len()) {
+        let entries: Vec<u16> = (0..per)
+            .map(|t| {
+                let tile = tile_at(k, t);
+                lookup.get(&tile).copied().unwrap_or_else(|| {
+                    (0..kept.len())
+                        .min_by_key(|i| kept[*i].iter().zip(&tile).filter(|(a, b)| a != b).count())
+                        .unwrap_or(0)
+                }) as u16
+            })
+            .collect();
+        files.push((
+            format!("{tex_root}/Map2D/{layer}.NSCR"),
+            Nscr::new(sw as u16, sh as u16, &entries)?.write(),
+        ));
+    }
+    let rows = kept.len().div_ceil(32).max(1);
+    let mut data = kept.concat();
+    data.resize(rows * 32 * 64, 0);
+    files.push((
+        format!("{tex_root}/Map2D/local.NCGR"),
+        Ncgr::new(32, rows as u16, 4, false, data)?.write(),
+    ));
+    let mut colours = palette;
+    colours.resize(256, 0);
+    files.push((
+        format!("{tex_root}/Map2D/local.NCLR"),
+        nitro_formats::graphics::Nclr::new(&colours, true, false).write(),
+    ));
+    Ok(Some(files))
+}
+
+/// Calls `put` for each pixel centre inside the triangle, within columns `x0..x1` of a `w` x `h` image.
+fn raster(
+    tri: &[[f32; 2]; 3],
+    w: usize,
+    h: usize,
+    x0: usize,
+    x1: usize,
+    mut put: impl FnMut(usize),
+) {
+    let lo = |k: usize| {
+        tri.iter()
+            .map(|p| p[k])
+            .fold(f32::INFINITY, f32::min)
+            .floor()
+            .max(0.) as usize
+    };
+    let hi = |k: usize| {
+        tri.iter()
+            .map(|p| p[k])
+            .fold(f32::NEG_INFINITY, f32::max)
+            .ceil()
+            .max(0.) as usize
+    };
+    for y in lo(1)..hi(1).min(h) {
+        for x in lo(0).max(x0)..hi(0).min(x1).min(w) {
+            let (px, py) = (x as f32 + 0.5, y as f32 + 0.5);
+            let s = [0, 1, 2].map(|k| {
+                let (a, b) = (tri[k], tri[(k + 1) % 3]);
+                (b[0] - a[0]) * (py - a[1]) - (b[1] - a[1]) * (px - a[0])
+            });
+            if s.iter().all(|v| *v >= 0.) || s.iter().all(|v| *v <= 0.) {
+                put(y * w + x);
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
