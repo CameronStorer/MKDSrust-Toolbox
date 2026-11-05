@@ -29,3 +29,9 @@ No game assets, SDK code or extracted data are included. Demo JSON, image and sc
 Stage 6B's model association and related-course views also reference MKTB's `G3dModelManager` and `MkdsBinaryCourse`
 (MIT): named texture resources, separate main/Tex archives, and explicit local/global minimap combinations.
 The sources studied and the resulting choices are recorded in `docs/research/STAGE6B_WORKFLOWS.md`.
+
+Stage 6B Run 2 also studies NitroPaint's texture/palette editors (BSD-2-Clause),
+apicula's skeleton/vertex influence representation (0BSD), and
+[Blender's default keymap](https://github.com/blender/blender/blob/main/scripts/presets/keyconfig/keymap_data/blender_default.py)
+(GPL-3.0-or-later) for modal mesh-editing behavior. These are workflow references;
+the linked-copy commands, mesh operations and UI are original implementations. No source code was copied.

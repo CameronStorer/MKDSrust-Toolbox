@@ -29,6 +29,9 @@ pub struct SceneEntry {
 }
 #[derive(Clone, Debug, Default, Serialize, Type)]
 pub struct SceneInfo {
+    pub linked_copies: Vec<crate::linked::LinkedCopy>,
+    pub bone_details: Vec<BoneDetail>,
+    pub material_details: Vec<MaterialDetail>,
     pub parts: Vec<ModelPart>,
     pub path: String,
     pub model_path: Option<String>,
@@ -41,6 +44,25 @@ pub struct SceneInfo {
     pub budget: Budget,
     pub issues: Vec<String>,
     pub collision_types: Vec<u16>,
+}
+#[derive(Clone, Debug, Serialize, Type)]
+pub struct BoneDetail {
+    pub name: String,
+    pub parent: Option<u32>,
+    pub position: [f32; 3],
+    pub vertices: u32,
+    pub clips: Vec<String>,
+}
+#[derive(Clone, Debug, Serialize, Type)]
+pub struct MaterialDetail {
+    pub name: String,
+    pub texture: Option<String>,
+    pub palette: Option<String>,
+    pub path: Option<String>,
+    pub texture_index: u32,
+    pub palette_index: u32,
+    pub format: u8,
+    pub colors: Vec<u16>,
 }
 #[derive(Clone, Debug, Serialize, Type)]
 pub struct ModelPart {
@@ -128,7 +150,8 @@ impl CourseScene {
                 })
         });
         let textures = texture_path
-            .map(|p| Ok::<_, Error>(Nsbtx::parse(&bytes(&p)?)?))
+            .as_ref()
+            .map(|p| Ok::<_, Error>(Nsbtx::parse(&bytes(p)?)?))
             .transpose()?;
         let kcl = kcl_path
             .map(|p| Ok::<_, Error>(Kcl::parse(&bytes(&p)?)?))
@@ -162,7 +185,82 @@ impl CourseScene {
             }
         }
         if let Some(m) = &model {
+            info.linked_copies =
+                crate::linked::copies(project, session, model_path.as_deref().unwrap_or(path))?;
+            let bank = m.textures.as_ref().or(textures.as_ref());
             for m in &m.models {
+                let offset = info.bone_details.len() as u32;
+                let world = crate::model::bone_world(m);
+                for (i, b) in m.bones.iter().enumerate() {
+                    let vertices = m
+                        .meshes
+                        .iter()
+                        .map(|mesh| {
+                            mesh.joints
+                                .iter()
+                                .zip(&mesh.weights)
+                                .filter(|(js, ws)| {
+                                    js.iter()
+                                        .zip(ws.iter())
+                                        .any(|(&j, &w)| j as usize == i && w > 0.)
+                                })
+                                .count() as u32
+                        })
+                        .sum();
+                    let position = nitro_formats::math::point(world[i], [0.; 3]);
+                    info.bone_details.push(BoneDetail {
+                        name: b.name.clone(),
+                        parent: b.parent.map(|p| p as u32 + offset),
+                        position,
+                        vertices,
+                        clips: animations
+                            .iter()
+                            .filter(|a| {
+                                a.joints.iter().any(|j| {
+                                    j.bone == i
+                                        && (j.translations.is_some()
+                                            || j.rotations.is_some()
+                                            || j.scales.is_some())
+                                })
+                            })
+                            .map(|a| a.name.clone())
+                            .collect(),
+                    });
+                }
+                for material in &m.materials {
+                    let t = bank.and_then(|b| {
+                        material
+                            .texture
+                            .as_ref()
+                            .and_then(|n| b.textures.iter().position(|t| &t.name == n))
+                    });
+                    let p = bank.and_then(|b| {
+                        material
+                            .palette
+                            .as_ref()
+                            .and_then(|n| b.palettes.iter().position(|p| &p.name == n))
+                    });
+                    info.material_details.push(MaterialDetail {
+                        name: material.name.clone(),
+                        texture: material.texture.clone(),
+                        palette: material.palette.clone(),
+                        path: t.and_then(|_| {
+                            if model.as_ref().is_some_and(|m| m.textures.is_some()) {
+                                model_path.clone()
+                            } else {
+                                texture_path.clone()
+                            }
+                        }),
+                        texture_index: t.unwrap_or(0) as u32,
+                        palette_index: p.unwrap_or(0) as u32,
+                        format: bank
+                            .and_then(|b| t.map(|t| b.textures[t].format))
+                            .unwrap_or(0),
+                        colors: bank
+                            .and_then(|b| p.map(|p| b.palettes[p].colors.clone()))
+                            .unwrap_or_default(),
+                    });
+                }
                 info.materials.extend(m.materials.iter().map(|m| {
                     format!(
                         "{} · {}",

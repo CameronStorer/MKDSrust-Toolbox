@@ -4,11 +4,17 @@ import assets from './demo-assets.json';
 import sceneData from './demo-scene.json';
 import audioData from './demo-audio.json';
 import wizardData from './demo-wizards.json';
-let sceneState = structuredClone(sceneData);
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
+import { previewEdit } from './mesh-selection';
+let sceneState = structuredClone(sceneData) as unknown as SceneInfo;
 import type { SceneInfo } from './bindings';
+let sceneBank = structuredClone(wizardData.scenes) as unknown as Record<string, SceneInfo>;
+let modelBytes: Record<string, ArrayBuffer> = {};
 export async function scene(path: string): Promise<SceneInfo> {
-  const fixture = (wizardData.scenes as unknown as Record<string, SceneInfo>)[path];
-  if (fixture && !path.includes('/Course/')) return clone(fixture);
+  const fixture = sceneBank[path];
+  if (fixture) return clone(fixture);
   const tuple = (v: number[] | null): [number, number, number] | null =>
     v ? [v[0], v[1], v[2]] : null;
   return {
@@ -51,6 +57,11 @@ const messages = { ...clone(assets.messages), ...clone(wizardData.messages) } as
 >;
 const originalMessages = clone(messages);
 interface Edit {
+  oldSceneBank: typeof sceneBank;
+  newSceneBank: typeof sceneBank;
+  oldModelBytes: typeof modelBytes;
+  newModelBytes: typeof modelBytes;
+  paths: string[];
   oldCatalog: Snapshot['wizard_catalog'];
   newCatalog: Snapshot['wizard_catalog'];
   oldNames: Snapshot['names'];
@@ -109,12 +120,15 @@ function updatePreview() {
   state.history = history.map((h, i) => ({
     title: h.title,
     applied: i < cursor,
-    paths: h.newEdited.filter((p) => !h.oldEdited.includes(p)),
+    paths: h.paths,
   }));
   state.can_undo = cursor > 0;
   state.can_redo = cursor < history.length;
 }
 export async function dispatch(r: Request): Promise<Snapshot> {
+  const oldSceneBank = clone(sceneBank),
+    oldModelBytes = clone(modelBytes);
+  let changePaths: string[] = [];
   const oldCatalog = clone(state.wizard_catalog),
     oldNames = clone(state.names);
   const oldPixels = clone(pixels);
@@ -183,6 +197,76 @@ export async function dispatch(r: Request): Promise<Snapshot> {
             ? ['Generated track files checked against synthetic size limits.']
             : [],
       };
+      break;
+    }
+    case 'ModelMaterial': {
+      const info = await scene(r.path),
+        detail = info.material_details[r.material];
+      if (r.action.kind === 'Recolour') detail.colors[r.action.index] = r.action.color;
+      sceneBank[r.path] = info;
+      editedPath = r.path;
+      title = 'Edit model texture';
+      break;
+    }
+    case 'ModelBatch': {
+      const info = await scene(r.path);
+      const targets =
+        r.linked && info.linked_copies.length ? info.linked_copies.map((c) => c.path) : [r.path];
+      for (const path of targets) {
+        const data = await binary({
+          path,
+          mode: 'glb',
+          palette: null,
+          screen: null,
+          texture: 0,
+          bank: 0,
+          start: 0,
+          length: 0,
+        });
+        const gltf = await new GLTFLoader().parseAsync(data, '');
+        const metadata = await scene(path);
+        const meshes: THREE.Mesh[] = [];
+        gltf.scene.traverse((o) => {
+          if (o instanceof THREE.Mesh && typeof o.userData.part === 'number') meshes.push(o);
+        });
+        for (const action of r.actions) {
+          title =
+            action.kind === 'Edit'
+              ? {
+                  Transform: 'Transform model',
+                  Extrude: 'Extrude selection',
+                  Inset: 'Inset selection',
+                  Delete: 'Delete model selection',
+                  Merge: 'Merge selected vertices',
+                }[action.operation.kind]
+              : action.kind + ' model';
+          if (action.kind === 'Import') continue;
+          const mesh = meshes.find((m) => m.userData.part === action.part);
+          if (!mesh) continue;
+          if (action.kind === 'Edit')
+            mesh.geometry = previewEdit(mesh.geometry, action.selection, action.operation);
+          if (action.kind === 'Decimate')
+            mesh.geometry.setIndex(
+              Array.from(mesh.geometry.index?.array ?? []).slice(0, action.target * 3),
+            );
+          const part = metadata.parts[action.part];
+          if (part)
+            part.triangles =
+              (mesh.geometry.index?.count ?? mesh.geometry.getAttribute('position').count) / 3;
+        }
+        metadata.budget.polygons = metadata.parts.reduce((n, p) => n + p.triangles, 0);
+        sceneBank[path] = metadata;
+        modelBytes[path] = (await new GLTFExporter().parseAsync(gltf.scene, {
+          binary: true,
+          animations: gltf.animations,
+        })) as ArrayBuffer;
+      }
+      for (const metadata of Object.values(sceneBank))
+        for (const copy of metadata.linked_copies)
+          if (sceneBank[copy.path]) copy.triangles = sceneBank[copy.path].budget.polygons;
+      if (!sceneBank[r.path]?.path.includes('/KartModel')) sceneState = clone(sceneBank[r.path]);
+      changePaths = targets;
+      editedPath = r.path;
       break;
     }
     case 'Model':
@@ -347,6 +431,8 @@ export async function dispatch(r: Request): Promise<Snapshot> {
         const h = history[--cursor];
         pixels = clone(h.oldPixels);
         sceneState = clone(h.oldScene);
+        sceneBank = clone(h.oldSceneBank);
+        modelBytes = clone(h.oldModelBytes);
         state.audio_resources = clone(h.oldAudio);
         colors = clone(h.before);
         Object.assign(messages, clone(h.oldMessages));
@@ -362,6 +448,8 @@ export async function dispatch(r: Request): Promise<Snapshot> {
         const h = history[cursor++];
         pixels = clone(h.newPixels);
         sceneState = clone(h.newScene);
+        sceneBank = clone(h.newSceneBank);
+        modelBytes = clone(h.newModelBytes);
         state.audio_resources = clone(h.newAudio);
         colors = clone(h.after);
         Object.assign(messages, clone(h.newMessages));
@@ -414,10 +502,16 @@ export async function dispatch(r: Request): Promise<Snapshot> {
     case 'Extract':
       break;
   }
-  if (editedPath && !state.edited.includes(editedPath)) state.edited.push(editedPath);
+  if (editedPath && !changePaths.length) changePaths = [editedPath];
+  for (const path of changePaths) if (!state.edited.includes(path)) state.edited.push(path);
   if (title) {
     history = history.slice(0, cursor);
     history.push({
+      oldSceneBank,
+      newSceneBank: clone(sceneBank),
+      oldModelBytes,
+      newModelBytes: clone(modelBytes),
+      paths: changePaths,
       oldCatalog,
       newCatalog: clone(state.wizard_catalog),
       oldNames,
@@ -451,8 +545,11 @@ export async function dispatch(r: Request): Promise<Snapshot> {
   return clone(state);
 }
 export async function binary(r: BinaryRequest): Promise<ArrayBuffer> {
+  if (r.mode === 'glb' && modelBytes[r.path]) return modelBytes[r.path].slice(0);
   if (r.mode === 'audio-wav') return (await fetch('/demo/tone.wav')).arrayBuffer();
   if (r.mode === 'glb' && !r.path.includes('/Course/')) {
+    if (r.path === 'data/Studio/editing.nsbmd')
+      return (await fetch('/demo/editing.glb')).arrayBuffer();
     const animated = state.pairings.find((p) => p.path === r.path)?.animations.length;
     return (await fetch(`/demo/${animated ? 'driver' : 'static'}.glb`)).arrayBuffer();
   }
@@ -470,6 +567,30 @@ export async function binary(r: BinaryRequest): Promise<ArrayBuffer> {
   }
   if (r.mode === 'cell-png') return (await fetch('/demo/cell.png')).arrayBuffer();
   if (r.mode === 'png' || r.mode === 'import-preview') {
+    if (r.path === 'data/Studio/editing.nsbmd') {
+      const bitmap = await createImageBitmap(await (await fetch('/demo/editing.png')).blob());
+      const canvas = document.createElement('canvas');
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(bitmap, 0, 0);
+      bitmap.close();
+      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const original = (wizardData.scenes as unknown as Record<string, SceneInfo>)[r.path]
+        .material_details[0].colors;
+      const palette = sceneBank[r.path].material_details[0].colors;
+      const rgb = (c: number) => rgb555(c).map((c) => (c << 3) | (c >> 2));
+      for (let i = 0; i < pixels.data.length; i += 4) {
+        const index = original.findIndex((c) =>
+          rgb(c).every((v, k) => Math.abs(v - pixels.data[i + k]) < 3),
+        );
+        if (index >= 0) pixels.data.set(rgb(palette[index]), i);
+      }
+      ctx.putImageData(pixels, 0, 0);
+      return (
+        await new Promise<Blob>((resolve) => canvas.toBlob((b) => resolve(b!), 'image/png'))
+      ).arrayBuffer();
+    }
     if (r.path.endsWith('.nsbtx')) return (await fetch('/demo/texture.png')).arrayBuffer();
     const paletteOnly = r.path.endsWith('.nclr');
     const canvas = document.createElement('canvas');

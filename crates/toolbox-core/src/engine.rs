@@ -31,6 +31,11 @@ pub enum MeshSelection {
 #[derive(Clone, Debug, Deserialize, Type)]
 #[serde(tag = "kind")]
 pub enum ModelAction {
+    Edit {
+        part: u32,
+        selection: crate::mesh_edit::Selection,
+        operation: crate::mesh_edit::Operation,
+    },
     Import {
         source: String,
     },
@@ -62,7 +67,117 @@ pub enum ModelAction {
         part: u32,
     },
 }
-fn wrap(original: &[u8], bytes: Vec<u8>) -> Vec<u8> {
+#[derive(Clone, Debug, Deserialize, Type)]
+#[serde(tag = "kind")]
+pub enum MaterialAction {
+    Replace { source: String },
+    Recolour { index: u32, color: u16 },
+    Tint { color: u16 },
+}
+pub fn material(
+    p: &mut Project,
+    s: &RomSession,
+    path: &str,
+    material: u32,
+    action: MaterialAction,
+) -> Result<()> {
+    let scene = crate::scene::CourseScene::load(Some(p), s, path)?;
+    let detail = scene
+        .info
+        .material_details
+        .get(material as usize)
+        .ok_or_else(|| Error::Invalid("choose a material".into()))?;
+    let dest = detail
+        .path
+        .as_ref()
+        .ok_or_else(|| Error::Invalid("material has no bound texture".into()))?;
+    let mut container = scene
+        .model
+        .ok_or_else(|| Error::Invalid("no model".into()))?;
+    let mut tx = container
+        .textures
+        .as_ref()
+        .or(scene.textures.as_ref())
+        .ok_or_else(|| Error::Invalid("missing texture bank".into()))?
+        .clone();
+    match action {
+        MaterialAction::Recolour { index, color } => {
+            if detail.format == 7 || detail.palette.is_none() {
+                return Err(Error::Invalid(
+                    "This texture has no palette; use Tint instead".into(),
+                ));
+            }
+            let c = tx
+                .palettes
+                .get_mut(detail.palette_index as usize)
+                .and_then(|p| p.colors.get_mut(index as usize))
+                .ok_or_else(|| Error::Invalid("choose a palette colour".into()))?;
+            *c = color & 0x7fff;
+        }
+        MaterialAction::Tint { color } => {
+            let mut image =
+                tx.decode(detail.texture_index as usize, detail.palette_index as usize)?;
+            let c = nitro_formats::graphics::bgr555_to_rgba(color);
+            for p in image.rgba.chunks_exact_mut(4) {
+                p[..3].copy_from_slice(&c[..3]);
+            }
+            let old = &tx.textures[detail.texture_index as usize];
+            let (t, _) = crate::model::convert_texture(&image, &old.name, 7, 1024)?;
+            tx.textures[detail.texture_index as usize] = t;
+        }
+        MaterialAction::Replace { source } => {
+            let image = crate::graphic::read_png(Path::new(&source))?;
+            let old = &tx.textures[detail.texture_index as usize];
+            let (t, mut pal) = crate::model::convert_texture(
+                &image,
+                &old.name,
+                if old.format == 5 { 3 } else { old.format },
+                1024,
+            )?;
+            for model in &mut container.models {
+                for mat in &mut model.materials {
+                    if mat.texture.as_ref() == Some(&t.name) {
+                        mat.width = t.width as u16;
+                        mat.height = t.height as u16;
+                    }
+                }
+            }
+            tx.textures[detail.texture_index as usize] = t;
+            if detail.format != 7 {
+                let old = tx
+                    .palettes
+                    .get_mut(detail.palette_index as usize)
+                    .ok_or_else(|| Error::Invalid("missing palette binding".into()))?;
+                pal.name = old.name.clone();
+                *old = pal;
+            }
+        }
+    }
+    // Rebuild through the common writer, including for embedded TEX0 resources.
+    let tx = nitro_formats::texture::Nsbtx::new(tx.textures, tx.palettes)?;
+    let mut edits = std::collections::BTreeMap::new();
+    if dest == path {
+        container.textures = Some(tx);
+    } else {
+        edits.insert(dest.clone(), wrap(p.bytes(s, dest)?, tx.write()));
+    }
+    let external = if dest == path {
+        None
+    } else {
+        Some(nitro_formats::texture::Nsbtx::parse(&preview::plain(
+            &edits[dest],
+        )?)?)
+    };
+    let budget = crate::model::budget(&container, external.as_ref());
+    if !budget.reasons.is_empty() {
+        return Err(Error::Invalid(budget.reasons.join("; ")));
+    }
+    let bytes = container.write()?;
+    Nsbmd::parse(&bytes)?;
+    edits.insert(path.into(), wrap(p.bytes(s, path)?, bytes));
+    p.edit_many(edits, "Edit model texture", s)
+}
+pub(crate) fn wrap(original: &[u8], bytes: Vec<u8>) -> Vec<u8> {
     if original.first() == Some(&0x10) {
         nitro_formats::recompress(original, &bytes)
     } else {
@@ -72,6 +187,9 @@ fn wrap(original: &[u8], bytes: Vec<u8>) -> Vec<u8> {
 pub fn model(p: &mut Project, s: &RomSession, path: &str, action: ModelAction) -> Result<()> {
     let original = p.bytes(s, path)?;
     let mut container = Nsbmd::parse(&preview::plain(original)?)?;
+    if container.models.len() != 1 {
+        return Err(Error::Invalid("This file contains multiple models. Export a model to GLB and edit it separately before replacing this set.".into()));
+    }
     let title;
     match action {
         ModelAction::Import { source } => {
@@ -90,6 +208,7 @@ pub fn model(p: &mut Project, s: &RomSession, path: &str, action: ModelAction) -
                 | ModelAction::Delete { part, .. }
                 | ModelAction::Merge { part, .. }
                 | ModelAction::Normals { part } => *part as usize,
+                ModelAction::Edit { part, .. } => *part as usize,
                 _ => unreachable!(),
             };
             let mesh = m
@@ -97,6 +216,14 @@ pub fn model(p: &mut Project, s: &RomSession, path: &str, action: ModelAction) -
                 .get_mut(part)
                 .ok_or_else(|| Error::Invalid("choose a model part".into()))?;
             title = match action {
+                ModelAction::Edit {
+                    selection,
+                    operation,
+                    ..
+                } => {
+                    crate::mesh_edit::apply(mesh, &selection, &operation)?;
+                    operation.title()
+                }
                 ModelAction::Transform {
                     translation,
                     rotation,
@@ -160,6 +287,21 @@ pub fn model(p: &mut Project, s: &RomSession, path: &str, action: ModelAction) -
         }
     }
     let bytes = container.write()?;
+    let external = if container.textures.is_none() {
+        crate::linked::texture_path(s, path)
+            .map(|candidate| {
+                Ok::<_, Error>(nitro_formats::texture::Nsbtx::parse(&preview::plain(
+                    p.bytes(s, &candidate)?,
+                )?)?)
+            })
+            .transpose()?
+    } else {
+        None
+    };
+    let b = crate::model::budget(&container, external.as_ref());
+    if !b.reasons.is_empty() {
+        return Err(Error::Invalid(b.reasons.join("; ")));
+    }
     Nsbmd::parse(&bytes)?;
     p.edit(path, wrap(original, bytes), title, s)
 }

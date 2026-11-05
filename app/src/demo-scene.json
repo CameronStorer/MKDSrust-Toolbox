@@ -1,4 +1,32 @@
 {
+  "linked_copies": [],
+  "bone_details": [
+    {
+      "name": "root",
+      "parent": null,
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "vertices": 12,
+      "clips": [
+        "Float"
+      ]
+    }
+  ],
+  "material_details": [
+    {
+      "name": "paint",
+      "texture": "studio",
+      "palette": null,
+      "path": "data/Course/studio.carc/course_model.nsbtx",
+      "texture_index": 0,
+      "palette_index": 0,
+      "format": 7,
+      "colors": []
+    }
+  ],
   "parts": [
     {
       "name": "shape0",

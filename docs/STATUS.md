@@ -1,10 +1,27 @@
-# Toolbox status - 2026-11-05, Stage 6B Run 1
+# Toolbox status - 2026-11-05, Stage 6B Run 2
 
 Real hardware first. DS ROM/BPS export still uses the existing validated ROM rebuilder.
 The user's ROM is read in place through MKDS_ROM; no ROM-derived bytes or screenshots
 were written to this repository. No hardware/emulator boot verification is claimed.
-F, G and H's new editing features are left for later.
 The existing camera preservation, Simple | Studio and FileLink/openAsset are retained.
+
+Run 2 implements F, G and H breadth first. The verified MDL0 position-scale offset (28),
+single identity-node/POSSCALE encoding and COURSE_MODEL_SCALE (16x) remain intact.
+Every model mutation still uses nitro_formats::model_write. A small writer fix accepts
+an embedded texture bank retained inside a parsed BMD0 when extracting TEX0 for rewriting.
+
+| Section | Done in Run 2 | Partial / limits |
+|---|---|---|
+| F - linked copies | Model strip links race/menu/far drivers and race/menu kart bodies/shadows, with current counts and each clean-ROM measured polygon budget. Apply to all copies defaults on. Transforms, cuts, deletions, reduction and mesh edits stage atomically in one undo command. Import reduces each variant to its own polygon/vertex allocation, retains its skeleton and clips through the existing rig workflow, makes E static with one identity node, preserves texture names and projects shadows flat. Developer and stale menu archives are excluded. | Part subsets require a unique matching part name across variants; ambiguous matches fail without edits. Element subsets map by nearest bind-space source vertex, not a hand-authored LOD correspondence. Extremely small budgets can refuse a reduction that would erase disconnected pieces. Review each imported variant visually before racing. |
+| G - model contents | Clickable parts, bones and materials. Bone selection shows a joint marker/axes and influenced vertices, parent chain, assigned vertex count and joint clips; Paint vertices opens the existing rig brush with that bone selected. Materials show the exact bound texture/palette in a zoomable popup, with PNG replacement/conversion, palette recolour, direct-colour tint, PNG export and triangle highlighting. Shared-palette effects are explained. Embedded and external texture edits are atomic and undoable. | Clip lists identify joint tracks, including constant pose tracks. Painting uses the existing rigid assignment brush. Replacing 4x4 compressed images converts to indexed 16-colour; no new 4x4 encoder. Geometry edits reject multi-model containers rather than applying flattened indices to the wrong model. |
+| H - mesh editing | Shift/Ctrl-click parts in viewport/Outliner, B box selection, A/Alt+A, Tab edits selected parts, vertex/edge/face modes (1/2/3), L linked selection and Alt+Z selection through geometry. Modal G/R/S has view-plane movement, X/Y/Z constraints, numeric values, Ctrl increments, Shift precision, Enter/LMB confirmation and Esc/RMB cancellation. E extrudes face regions or edges, I insets regions, X/Delete opens vertex/edge/face deletion, M merges at center. Live triangle/vertex estimates and existing VRAM/matrix budgets are shown; over-budget or invalid writes fail atomically. New vertices inherit skin/UV/colour attributes. Every confirmed operation is one undo step. The original camera regression remains green. | DS topology is triangulated; this is not a complete Blender modeller. Inset/extrude reject degenerate or non-manifold regions. Element selections clear after a geometry rebuild to avoid stale vertex IDs; reselect before the next edit. Preview budgets cover the active model set, not the whole race frame or all linked variants simultaneously. Committed results are checked in Rust. |
+
+New synthetic fixtures cover two parts/bones and an indexed embedded texture. Ten Rust tests
+cover linked transactions/import budgets, skin/topology operations, hardware-budget rejection,
+embedded/external texture round trips and read-only, in-memory linked edits against MKDS_ROM.
+Six Playwright flows cover F/G/H; new screenshots show linked copies, materials and edit mode.
+Community workflows and licences are recorded in research/STAGE6B_WORKFLOWS.md and CREDITS.md;
+no third-party source code was copied.
 
 | Section | Done in Run 1 | Partial / remaining |
 |---|---|---|
@@ -68,8 +85,8 @@ No new third-party code was copied; the native-builder repository was read only.
 ## Verification and run
 
 Passed: cargo fmt --check; cargo clippy --workspace --all-targets -- -D warnings;
-cargo test --workspace (92 tests, with MKDS_ROM set); app lint, typecheck,
-6 Vitest tests, production build and Tauri cargo build; **69 Playwright tests**.
+cargo test --workspace (104 tests, with MKDS_ROM set); app lint, typecheck,
+6 Vitest tests, production build and Tauri cargo build; **75 Playwright tests**.
 New screenshots are synthetic and cover related pages in both themes. The demo
 generator uses fixed synthetic settings instead of local user preferences.
 New Playwright flows cover Explorer controls/state, editor/popup routing, pairing,
@@ -93,3 +110,8 @@ outside the repository. Regenerate demos only with cargo run -p toolbox-core
 --example demo (always synthetic, independent of MKDS_ROM). For UI tests set
 PLAYWRIGHT_BROWSERS_PATH=<repo>/.cache/playwright and MKDSTB_SCREENSHOT_PREVIEW=1,
 then run npm run test:e2e from app/. No Git metadata/remotes were changed or pushed.
+
+For the new tools: Studio > Model, choose a model, inspect Linked copies, then select
+parts in the Outliner. Tab enters Edit mode; 1/2/3 chooses elements, A selects all,
+G/R/S/E/I starts a modal edit, and Enter confirms. Click a bone or material in the
+Outliner for its controls. All Run 2 changes are left uncommitted.

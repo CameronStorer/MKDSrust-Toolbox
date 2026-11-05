@@ -45,6 +45,15 @@ fn main() -> toolbox_core::Result<()> {
     let wizard =
         RomSession::from_bytes(synthetic::wizard_rom(), "/user/roms/synthetic.nds".into())?;
     std::fs::write(
+        root.join("app/public/demo/editing.glb"),
+        toolbox_core::scene::CourseScene::load(None, &wizard, "data/Studio/editing.nsbmd")?
+            .glb(false)?,
+    )?;
+    std::fs::write(
+        root.join("app/public/demo/editing.png"),
+        toolbox_core::preview::png(&synthetic::editing_model().textures.unwrap().decode(0, 0)?)?,
+    )?;
+    std::fs::write(
         root.join("app/src/demo-wizards.json"),
         serde_json::to_vec_pretty(&serde_json::json!({
             "messages": wizard.nodes.iter().filter(|n|n.format=="bmg").map(|n|Ok((n.path.clone(),toolbox_core::preview::preview(wizard.file(&n.path)?)?.messages))).collect::<toolbox_core::Result<std::collections::BTreeMap<_,_>>>()?,

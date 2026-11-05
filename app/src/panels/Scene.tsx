@@ -11,6 +11,10 @@ import { exportSelection } from '../commands';
 import type { SceneEntry, SceneInfo } from '../bindings';
 import { bytes } from './Properties';
 import { TrackPoint } from './TrackPoint';
+import { LinkedCopies, ModelContents } from './ModelContents';
+import { createModelEditor } from '../model-editor';
+import { ModelEditBar } from './ModelEditBar';
+import { runModel } from '../model-actions';
 
 function label(text: string, size: number) {
   const canvas = document.createElement('canvas');
@@ -175,6 +179,7 @@ export function SceneViewport() {
     let markerRoot: THREE.Group | null = null;
     let mixer: THREE.AnimationMixer | null = null;
     let clips: THREE.AnimationClip[] = [];
+    let editor: ReturnType<typeof createModelEditor> | null = null;
     let activeAnimation = -2;
     let activeFrameRequest = frameRequest;
     let renderer: THREE.WebGLRenderer;
@@ -186,7 +191,21 @@ export function SceneViewport() {
     }
     setLoaded(false);
     setError('');
-    useScene.setState({ info: null, selected: '', animation: -1, frame: 0, playing: false });
+    useScene.setState({
+      info: null,
+      selected: '',
+      animation: -1,
+      frame: 0,
+      playing: false,
+      elements: {},
+      modal: '',
+      liveTriangles: null,
+      liveVertices: null,
+      rigBrush: workspace === 'Rig & Animate' && useScene.getState().rigBrush,
+      ...(view.current?.path !== selected
+        ? { parts: [0], part: 0, editMode: false, highlight: 'none' as const, materialPopup: false }
+        : {}),
+    });
     const element = host.current;
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     renderer.setClearColor(settings?.theme === 'light' ? '#d6dcdf' : '#20262b');
@@ -211,12 +230,10 @@ export function SceneViewport() {
         object.scale.equals(new THREE.Vector3(1, 1, 1))
       )
         return;
-      void useStore.getState().run({
-        kind: 'Model',
-        path: state.info.model_path,
-        action: {
+      void runModel(
+        state.parts.map((part) => ({
           kind: 'Transform',
-          part: state.part,
+          part,
           translation: [object.position.x, object.position.y, object.position.z],
           rotation: [
             object.quaternion.x,
@@ -225,8 +242,8 @@ export function SceneViewport() {
             object.quaternion.w,
           ],
           scale: [object.scale.x, object.scale.y, object.scale.z],
-        },
-      });
+        })),
+      );
     });
     controls.enableDamping = true;
     const mktb = settings?.navigation === 'MKTB';
@@ -346,6 +363,7 @@ export function SceneViewport() {
       if (e.buttons & 1) paint(e);
     };
     const pointerup = (e: PointerEvent) => {
+      if (editor?.handlesPointer()) return;
       if (e.button === 0 && rigStroke.size) {
         const state = useScene.getState();
         if (state.info?.model_path)
@@ -505,6 +523,8 @@ export function SceneViewport() {
           playing: clips.length > 0 && !!autoplay,
           part: Math.min(useScene.getState().part, Math.max(0, info.parts.length - 1)),
         });
+        if (!track)
+          editor = createModelEditor(renderer.domElement, camera, content, scene, controls);
         setLoaded(true);
         // Edits rebuild the scene: keep the camera where the user left it on the same file.
         const saved = view.current;
@@ -533,6 +553,8 @@ export function SceneViewport() {
         !track &&
         content &&
         state.gizmo !== 'off' &&
+        !state.editMode &&
+        !state.modal &&
         useStore.getState().snapshot?.project_path
       ) {
         let target: THREE.Object3D | undefined;
@@ -547,6 +569,7 @@ export function SceneViewport() {
         if (target && transform.object !== target) transform.attach(target);
         transform.setMode(state.gizmo);
       } else if (transform.object) transform.detach();
+      editor?.update();
       gridObject.visible = state.grid;
       if (state.frameRequest !== activeFrameRequest) {
         activeFrameRequest = state.frameRequest;
@@ -620,6 +643,7 @@ export function SceneViewport() {
     };
     animationFrame = requestAnimationFrame(render);
     return () => {
+      editor?.dispose();
       if (content)
         view.current = {
           path: selected,
@@ -692,6 +716,8 @@ export function SceneViewport() {
         </label>
         <button onClick={() => set({ frameRequest: frameRequest + 1 })}>Frame selected · F</button>
       </div>
+      {!track && <LinkedCopies />}
+      {!track && <ModelEditBar />}
       <div className="viewport-host" ref={host} data-testid="viewport" data-loaded={loaded}>
         {error && (
           <div className="viewport-message" role="alert">
@@ -747,24 +773,7 @@ export function SceneOutliner() {
           </details>
         ))
       ) : (
-        <>
-          <details open>
-            <summary>Bones · {info?.bones.length ?? 0}</summary>
-            {info?.bones.map((b, i) => (
-              <div className="outliner-entry" key={i}>
-                {i} · {b}
-              </div>
-            ))}
-          </details>
-          <details open>
-            <summary>Materials · {info?.materials.length ?? 0}</summary>
-            {info?.materials.map((m, i) => (
-              <div className="outliner-entry" key={i}>
-                {m}
-              </div>
-            ))}
-          </details>
-        </>
+        <ModelContents />
       )}
     </div>
   );
@@ -788,7 +797,10 @@ export function SceneProperties() {
         <>
           <dl>
             {[
-              ['Polygons (triangulated)', `${budget.polygons} / 2,048`],
+              [
+                'Polygons (triangulated)',
+                `${useScene.getState().liveTriangles ?? budget.polygons} / 2,048`,
+              ],
               ['Vertices', `${budget.vertices} / 6,144`],
               ['Texture VRAM', `${bytes(budget.texture_bytes)} / 512 KiB`],
               ['Palette VRAM', `${bytes(budget.palette_bytes)} / 96 KiB`],

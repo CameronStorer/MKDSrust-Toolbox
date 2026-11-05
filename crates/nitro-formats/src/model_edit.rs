@@ -289,6 +289,14 @@ pub fn merge_vertices(m: &mut Mesh, tolerance: f32) -> Result<()> {
 /// Garland–Heckbert plane quadrics with conservative edge collapse. UV/skin
 /// seams are preserved; a target can be unreachable without destroying them.
 pub fn decimate(m: &mut Mesh, target: usize) -> Result<()> {
+    decimate_impl(m, target, 2)
+}
+/// LOD reduction may collapse a two-triangle patch to one, but never erase an isolated triangle.
+/// Scene reduction retains the stricter default so small road surfaces survive.
+pub fn decimate_lod(m: &mut Mesh, target: usize) -> Result<()> {
+    decimate_impl(m, target, 1)
+}
+fn decimate_impl(m: &mut Mesh, target: usize, remaining: usize) -> Result<()> {
     validate_mesh(m)?;
     merge_vertices(m, 0.)?;
     if target == 0 {
@@ -339,7 +347,7 @@ pub fn decimate(m: &mut Mesh, target: usize) -> Result<()> {
                     .filter(|&&id| m.indices[id * 3..id * 3 + 3].contains(&(b as u32)))
                     .count();
                 // Do not erase a small disconnected piece (for example a map floor).
-                if adjacent[a].len() + adjacent[b].len() - shared * 2 < 2 {
+                if adjacent[a].len() + adjacent[b].len() - shared * 2 < remaining {
                     return None;
                 }
                 let quad: [f64; 16] = std::array::from_fn(|i| q[a][i] + q[b][i]);

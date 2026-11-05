@@ -3,6 +3,7 @@ import { inspectScene, pickFile } from '../backend';
 import { useStore } from '../store';
 import { useScene } from '../scene-view';
 import type { ModelAction, MeshSelection, SceneEntry } from '../bindings';
+import { runModel, selectPart } from '../model-actions';
 
 export function RigTools() {
   const { info, bone, rigBrush, set } = useScene();
@@ -53,7 +54,11 @@ export function ModelTools() {
   const placement = useScene();
   const current = info?.parts[part];
   const apply = (action: ModelAction) => {
-    if (path) void useStore.getState().run({ kind: 'Model', path, action });
+    const parts = useScene.getState().parts;
+    if (path)
+      void runModel(
+        action.kind === 'Import' ? [action] : parts.map((part) => ({ ...action, part })),
+      );
   };
   async function importModel() {
     const source = await pickFile(['glb', 'gltf', 'obj']);
@@ -90,7 +95,7 @@ export function ModelTools() {
           <select
             aria-label="Model part"
             value={part}
-            onChange={(e) => set({ part: Number(e.target.value) })}
+            onChange={(e) => selectPart(Number(e.target.value))}
           >
             {info?.parts.map((p, i) => (
               <option key={i} value={i}>

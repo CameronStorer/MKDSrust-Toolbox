@@ -2532,3 +2532,16 @@ canvas {
 .related-audio audio { width: 100%; }
 .related-missing { padding: 35px 0; opacity: .65; }
 .pairing-details { padding: 6px; font-size: 11px; }
+.linked-copies, .model-edit-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
+  padding: 6px 10px; border-bottom: 1px solid var(--border); font-size: 11px;
+}
+.linked-copies label { display: flex; align-items: center; gap: 5px; }
+.model-edit-bar { position: relative; }
+.model-edit-bar [role='status'] { width: 100%; color: var(--muted); }
+.model-menu { position: absolute; top: 100%; right: 10px; z-index: 20; display: grid; padding: 6px; background: var(--panel); border: 1px solid var(--border); }
+.selection-box { position: absolute; pointer-events: none; border: 1px solid #ffb061; background: #ffb06122; z-index: 10; }
+.material-image { height: 240px; overflow: auto; background: #7773; }
+.material-palette { display: flex; flex-wrap: wrap; gap: 3px; margin: 12px 0; }
+.material-palette button { width: 24px; height: 24px; padding: 0; border: 1px solid #777; }
+.material-palette button[aria-pressed='true'] { outline: 2px solid #ffb061; }

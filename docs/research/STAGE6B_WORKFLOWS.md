@@ -1,5 +1,41 @@
 # Stage 6B Run 1 workflow references (2026-11-05)
 
+## Run 2: linked models, contents, mesh editing
+
+Sources read before implementation (workflow/format study; no third-party code copied):
+
+- [NitroPaint nsbtxviewer.c](https://github.com/Garhoogin/NitroPaint/blob/main/NitroPaint/editor/nsbtxviewer.c)
+  and [textureeditor.c](https://github.com/Garhoogin/NitroPaint/blob/main/NitroPaint/editor/textureeditor.c)
+  (BSD-2-Clause): independently selected texture and palette resources, nearest-pixel zoom,
+  palette swatches, image replacement through format conversion, and PNG export. The Outliner
+  popup uses the material's actual named resources; shared palette edits are explained there.
+- [MKTB G3dModelManager.cs](https://github.com/HaroohiePals/MarioKartToolbox/blob/develop/src/HaroohiePals.Nitro.NitroSystem/G3d/G3dModelManager.cs)
+  (MIT), `BindTextures`: resolve material-to-texture and material-to-palette dictionaries separately.
+  An absent texture stays explicitly unbound. Direct-colour textures have no palette controls.
+- [apicula skeleton](https://github.com/scurest/apicula/blob/master/src/skeleton/mod.rs)
+  and [vertex_record.rs](https://github.com/scurest/apicula/blob/master/src/skeleton/vertex_record.rs)
+  (0BSD): joint parent transforms and per-vertex matrix/weight influences are separate from mesh parts.
+  Bone inspection counts nonzero influences, displays the parent chain and joint tracks, and reuses
+  the existing rigid rig brush. New mesh vertices copy all source attributes, including skin weights.
+- [Blender default keymap](https://github.com/blender/blender/blob/main/scripts/presets/keyconfig/keymap_data/blender_default.py)
+  (GPL-3.0-or-later): Tab, 1/2/3, A/Alt+A, B, L, G/R/S, E, I, X/Delete and M.
+  Modal transforms use axis constraints, numeric values, Ctrl increments, Shift precision,
+  Enter/LMB confirmation and Escape/RMB cancellation. X and M open explicit operation menus.
+  E extrudes a region with boundary walls; I insets a region rather than each triangle separately.
+
+F's associations follow ASSET_CATALOG's runtime copies. Source geometry is never copied into a linked
+variant for ordinary edits: each retains its mesh, materials and rig. Part subsets require a unique
+matching part name; element subsets map by nearest bind-space source vertex, never by index across LODs.
+All-copy selection maps to every destination part. Ambiguous subsets fail atomically with a message to
+edit the variant alone. Imports use each copy's clean-ROM polygon/vertex budget and its existing rig;
+E variants get one identity node; shadows stay flat. The existing conservative reducer runs first;
+the LOD fallback permits a two-triangle patch to become one without changing track reduction behavior.
+
+All mutations stage in memory and record one Project::edit_many command. NSBMD serialization remains
+nitro_formats::model_write, with its verified header/POSSCALE and course scale behavior unchanged.
+
+## Run 1
+
 Structure and workflow observations only. No community code was copied in this run.
 
 | Section | Source studied before implementation | Applied here |

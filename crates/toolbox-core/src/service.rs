@@ -36,6 +36,16 @@ pub enum Request {
         path: String,
         action: crate::engine::ModelAction,
     },
+    ModelBatch {
+        path: String,
+        actions: Vec<crate::engine::ModelAction>,
+        linked: bool,
+    },
+    ModelMaterial {
+        path: String,
+        material: u32,
+        action: crate::engine::MaterialAction,
+    },
     GenerateCollision {
         model: String,
         path: String,
@@ -374,6 +384,8 @@ impl Service {
             Request::Wizard { .. }
                 | Request::TexturePalette { .. }
                 | Request::Model { .. }
+                | Request::ModelBatch { .. }
+                | Request::ModelMaterial { .. }
                 | Request::GenerateCollision { .. }
                 | Request::PaintCollision { .. }
                 | Request::ImportSong { .. }
@@ -442,6 +454,24 @@ impl Service {
             Request::Model { path, action } => {
                 let (p, s) = self.editing()?;
                 crate::engine::model(p, s, &path, action)?;
+                self.packed = None;
+            }
+            Request::ModelBatch {
+                path,
+                actions,
+                linked,
+            } => {
+                let (p, s) = self.editing()?;
+                crate::linked::edit(p, s, &path, actions, linked)?;
+                self.packed = None;
+            }
+            Request::ModelMaterial {
+                path,
+                material,
+                action,
+            } => {
+                let (p, s) = self.editing()?;
+                crate::engine::material(p, s, &path, material, action)?;
                 self.packed = None;
             }
             Request::GenerateCollision { model, path } => {

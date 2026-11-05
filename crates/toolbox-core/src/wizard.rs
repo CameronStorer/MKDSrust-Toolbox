@@ -664,7 +664,7 @@ fn texture_image(source: &Nsbmd, index: usize) -> Result<nitro_formats::graphics
         rgba,
     })
 }
-fn driver_materials(
+pub(crate) fn driver_materials(
     m: &mut Model,
     donor: &Model,
     source: &Nsbmd,

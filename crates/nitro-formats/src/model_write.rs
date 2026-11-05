@@ -72,7 +72,14 @@ impl Nsbmd {
         put32(&mut mdl, 4, n as u32);
         let mut blocks = vec![mdl];
         if let Some(textures) = &self.textures {
-            for s in crate::model::blocks(&textures.write(), b"BTX0")? {
+            // A parsed embedded bank retains its BMD0 container for lossless texture edits.
+            let bytes = textures.write();
+            let magic = if bytes.starts_with(b"BMD0") {
+                b"BMD0"
+            } else {
+                b"BTX0"
+            };
+            for s in crate::model::blocks(&bytes, magic)? {
                 if s.starts_with(b"TEX0") {
                     blocks.push(s.to_vec());
                 }

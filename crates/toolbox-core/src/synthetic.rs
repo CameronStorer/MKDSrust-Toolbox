@@ -9,10 +9,7 @@ fn put(b: &mut [u8], at: usize, n: u32) {
     b[at..at + 4].copy_from_slice(&n.to_le_bytes());
 }
 pub fn files() -> BTreeMap<String, Vec<u8>> {
-    let authored_model = nitro_formats::model::Nsbmd::parse(&nitro_formats::synthetic::nsbmd())
-        .unwrap()
-        .write()
-        .unwrap();
+    let authored_model = course_model();
     let colors = (0..256)
         .map(|i| ((i % 32) | ((i / 8 % 32) << 5) | ((31 - i / 8 % 32) << 10)) as u16)
         .collect::<Vec<_>>();
@@ -56,6 +53,10 @@ pub fn files() -> BTreeMap<String, Vec<u8>> {
     .write();
     BTreeMap::from([
         (
+            "data/Studio/editing.nsbmd".into(),
+            editing_model().write().unwrap(),
+        ),
+        (
             "data/Course/studio.carc".into(),
             nitro_formats::compress(
                 &Narc::new(BTreeMap::from([
@@ -85,6 +86,58 @@ pub fn files() -> BTreeMap<String, Vec<u8>> {
         ),
         ("data/Studio/texture.nsbtx".into(), texture_fixture()),
     ])
+}
+fn course_model() -> Vec<u8> {
+    let mut m = nitro_formats::model::Nsbmd::parse(&nitro_formats::synthetic::nsbmd()).unwrap();
+    // The generated collision is already in game units; the course draw applies 16x.
+    for mesh in &mut m.models[0].meshes {
+        for p in &mut mesh.positions {
+            for v in p {
+                *v /= mkds_data::COURSE_MODEL_SCALE;
+            }
+        }
+    }
+    m.write().unwrap()
+}
+
+/// Authored two-part, two-bone mesh with an indexed embedded texture for editor flows.
+pub fn editing_model() -> nitro_formats::model::Nsbmd {
+    let mut model =
+        crate::model_import::obj("v -4 0 0\nv -1 0 0\nv -1 4 0\nv -4 4 0\nf 1 2 3 4\n").unwrap();
+    let m = &mut model.models[0];
+    m.meshes[0].name = "Body".into();
+    let mut arm = m.meshes[0].clone();
+    arm.name = "Arm".into();
+    for p in &mut arm.positions {
+        p[0] += 5.;
+    }
+    m.bones.push(nitro_formats::model::Bone {
+        name: "arm".into(),
+        parent: Some(0),
+        translation: [2., 2., 0.],
+        rotation: [0., 0., 0., 1.],
+        scale: [1.; 3],
+    });
+    m.matrix_count = 2;
+    m.meshes.push(arm);
+    for (i, mesh) in m.meshes.iter_mut().enumerate() {
+        mesh.joints = vec![[i as u16, 0, 0, 0]; mesh.positions.len()];
+        mesh.weights = vec![[1., 0., 0., 0.]; mesh.positions.len()];
+    }
+    let image = nitro_formats::graphics::Image {
+        width: 8,
+        height: 8,
+        rgba: (0..64)
+            .flat_map(|i| [40 + (i % 8) as u8 * 20, 80, 180, 255])
+            .collect(),
+    };
+    let (t, p) = crate::model::convert_texture(&image, "paint", 3, 32).unwrap();
+    m.materials[0].texture = Some(t.name.clone());
+    m.materials[0].palette = Some(p.name.clone());
+    m.materials[0].width = 8;
+    m.materials[0].height = 8;
+    model.textures = Some(nitro_formats::texture::Nsbtx::new(vec![t], vec![p]).unwrap());
+    model
 }
 pub fn sound_fixture() -> Vec<u8> {
     use nitro_formats::audio::Sdat;

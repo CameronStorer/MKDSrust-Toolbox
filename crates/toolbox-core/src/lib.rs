@@ -9,6 +9,8 @@ pub mod export;
 pub mod game;
 pub mod graphic;
 pub mod icon;
+pub mod linked;
+pub mod mesh_edit;
 pub mod model;
 pub mod model_import;
 pub mod names;

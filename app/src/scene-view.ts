@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { SceneInfo } from './bindings';
+import type { SceneInfo, Selection } from './bindings';
 export const layerDefaults = {
   KCL: { name: 'Collision', color: '#a4c38b', visible: true, locked: false },
   EPOI: { name: 'CPU routes', color: '#ffae69', visible: true, locked: false },
@@ -14,6 +14,20 @@ export const layerDefaults = {
 };
 export type Layer = keyof typeof layerDefaults;
 interface SceneState {
+  linked: boolean;
+  parts: number[];
+  editMode: boolean;
+  xray: boolean;
+  elementMode: 'vertex' | 'edge' | 'face';
+  elements: Record<number, Selection>;
+  highlight: 'none' | 'bone' | 'material';
+  material: number;
+  materialPopup: boolean;
+  boxSelect: boolean;
+  modal: string;
+  editMenu: '' | 'delete' | 'merge';
+  liveTriangles: number | null;
+  liveVertices: number | null;
   reference: string;
   referenceKart: number;
   referenceCharacter: number;
@@ -39,6 +53,20 @@ interface SceneState {
   set: (state: Partial<Omit<SceneState, 'set'>>) => void;
 }
 export const useScene = create<SceneState>((set) => ({
+  linked: true,
+  parts: [0],
+  editMode: false,
+  xray: false,
+  elementMode: 'vertex',
+  elements: {},
+  highlight: 'none',
+  material: 0,
+  materialPopup: false,
+  boxSelect: false,
+  modal: '',
+  editMenu: '',
+  liveTriangles: null,
+  liveVertices: null,
   reference: '',
   referenceKart: 0,
   referenceCharacter: 0,

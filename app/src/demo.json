@@ -82,6 +82,15 @@
       "screen": null
     },
     {
+      "path": "data/Studio/editing.nsbmd",
+      "group": "Menus & HUD",
+      "section": "Screens & icons",
+      "label": "editing",
+      "location": "On a menu or in the race display; inspect the preview to identify this image",
+      "palette": null,
+      "screen": null
+    },
+    {
       "path": "data/Studio/readout.bmg",
       "group": "Text",
       "section": "Shared / language independent",
@@ -123,7 +132,7 @@
   },
   "rom_path": "/user/roms/synthetic.nds",
   "game": "AMCE",
-  "rom_hash": "22adead05cee97b5e9f91a11c1bed06bdb616f8ba0793b7f4c9d31d3eab14371",
+  "rom_hash": "628130af1b236e85646fb4cb3fea1a8dad56ad75e1cefbbdb4cd631ae5676376",
   "project_path": "/projects/colour-study",
   "manifest": {
     "id": "studio.colour-study",
@@ -142,8 +151,8 @@
       "name": "studio.carc",
       "format": "carc",
       "category": "Archive",
-      "size": 1352,
-      "offset": 656,
+      "size": 1332,
+      "offset": 676,
       "compressed": true,
       "archive": true,
       "parent": null
@@ -186,7 +195,7 @@
       "name": "course_model.nsbmd",
       "format": "nsbmd",
       "category": "Model",
-      "size": 1040,
+      "size": 828,
       "offset": 1596,
       "compressed": false,
       "archive": false,
@@ -198,7 +207,7 @@
       "format": "nsbtx",
       "category": "Texture",
       "size": 300,
-      "offset": 2636,
+      "offset": 2424,
       "compressed": false,
       "archive": false,
       "parent": "data/Course/studio.carc"
@@ -292,12 +301,23 @@
       "parent": "data/Studio/demo.carc"
     },
     {
+      "path": "data/Studio/editing.nsbmd",
+      "name": "editing.nsbmd",
+      "format": "nsbmd",
+      "category": "Model",
+      "size": 1348,
+      "offset": 13376,
+      "compressed": false,
+      "archive": false,
+      "parent": null
+    },
+    {
       "path": "data/Studio/readout.bmg",
       "name": "readout.bmg",
       "format": "bmg",
       "category": "Text",
       "size": 192,
-      "offset": 13376,
+      "offset": 14724,
       "compressed": false,
       "archive": false,
       "parent": null
@@ -308,7 +328,7 @@
       "format": "nsbtx",
       "category": "Texture",
       "size": 300,
-      "offset": 13568,
+      "offset": 14916,
       "compressed": false,
       "archive": false,
       "parent": null
@@ -385,6 +405,16 @@
       "palette": "data/Studio/demo.carc/art/studio.nclr",
       "screen": "data/Studio/demo.carc/art/studio.nscr",
       "cells": "data/Studio/demo.carc/art/studio.ncer",
+      "textures": null,
+      "animations": [],
+      "face_animation": null
+    },
+    {
+      "path": "data/Studio/editing.nsbmd",
+      "tiles": null,
+      "palette": null,
+      "screen": null,
+      "cells": null,
       "textures": null,
       "animations": [],
       "face_animation": null
