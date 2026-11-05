@@ -3,6 +3,19 @@
 Do this after STAGE6, building on its Game browser. Use `docs/research/ASSET_CATALOG.md` (folder guide, naming, pairing rules, plain labels) as the source for labels and pairing; note its merge rule (palettes in `X.carc`, tiles in `X_us.carc`) and the duplicate KartModelMenu folder vs archive. Same rules: breadth first, checks green, ROM read in place,
 changes left uncommitted.
 
+**Done by the maintainer (2026-11-05):** H's camera-reset bug (Scene.tsx keeps the view per file, Playwright test
+`model edits keep the camera`), the Simple | Studio switch, `app/src/files.tsx` (`FileLink`, `openAsset`, a
+preview popup) and texture matrices in the model view. Build on these; don't redo them.
+
+**Reuse first (owner):** most of these features already exist in community tools. Before building one, read how
+they solve it (docs/PRIOR_ART.md) and follow the proven approach:
+- A: Tinke and EveryFileExplorer for the explorer;
+- B: NitroPaint's palette/tile pairing and Mario Kart Toolbox's model/texture loading;
+- C: Mario Kart Toolbox's course view (minimap, routes, objects);
+- G: NitroPaint's texture/palette view;
+- H: Blender's own keymap and behaviour;
+- E: bsdiff per archive member, as `modpkg.rs` in mkds-native-builder already does.
+
 ## A. Explorer (the Advanced file view stays, and gets easier)
 - **Collapse all** and **Expand all** buttons.
 - **Sort and group by type** while keeping the folder hierarchy:
