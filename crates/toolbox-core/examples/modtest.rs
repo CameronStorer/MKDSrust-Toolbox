@@ -36,11 +36,12 @@ fn main() {
     };
     p.edit_many(BTreeMap::from([(path.to_string(), bytes)]), "test", &s)
         .unwrap();
-    let packed = toolbox_core::pack::pack(&p, &s).unwrap();
+    // Legacy package format: what the current MKDSrust game reads (as Test Bench does).
+    let (packed, _) = toolbox_core::pack::build_legacy(&p, &s).unwrap();
     let id = p.config.manifest.id.clone();
     let dest = game.join("mods").join(&id);
     let _ = std::fs::remove_dir_all(&dest);
-    let mut zip = zip::ZipArchive::new(std::fs::File::open(&packed.path).unwrap()).unwrap();
+    let mut zip = zip::ZipArchive::new(std::io::Cursor::new(packed)).unwrap();
     for i in 0..zip.len() {
         let mut f = zip.by_index(i).unwrap();
         if f.is_dir() {
