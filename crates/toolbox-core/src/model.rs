@@ -270,9 +270,11 @@ pub fn glb(
                     continue;
                 }
                 let uvs = match model.materials.get(mesh.material) {
-                    Some(m) if m.has_tex_matrix() => {
-                        mesh.uvs.iter().map(|uv| m.transform_uv(*uv)).collect::<Vec<_>>()
-                    }
+                    Some(m) if m.has_tex_matrix() => mesh
+                        .uvs
+                        .iter()
+                        .map(|uv| m.transform_uv(*uv))
+                        .collect::<Vec<_>>(),
                     _ => mesh.uvs.clone(),
                 };
                 let mut attrs = json!({"POSITION":buffer.floats(&mesh.positions,"VEC3",true),"NORMAL":buffer.floats(&mesh.normals,"VEC3",false),"TEXCOORD_0":buffer.floats(&uvs,"VEC2",false),"COLOR_0":buffer.floats(&mesh.colors,"VEC4",false)});

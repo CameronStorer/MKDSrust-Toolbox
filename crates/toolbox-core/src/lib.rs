@@ -3,6 +3,7 @@ pub mod audio;
 pub mod base;
 pub mod bench;
 pub mod collision;
+pub mod course_map;
 pub mod engine;
 pub mod export;
 pub mod game;

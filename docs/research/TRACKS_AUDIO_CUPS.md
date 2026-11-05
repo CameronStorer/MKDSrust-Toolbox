@@ -396,3 +396,23 @@ with that exact relative path, measured from the user's ROM in memory. Observed
 maxima: course model 124,952 B, textures 129,780 B, NKM 21,960 B, local NCGR 65,600 B,
 local NCLR 570 B, local2/local3 NSCR 8,228 B each. The KCL cap is additionally enforced
 by export validation. Sizes are metadata only; no retail content is stored here.
+
+
+## Course map layers (2026-11-05, measured on the user's ROM; replaces the local-layer note above)
+- **Overview (what the race shows on the touch screen):** `Map2D/global.NCGR` (4bpp, e.g. 32x6 tiles) +
+  `global.NCLR` + `global1.NSCR` (256x256 screen, 256x192 visible). Style: grey road, white outline, yellow/black start
+  marker on a transparent backdrop. Palette (Figure-8): 0 backdrop, 2 grey road, 3 white outline, 4 start yellow.
+  Mario Kart Toolbox (MIT) generates exactly this layer from the KCL road types (its `MkdsGlobalMapRasterizer`).
+- `global2.NSCR` / `global2.NCGR` are a separate pattern layer, left unchanged.
+- **Zoomed layers:** `local.NCGR` (8bpp, up to 1024 tiles) + `local.NCLR` + `local2.NSCR` and `local3.NSCR`
+  (512x512 screens, 4096 entries each): full-colour top-down art split into two halves.
+- Rectangle table 1 (RAM 0x0216890C, 55 x 4 s16) holds per-course world bounds: for Figure-8 (course 20) it equals
+  the road-collision bounding box (-3952, -2303, 2598, 1783). Other courses are hand-tuned. Rectangle table 2
+  (0x02168754) is a ~6000-unit square for the zoomed map, and a third table exists (0x020B6B54 reads it). Some
+  courses are drawn rotated (Figure-8, Peach Gardens, Luigi's Mansion GCN, Mushroom Bridge GCN, Moo Moo Farm):
+  `0x020B64E8` and `0x020B6078` hold per-course special cases. The exact formula is not reversed yet.
+- **What the track wizard does:** it measures the slot's world-to-map transform by fitting the retail road collision
+  onto the retail overview (8 orientations, uniform scale; overlap 89% on Figure-8, at least 50% on 30 of 55 slots).
+  It then draws the new racing line with that transform (`toolbox-core/src/course_map.rs`). Other slots fall back to
+  fitting the line into the visible area and warn that kart icons may be offset. The zoomed layers are replaced
+  with a plain backdrop of the correct size; the earlier 256x256 local screen made the game read past its end.

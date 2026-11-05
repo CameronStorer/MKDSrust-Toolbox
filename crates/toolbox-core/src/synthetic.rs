@@ -382,6 +382,15 @@ pub fn wizard_rom() -> Vec<u8> {
                 "Map2D/local2.NSCR".into(),
                 Nscr::new(256, 256, &vec![0; 1024]).unwrap().write(),
             ),
+            // Size budget for the overview layer (retail maximum: 512 4bpp tiles).
+            (
+                "Map2D/global.NCGR".into(),
+                Ncgr::new(32, 16, 3, false, vec![0; 32768]).unwrap().write(),
+            ),
+            (
+                "Map2D/global1.NSCR".into(),
+                Nscr::new(256, 256, &vec![0; 1024]).unwrap().write(),
+            ),
         ]))
         .unwrap()
         .write(),
@@ -415,6 +424,18 @@ pub fn wizard_rom() -> Vec<u8> {
                 (
                     "Map2D/local2.NSCR".into(),
                     Nscr::new(8, 8, &[0]).unwrap().write(),
+                ),
+                (
+                    "Map2D/global.NCGR".into(),
+                    Ncgr::new(32, 1, 3, false, vec![0; 2048]).unwrap().write(),
+                ),
+                (
+                    "Map2D/global.NCLR".into(),
+                    Nclr::new(&[0, 0, 0x3def, 0x7fff], false, false).write(),
+                ),
+                (
+                    "Map2D/global1.NSCR".into(),
+                    Nscr::new(256, 256, &vec![0; 1024]).unwrap().write(),
                 ),
             ]))
             .unwrap()

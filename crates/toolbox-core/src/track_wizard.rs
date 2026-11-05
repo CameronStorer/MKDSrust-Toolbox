@@ -8,7 +8,7 @@ use crate::{
     Error, Result,
 };
 use nitro_formats::{
-    graphics::{Ncgr, Nclr, Nscr},
+    graphics::{Ncgr, Nscr},
     math,
     model::Nsbmd,
     nkm::Nkm,
@@ -450,64 +450,6 @@ pub fn map_rectangle(arm9: &[u8], course: u32, second: bool) -> Result<[f32; 4]>
     }
     Ok(r)
 }
-fn minimap(m: &nitro_formats::model::Model, rect: [f32; 4]) -> Result<(Vec<u8>, Vec<u8>, Vec<u8>)> {
-    let mut pixels = vec![0u8; 256 * 256];
-    let project = |p: [f32; 3]| {
-        [
-            (p[0] - rect[0]) / (rect[2] - rect[0]) * 255.,
-            (p[2] - rect[1]) / (rect[3] - rect[1]) * 255.,
-        ]
-    };
-    for mesh in &m.meshes {
-        for tri in mesh.indices.chunks_exact(3) {
-            let p = tri
-                .iter()
-                .map(|&i| project(mesh.positions[i as usize]))
-                .collect::<Vec<_>>();
-            let lo = std::array::from_fn::<_, 2, _>(|k| {
-                p.iter()
-                    .map(|p| p[k])
-                    .fold(f32::INFINITY, f32::min)
-                    .floor()
-                    .clamp(0., 255.) as usize
-            });
-            let hi = std::array::from_fn::<_, 2, _>(|k| {
-                p.iter()
-                    .map(|p| p[k])
-                    .fold(f32::NEG_INFINITY, f32::max)
-                    .ceil()
-                    .clamp(0., 255.) as usize
-            });
-            for y in lo[1]..=hi[1] {
-                for x in lo[0]..=hi[0] {
-                    let mut signs = [0.; 3];
-                    for k in 0..3 {
-                        let a = p[k];
-                        let b = p[(k + 1) % 3];
-                        signs[k] =
-                            (b[0] - a[0]) * (y as f32 - a[1]) - (b[1] - a[1]) * (x as f32 - a[0]);
-                    }
-                    if signs.iter().all(|&v| v >= 0.) || signs.iter().all(|&v| v <= 0.) {
-                        pixels[y * 256 + x] = 1;
-                    }
-                }
-            }
-        }
-    }
-    let tiled = (0..1024)
-        .flat_map(|tile| {
-            (0..64).map(move |i| (tile / 32 * 8 + i / 8) * 256 + tile % 32 * 8 + i % 8)
-        })
-        .map(|i| pixels[i])
-        .collect();
-    let mut colors = vec![0; 256];
-    colors[1] = 0x7fff;
-    Ok((
-        Ncgr::new(32, 32, 4, false, tiled)?.write(),
-        Nclr::new(&colors, true, false).write(),
-        Nscr::new(256, 256, &(0..1024).collect::<Vec<u16>>())?.write(),
-    ))
-}
 pub fn surface_height(m: &nitro_formats::model::Model, x: f32, z: f32) -> Result<f32> {
     let mut height: Option<f32> = None;
     for mesh in &m.meshes {
@@ -772,6 +714,7 @@ pub fn track_from(
         source.textures = Some(nitro_formats::texture::Nsbtx::new(textures, palettes)?);
     }
     let mut edits = BTreeMap::new();
+    let mut map_note = None;
     // Update D variants as well, so every race mode sees the replacement.
     for variant in if c.variants { vec!["", "D"] } else { vec![""] } {
         let suffix = format!("/{}{}.carc", c.stem, variant).to_ascii_lowercase();
@@ -796,13 +739,26 @@ pub fn track_from(
                 edits.insert(path, tx.write());
             }
         }
-        let (tiles, palette, screen) = minimap(&source.models[0], rect)?;
-        edits.insert(format!("{tex_root}/Map2D/local.NCGR"), tiles);
-        edits.insert(format!("{tex_root}/Map2D/local.NCLR"), palette);
-        edits.insert(format!("{tex_root}/Map2D/local2.NSCR"), screen);
-        let second = format!("{tex_root}/Map2D/local3.NSCR");
-        if s.file(&second).is_ok() {
-            edits.insert(second, Nscr::new(256, 256, &vec![0; 1024])?.write());
+        // Touch-screen overview (global layer): the racing line as a road, in the slot's own map transform.
+        if let Some(map) = crate::course_map::global_map(s, root, &line, o.width)? {
+            edits.extend(map.files);
+            if variant.is_empty() {
+                map_note = Some(map.note);
+            }
+        }
+        // Zoomed layers: the retail art shows the old course, so replace it with a plain backdrop.
+        edits.insert(
+            format!("{tex_root}/Map2D/local.NCGR"),
+            Ncgr::new(32, 1, 4, false, vec![0; 64 * 32])?.write(),
+        );
+        for layer in ["local2", "local3"] {
+            let path = format!("{tex_root}/Map2D/{layer}.NSCR");
+            // Keep the slot's screen size (retail: 512x512).
+            if let Ok(old) = s.file(&path).and_then(crate::preview::plain) {
+                let old = Nscr::parse(&old)?;
+                let n = old.entries.len();
+                edits.insert(path, Nscr::new(old.width, old.height, &vec![0; n])?.write());
+            }
         }
     }
     let limits = file_budgets(s)?;
@@ -820,6 +776,7 @@ pub fn track_from(
         ),
     ];
     warnings.extend(collision.budget_warning());
+    warnings.extend(map_note);
     let report = Report {
         files: edits.keys().cloned().collect(),
         polygons,

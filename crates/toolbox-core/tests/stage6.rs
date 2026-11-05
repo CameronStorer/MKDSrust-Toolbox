@@ -283,17 +283,23 @@ fn dense_matrix_skinned_download_runs_through_all_three_wizards() {
             .iter()
             .find(|p| p.ends_with("/Map2D/local.NCGR"))
         {
-            let image = toolbox_core::preview::image(
-                Some(&project),
-                &s,
-                path,
-                Some(&path.replace("NCGR", "NCLR")),
-                Some(&path.replace("local.NCGR", "local2.NSCR")),
-                0,
-                0,
-            )
-            .unwrap();
-            assert!(image.rgba.chunks_exact(4).any(|p| p[3] != 0 && p[0] > 0));
+            if let Some(global) = report
+                .files
+                .iter()
+                .find(|p| p.ends_with("/Map2D/global.NCGR"))
+            {
+                let image = toolbox_core::preview::image(
+                    Some(&project),
+                    &s,
+                    global,
+                    Some(&global.replace("NCGR", "NCLR")),
+                    Some(&global.replace("global.NCGR", "global1.NSCR")),
+                    0,
+                    0,
+                )
+                .unwrap();
+                assert!(image.rgba.chunks_exact(4).any(|p| p[3] != 0 && p[0] > 0));
+            }
             let path = path.replace("Map2D/local.NCGR", "course_model.nsbtx");
             let textures =
                 nitro_formats::texture::Nsbtx::parse(project.bytes(&s, &path).unwrap()).unwrap();

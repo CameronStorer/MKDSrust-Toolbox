@@ -72,7 +72,10 @@ fn texture_matrix_roundtrips_and_maps_uvs() {
     }
     let back = Nsbmd::parse(&n.write().unwrap()).unwrap();
     let m = &back.models[0].materials[0];
-    assert_eq!((m.tex_mode, m.tex_scale, m.tex_rotate, m.tex_translate), (1, [1., 7.], [0., 1.], [0.25, 0.]));
+    assert_eq!(
+        (m.tex_mode, m.tex_scale, m.tex_rotate, m.tex_translate),
+        (1, [1., 7.], [0., 1.], [0.25, 0.])
+    );
     // Maya rule: V scales about the bottom edge, so t=1 (bottom) stays put.
     assert_eq!(m.transform_uv([0., 1.]), [0.25, 1.]);
     assert_eq!(m.transform_uv([0.5, 0.]), [0.75, -6.]);
