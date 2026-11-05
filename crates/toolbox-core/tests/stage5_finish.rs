@@ -199,9 +199,11 @@ fn every_art_audio_and_names_recipe_exports_with_authored_inputs() {
     let mut sound = Sdat::parse(s.file("data/Sound/sound_data.sdat").unwrap()).unwrap();
     let file = sound.resource_file(1, 2).unwrap();
     let before = Ssar::parse(&sound.files[file]).unwrap();
+    // Shy Guy (slot 12, voice block 12) takes Mario's voice (slot 0, voice block 4).
     wizard::copy_voice(&mut sound, 12, 0).unwrap();
     let after = Ssar::parse(&sound.files[file]).unwrap();
-    assert_eq!(after.entries[168].offset, before.entries[0].offset);
+    assert_eq!(mkds_data::CHARACTER_VOICE[0], 4);
+    assert_eq!(after.entries[168].offset, before.entries[4 * 14].offset);
     assert_eq!(after.entries[168].bank, before.entries[168].bank);
     assert_eq!(after.entries[..168], before.entries[..168]);
     let mut p = project(&s);

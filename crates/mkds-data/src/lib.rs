@@ -25,6 +25,9 @@ pub const CHARACTERS: &[(&str, &str)] = &[
     ("RB", "robo"),
     ("HH", "heyho"),
 ];
+/// Voice block for each character slot (order of `CHARACTERS`). AMCE stores a voice id per kart, set from the
+/// character by a switch at 0x02071C18; voices are sequence archive 2, entry 14 x voice id + event.
+pub const CHARACTER_VOICE: [usize; 13] = [4, 0, 1, 2, 5, 6, 7, 3, 10, 8, 9, 11, 12];
 /// MKDS attributes: type occupies bits 8–12; wall/floor are separate flags.
 /// Layout reference: Mario Kart Toolbox (MIT). Values are format facts.
 pub const fn collision_type(attribute: u16) -> u16 {

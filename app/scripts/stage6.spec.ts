@@ -191,3 +191,33 @@ test('model edits keep the camera where the user left it', async ({ page }) => {
   const b = JSON.parse((await camera()) ?? '[]') as number[];
   a.forEach((v, k) => expect(Math.abs(v - b[k])).toBeLessThan(Math.abs(v) * 0.01 + 0.01));
 });
+test('Section dividers resize, persist and reset; middle click in a 3D view does not autoscroll', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: /^Change text and names/ }).click();
+  const list = page.locator('.friendly-text > .messages');
+  const before = (await list.boundingBox())!.width;
+  const handle = page.locator('.friendly-text > .resizer');
+  const box = (await handle.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + 200);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width / 2 + 120, box.y + 200, { steps: 5 });
+  await page.mouse.up();
+  const after = (await list.boundingBox())!.width;
+  expect(after).toBeGreaterThan(before + 100);
+  await page.reload();
+  await page.getByRole('button', { name: /^Change text and names/ }).click();
+  expect(Math.abs((await list.boundingBox())!.width - after)).toBeLessThan(2);
+  await handle.dblclick();
+  expect(Math.abs((await list.boundingBox())!.width - before)).toBeLessThan(2);
+  const prevented = await page.evaluate(() => {
+    const canvas = document.createElement('canvas');
+    document.body.append(canvas);
+    const e = new MouseEvent('mousedown', { button: 1, bubbles: true, cancelable: true });
+    canvas.dispatchEvent(e);
+    canvas.remove();
+    return e.defaultPrevented;
+  });
+  expect(prevented).toBe(true);
+});

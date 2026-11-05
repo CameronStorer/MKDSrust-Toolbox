@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Resizer } from '../Resizer';
 import { binary, pickFile } from '../backend';
 import { useStore } from '../store';
 import type { Snapshot } from '../bindings';
@@ -123,6 +124,7 @@ export function AudioWorkspace() {
               </details>
             ))}
         </div>
+        <Resizer name="audio-tree" min={160} max={700} />
         <div className="audio-editor engine-tools">
           <h2>
             {current

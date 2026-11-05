@@ -1,4 +1,5 @@
 import { FileLink, LinkedText } from '../files';
+import { Resizer } from '../Resizer';
 import { useEffect, useState } from 'react';
 import {
   ArrowUpRight,
@@ -248,6 +249,7 @@ export function Overview() {
             </form>
           )}
         </section>
+        <Resizer name="overview-left" min={280} max={1400} />
         <section className="overview-section start-editing">
           <div className="overview-section-title">
             <h2>Start editing</h2>

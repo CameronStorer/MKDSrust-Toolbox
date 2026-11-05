@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Resizer } from '../Resizer';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { Entry } from '../bindings';
@@ -207,6 +208,7 @@ export function GameBrowser({ gallery = false }: { gallery?: boolean }) {
         </button>
         <button onClick={() => openWorkspace('Explorer')}>Studio: raw files & pairing</button>
       </aside>
+      <Resizer name="game-tree" min={150} max={520} />
       <div className="game-content">
         <div className="toolbar">
           <button aria-label="Back" disabled={navigationIndex <= 0} onClick={() => navigate(-1)}>
@@ -318,6 +320,7 @@ export function GameBrowser({ gallery = false }: { gallery?: boolean }) {
                 <div className="browser-scene">
                   <SceneViewport />
                 </div>
+                <Resizer name="browser-scene" axis="y" min={240} max={1400} />
                 {format === 'nsbca' && (
                   <div style={{ height: 130 }}>
                     <Timeline />
@@ -327,6 +330,7 @@ export function GameBrowser({ gallery = false }: { gallery?: boolean }) {
             ) : (
               <div className="gallery-editor">
                 <Texture />
+                <Resizer name="gallery-side" min={220} max={700} invert />
                 <div>
                   <h3>Swap a colour</h3>
                   <p className="inset muted">

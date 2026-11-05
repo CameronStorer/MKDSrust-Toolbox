@@ -112,7 +112,10 @@ pub fn pages(
             if voices.entries.len() != 13 * 14 {
                 return None;
             }
-            let bank = voices.entries.get(slot * 14)?.bank as usize;
+            let bank = voices
+                .entries
+                .get(mkds_data::CHARACTER_VOICE[slot] * 14)?
+                .bank as usize;
             data.waves_for_bank(bank)
                 .ok()?
                 .into_iter()

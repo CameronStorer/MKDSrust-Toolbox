@@ -1,4 +1,5 @@
 import { FileLink, LinkedText } from './files';
+import { Resizer } from './Resizer';
 import { ExportDialog, CreateDialog } from './ProjectDialogs';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -589,6 +590,7 @@ export function App() {
         ) : !advanced && workspace === 'Text' ? (
           <div className="friendly-text">
             <MessageList />
+            <Resizer name="text-list" min={200} max={700} />
             <TextEditor />
           </div>
         ) : !advanced && workspace === 'Audio' ? (

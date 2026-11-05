@@ -1115,13 +1115,18 @@ pub fn character_from(
     p.edit_many(edits, "New character", s)?;
     Ok(report)
 }
-/// AMCE voice playback indexes sequence archive 2 by character * 14 + event.
+/// AMCE voice playback indexes sequence archive 2 by voice id * 14 + event; `slot` and `base` are character
+/// slots, mapped to voice ids through `mkds_data::CHARACTER_VOICE`.
 /// Keep the destination bank id (used by preloading), but give it the donor's
 /// bank/wave references and event records. No executable instructions are copied.
 pub fn copy_voice(sound: &mut nitro_formats::audio::Sdat, slot: usize, base: usize) -> Result<()> {
     if slot >= 13 || base >= 13 {
         return Err(invalid("voice character outside 0..12"));
     }
+    let (slot, base) = (
+        mkds_data::CHARACTER_VOICE[slot],
+        mkds_data::CHARACTER_VOICE[base],
+    );
     let file = sound.resource_file(1, 2)?;
     let mut voices = nitro_formats::audio::Ssar::parse(&sound.files[file])?;
     if voices.entries.len() != 13 * 14 {
