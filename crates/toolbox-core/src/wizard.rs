@@ -1178,6 +1178,7 @@ pub fn kart_from(
         .first()
         .ok_or_else(|| invalid("source has no model"))?
         .clone();
+    bake_vertex_colours(&mut m, source.textures.as_ref());
     fit(&mut m, donor)?;
     for mesh in &mut m.meshes {
         nitro_formats::model::transform(mesh, math::trs(o.translation, o.rotation, [o.scale; 3]))?;
@@ -1199,9 +1200,14 @@ pub fn kart_from(
             .cloned(),
     );
     let mut tx = Nsbtx::parse(p.bytes(s, &base_path.replace(".nsbmd", ".nsbtx"))?)?;
+    // The body's colours are baked into its vertices; its texture is plain white (tires/emblem keep theirs).
     if let Some(t) = tx.textures.first() {
-        let (mut texture, mut palette) =
-            model::convert_texture(&texture_image(&source, 0)?, &t.name, 3, 32)?;
+        let white = nitro_formats::graphics::Image {
+            width: 8,
+            height: 8,
+            rgba: [255u8; 4].repeat(64),
+        };
+        let (mut texture, mut palette) = model::convert_texture(&white, &t.name, 3, 8)?;
         texture.name = t.name.clone();
         palette.name = tx.palettes[0].name.clone();
         tx.textures[0] = texture;
