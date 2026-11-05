@@ -3,7 +3,7 @@
 Real hardware first. DS ROM/BPS export still uses the existing validated ROM rebuilder.
 The user's ROM is read in place through MKDS_ROM; no ROM-derived bytes or screenshots
 were written to this repository. No hardware/emulator boot verification is claimed.
-Changes are uncommitted. F, G and H's new editing features are left for later.
+F, G and H's new editing features are left for later.
 The existing camera preservation, Simple | Studio and FileLink/openAsset are retained.
 
 | Section | Done in Run 1 | Partial / remaining |
@@ -12,6 +12,22 @@ The existing camera preservation, Simple | Studio and FileLink/openAsset are ret
 | B - pairing | Naming rules live in mkds-data; indexed, cached associations merge neutral/localized archives, sprite stems and minimap/cup-picture patterns, with image depth/tile-index compatibility checks. Pairing is shown in Details; image controls allow overrides. Models use their own textures and clips, course Tex partners, automatic driver playback and the existing animation picker. Kart views attach the selected tire model at the four table offsets. | Shared face NSBTP is linked but eye switching/NSBTA/NSBMA playback is not implemented. Some exceptional cross-family image pairs remain unresolved. Manual image overrides affect the current view; they are not saved as project metadata. Emblem/shadow relationships are shown on related pages; runtime emblem composition remains partial. |
 | C - related pages | Related assets is available in Simple and Studio and linked from Game browser. Character pages show race/far/menu variants, icon cells, voice-bank sample playback and kart links. Kart pages show race/menu bodies, S/M/L tires, shadow, emblem and stats. Catalogued course pages show model, sky, collision, minimap, routes/objects and music. Each card has its own viewport; offscreen cards release graphics resources. Replace opens the existing recipe for that slot; image replacement opens the image tools. | Icon-cell order remains labelled inferred; missing roles are explicit. Voice preview plays samples from the voice-event bank, not a complete named event sequence. Course pages currently cover loaded course-table entries with models, not every D variant/award/credits scene. Wheel placement uses the existing 16:1 picker conversion and still needs visual confirmation against gameplay. Shy Guy's special kart replacement is disabled. No new dedicated tire/emblem/voice wizard. |
 | E - small packages | Format 3 writes one BSDIFF40 per changed decompressed archive member, including nested CARCs, with source/result SHA-256 checks. A bounded in-memory reference consumer repacks/recompresses; disjoint member edits combine and wrong sources fail atomically. Nonarchive packages remain v1. Stale menu-archive edits warn; browser pages, openAsset and recipes prefer the loose copy when present. | The launcher/game overlay and site are external repositories and have NOT been migrated. Pack warns that v3 needs those updates; share DS BPS meanwhile. Test Bench deliberately builds legacy v1 packages for the current native game. See exact integration work below. |
+
+2026-11-05:
+- Model view: NSBMD texture matrices (scale/rotate/translate) are now applied, so track and object textures tile
+  as on the DS. 358 retail materials use one. They are kept when a model is written back.
+- Top bar: a **Simple | Studio** switch replaces the hidden Advanced button and is remembered between sessions.
+- Model view: the camera stays where the user left it after an edit.
+- Track wizard, touch-screen maps: the race's default zoomed map (`local2`/`local3`) is now a top-down picture of
+  the new map with the racing line as road, placed by the slot's rectangle-table-2 square. The overview (`global`)
+  is drawn in the retail style with the slot's measured transform. Both were blank before.
+- **Black floor fixed (race-verified in MKDSrust):** three model-writer bugs made generated course models
+  invisible. (1) The model info header was 4 bytes off: position scale 0 and an empty bounding box. (2) Course shapes
+  used per-vertex matrix restores, which the game's course drawing doesn't set up. Single-node models are now written
+  like retail courses: header position scale plus POSSCALE. (3) The game draws course models 16x (`COURSE_MODEL_SCALE`),
+  so the wizard wrote tracks 16x too big. The reader now applies POSSCALE from the right header field, so retail
+  models load at true size, and the Track view scales course models 16x to line up with collision and routes. A retail
+  Figure-8 model run through our reader and writer renders correctly in game.
 
 An opt-in read-only ROM test changed one menu-model vertex in memory: a **4,578-byte
 member patch** versus a **372,728-byte compressed archive**, successfully reapplied

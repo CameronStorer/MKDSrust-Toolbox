@@ -150,6 +150,10 @@ fn encode(
             script.extend([0x26, i as u8, i as u8, 0, i as u8]);
         }
     }
+    // NODE: mark every node visible before drawing, as retail models do.
+    for i in 0..model.bones.len() {
+        script.extend([0x02, i as u8, 1]);
+    }
     let mut shapes = vec![];
     let mut shape_names = vec![];
     let mut matrix_count = model.bones.len();
@@ -162,6 +166,24 @@ fn encode(
         .map(|x| x.abs())
         .fold(1f32, f32::max);
     let scale = (max / 6.).max(1.).log2().ceil().exp2();
+    // A single identity node without skinning (course models, many props) is written like retail course models:
+    // no per-vertex matrix restore or scale in the display lists, one position scale in the header applied by the
+    // draw script (POSSCALE). The game draws course shapes without the node script's matrix-stack setup, so a
+    // restore there would load an unset matrix and the course would vanish.
+    let static_model = model.bones.len() == 1
+        && model.bones[0].parent.is_none()
+        && model.bones[0].translation == [0.; 3]
+        && model.bones[0].rotation == [0., 0., 0., 1.]
+        && model.bones[0].scale == [1.; 3]
+        && model.meshes.iter().all(|m| {
+            m.joints
+                .iter()
+                .zip(&m.weights)
+                .all(|(j, w)| j.iter().zip(w).all(|(j, w)| *w <= 0. || *j == 0))
+        });
+    if static_model && scale != 1. {
+        script.push(0x0b);
+    }
     for (mi, mesh) in model.meshes.iter().enumerate() {
         super::model::validate_mesh(mesh)?;
         let material = model
@@ -223,9 +245,11 @@ fn encode(
                     (slot, mesh.positions[i])
                 };
                 matrix_count = matrix_count.max(slot + 1);
-                cmds.push((0x14, vec![slot as u32]));
-                if scale != 1. {
-                    cmds.push((0x1b, vec![fixed(scale)?; 3]));
+                if !static_model {
+                    cmds.push((0x14, vec![slot as u32]));
+                    if scale != 1. {
+                        cmds.push((0x1b, vec![fixed(scale)?; 3]));
+                    }
                 }
                 let n = mesh.normals.get(i).copied().unwrap_or([0., 1., 0.]);
                 let n = if let Some(k) = rigid {
@@ -333,9 +357,11 @@ fn encode(
         put32(&mut d, 40, 4096);
         // Texture matrix: 0x2 scale is one, 0x4 no rotation, 0x8 no translation.
         let fx = |v: f32| ((v * 4096.).round() as i32) as u32;
-        let mut flags = u16::from(
-            m.tex_scale != [1., 1.] || m.tex_rotate != [0., 1.] || m.tex_translate != [0., 0.],
-        );
+        // 0x1fc0 (as retail): send diffuse, ambient, vertex colour, specular, emission, shininess, palette base.
+        let mut flags = 0x1fc0
+            | u16::from(
+                m.tex_scale != [1., 1.] || m.tex_rotate != [0., 1.] || m.tex_translate != [0., 0.],
+            );
         if m.tex_scale == [1., 1.] {
             flags |= 2
         } else {
@@ -424,28 +450,48 @@ fn encode(
     b[24] = model.materials.len() as u8;
     b[25] = model.meshes.len() as u8;
     b[26] = matrix_count as u8;
-    put32(&mut b, 32, 4096);
-    put32(&mut b, 36, 4096);
-    put16(
-        &mut b,
-        40,
-        model
-            .meshes
-            .iter()
-            .map(|m| m.indices.len())
-            .sum::<usize>()
-            .min(65535) as u16,
-    );
-    put16(
-        &mut b,
-        42,
-        (model
-            .meshes
-            .iter()
-            .map(|m| m.indices.len() / 3)
-            .sum::<usize>())
-        .min(65535) as u16,
-    );
+    // Model info (NitroSystem MDL0 layout, as in retail): 28 position scale, 32 its inverse (fx32), 36 vertex
+    // count, 38 polygon count, 40 triangles, 42 quads, 44..56 bounding box (6 fx16 in box-scale units), 56 box
+    // scale, 60 its inverse. A zero position scale collapses the model to a point when the game draws it.
+    let pos_scale = if static_model { scale } else { 1. };
+    put32(&mut b, 28, (pos_scale * 4096.) as u32);
+    put32(&mut b, 32, (4096. / pos_scale).round().max(1.) as u32);
+    let triangles = model
+        .meshes
+        .iter()
+        .map(|m| m.indices.len() / 3)
+        .sum::<usize>();
+    put16(&mut b, 36, (triangles * 3).min(65535) as u16);
+    put16(&mut b, 38, triangles.min(65535) as u16);
+    put16(&mut b, 40, triangles.min(65535) as u16);
+    put16(&mut b, 42, 0);
+    let points: Vec<[f32; 3]> = model
+        .meshes
+        .iter()
+        .flat_map(|m| m.positions.iter().copied())
+        .collect();
+    if !points.is_empty() {
+        let lo: [f32; 3] =
+            std::array::from_fn(|k| points.iter().map(|p| p[k]).fold(f32::INFINITY, f32::min));
+        let hi: [f32; 3] = std::array::from_fn(|k| {
+            points
+                .iter()
+                .map(|p| p[k])
+                .fold(f32::NEG_INFINITY, f32::max)
+        });
+        let size: [f32; 3] = std::array::from_fn(|k| hi[k] - lo[k]);
+        let extent = lo.iter().chain(&size).map(|v| v.abs()).fold(0f32, f32::max);
+        let box_scale = (extent / 7.9).max(1.).log2().ceil().exp2();
+        for (k, v) in lo.iter().chain(&size).enumerate() {
+            put16(
+                &mut b,
+                44 + k * 2,
+                ((v / box_scale) * 4096.).round().clamp(-32768., 32767.) as i16 as u16,
+            );
+        }
+        put32(&mut b, 56, (box_scale * 4096.) as u32);
+        put32(&mut b, 60, (4096. / box_scale).round().max(1.) as u32);
+    }
     Ok(b)
 }
 

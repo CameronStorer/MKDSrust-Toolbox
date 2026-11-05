@@ -355,6 +355,13 @@ fn parse_model(b: &[u8], name: String) -> Result<Model> {
         at += n;
         match op {
             1 => break,
+            // POSSCALE: the header's position scale (0x0b) or its inverse (0x2b).
+            0x0b | 0x2b => {
+                let k = fx(b, if op == 0x0b { 28 } else { 32 })?;
+                if k.is_finite() && k > 0. {
+                    current.m = math::mul(current.m, math::trs([0.; 3], [0., 0., 0., 1.], [k; 3]));
+                }
+            }
             3 => {
                 current = stack
                     .get(p[0] as usize)
@@ -444,10 +451,6 @@ fn parse_model(b: &[u8], name: String) -> Result<Model> {
                     .get_mut(slot)
                     .ok_or_else(|| error(at, "skin destination out of range"))? = current.clone();
                 matrix_count = matrix_count.max(slot + 1);
-            }
-            0x0b | 0x2b => {
-                let s = fx(b, if op == 0x0b { 32 } else { 36 })?;
-                current.m = math::mul(current.m, math::trs([0.; 3], [0., 0., 0., 1.], [s; 3]));
             }
             7 | 8 | 0x47 => warnings.push("Billboard uses its rest orientation".into()),
             _ => {}
