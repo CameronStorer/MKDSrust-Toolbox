@@ -532,6 +532,8 @@ fn gltf_with(bytes: &[u8], base: &Path, rigged: bool) -> Result<Nsbmd> {
     let mut textures = Vec::<Texture>::new();
     let mut palettes = Vec::<Palette>::new();
     let mut materials = vec![];
+    // Materials whose look comes from an emissive texture (common in ripped game models).
+    let mut emissive_driven = vec![];
     for (i, material) in doc.json["materials"]
         .as_array()
         .into_iter()
@@ -549,7 +551,14 @@ fn gltf_with(bytes: &[u8], base: &Path, rigged: bool) -> Result<Nsbmd> {
         let pbr = &material["pbrMetallicRoughness"];
         m.diffuse = floats(&pbr["baseColorFactor"], [1.; 4]);
         m.double_sided = material["doubleSided"].as_bool().unwrap_or(false);
-        if let Some(id) = pbr["baseColorTexture"]["index"].as_u64() {
+        // Ripped models often keep the real colours in the emissive texture (factor ~1) while the base
+        // colour points at another part's texture; viewers add the emissive on top. Use it when it dominates.
+        let emissive = floats::<3>(&material["emissiveFactor"], [0.; 3]);
+        let emissive_id = material["emissiveTexture"]["index"]
+            .as_u64()
+            .filter(|_| emissive.iter().copied().fold(0f32, f32::max) >= 0.5);
+        emissive_driven.push(emissive_id.is_some());
+        if let Some(id) = emissive_id.or(pbr["baseColorTexture"]["index"].as_u64()) {
             let image = number(&doc.json["textures"][id as usize]["source"])?;
             let image = &doc.json["images"][image];
             let data = if let Some(u) = image["uri"].as_str() {
@@ -614,6 +623,12 @@ fn gltf_with(bytes: &[u8], base: &Path, rigged: bool) -> Result<Nsbmd> {
                     .collect()
             } else {
                 vec![]
+            };
+            let material = primitive["material"].as_u64().unwrap_or(0) as usize;
+            let colors = if emissive_driven.get(material).copied().unwrap_or(false) {
+                vec![]
+            } else {
+                colors
             };
             let mut m = Mesh {
                 name: format!("mesh{}", meshes.len()),

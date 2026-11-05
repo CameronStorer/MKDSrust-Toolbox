@@ -360,7 +360,34 @@ fn decimate_impl(m: &mut Mesh, target: usize, remaining: usize) -> Result<()> {
                 let rhs = [-quad[3] as f32, -quad[7] as f32, -quad[11] as f32];
                 let midpoint =
                     std::array::from_fn(|k| (m.positions[a][k] + m.positions[b][k]) / 2.);
-                let p = math::inverse(system).map_or(midpoint, |inv| math::vector(inv, rhs));
+                let solved = math::inverse(system).map(|inv| math::vector(inv, rhs));
+                // A near-singular quadric (flat or thin regions) can put the solved point far away and leave
+                // spikes. Accept it only near the edge; otherwise take the cheapest of the ends and midpoint.
+                let cost_at = |p: [f32; 3]| {
+                    let v = [p[0] as f64, p[1] as f64, p[2] as f64, 1.];
+                    (0..4)
+                        .flat_map(|r| (0..4).map(move |c| v[r] * quad[r * 4 + c] * v[c]))
+                        .sum::<f64>()
+                };
+                let edge = (0..3)
+                    .map(|k| (m.positions[a][k] - m.positions[b][k]).powi(2))
+                    .sum::<f32>()
+                    .sqrt();
+                let near = |p: [f32; 3]| {
+                    p.iter().all(|v| v.is_finite())
+                        && (0..3)
+                            .map(|k| (p[k] - midpoint[k]).powi(2))
+                            .sum::<f32>()
+                            .sqrt()
+                            <= edge
+                };
+                let p = match solved {
+                    Some(p) if near(p) => p,
+                    _ => [m.positions[a], m.positions[b], midpoint]
+                        .into_iter()
+                        .min_by(|x, y| cost_at(*x).total_cmp(&cost_at(*y)))
+                        .unwrap(),
+                };
                 if p.iter().any(|v| !v.is_finite()) {
                     return None;
                 }

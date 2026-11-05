@@ -473,6 +473,136 @@ pub fn bounds(m: &Model) -> Result<([f32; 3], [f32; 3])> {
     }
     Ok((lo, hi))
 }
+/// Low-poly DS look for downloaded models: each vertex takes the colour of its own texture at its UV (times
+/// material and vertex colour) with a soft fixed light baked in (DS vertex colours replace lighting), then
+/// vertices are welded by position so texture seams no longer stop the shape-preserving reduction.
+#[allow(clippy::needless_range_loop)] // parallel attribute arrays
+pub(crate) fn bake_vertex_colours(m: &mut Model, textures: Option<&Nsbtx>) {
+    let mut images: std::collections::HashMap<usize, Option<nitro_formats::graphics::Image>> =
+        Default::default();
+    let light = math::normalize([0.3, 0.8, 0.5]);
+    for mesh in &mut m.meshes {
+        let material = m.materials.get(mesh.material);
+        let image = images
+            .entry(mesh.material)
+            .or_insert_with(|| {
+                let (bank, mat) = (textures?, material?);
+                let t = bank
+                    .textures
+                    .iter()
+                    .position(|t| Some(&t.name) == mat.texture.as_ref())?;
+                let p = mat
+                    .palette
+                    .as_ref()
+                    .and_then(|n| bank.palettes.iter().position(|p| &p.name == n))
+                    .unwrap_or(0);
+                bank.decode(t, p).ok()
+            })
+            .as_ref();
+        let diffuse = material.map_or([1.; 4], |m| m.diffuse);
+        let n = mesh.positions.len();
+        let mut colours = Vec::with_capacity(n);
+        for i in 0..n {
+            let mut c = mesh.colors.get(i).copied().unwrap_or([1.; 4]);
+            if let (Some(img), Some(uv)) = (image, mesh.uvs.get(i)) {
+                let (w, h) = (img.width as f32, img.height as f32);
+                let x = ((uv[0] - uv[0].floor()) * w).min(w - 1.) as usize;
+                let y = ((uv[1] - uv[1].floor()) * h).min(h - 1.) as usize;
+                let px = &img.rgba[(y * img.width as usize + x) * 4..][..4];
+                for k in 0..3 {
+                    c[k] *= px[k] as f32 / 255.;
+                }
+            }
+            let normal = mesh.normals.get(i).copied().unwrap_or([0., 1., 0.]);
+            let shade = 0.55 + 0.45 * math::dot(normal, light).max(0.);
+            colours.push([0, 1, 2, 3].map(|k| {
+                if k == 3 {
+                    1.
+                } else {
+                    (c[k] * diffuse[k] * shade).clamp(0., 1.)
+                }
+            }));
+        }
+        mesh.colors = colours;
+        // Weld by position, averaging colours and normals; texture coordinates are no longer needed.
+        let mut index = std::collections::HashMap::<[u32; 3], u32>::new();
+        let mut remap = Vec::with_capacity(n);
+        let (mut pos, mut nor, mut col, mut cnt, mut joi, mut wei) =
+            (vec![], vec![], vec![], vec![], vec![], vec![]);
+        for i in 0..n {
+            let key = mesh.positions[i].map(|v| if v == 0. { 0 } else { v.to_bits() });
+            let id = *index.entry(key).or_insert_with(|| {
+                pos.push(mesh.positions[i]);
+                nor.push([0f32; 3]);
+                col.push([0f32; 4]);
+                cnt.push(0f32);
+                joi.push(mesh.joints.get(i).copied().unwrap_or([0; 4]));
+                wei.push(mesh.weights.get(i).copied().unwrap_or([1., 0., 0., 0.]));
+                (pos.len() - 1) as u32
+            });
+            let j = id as usize;
+            let nn = mesh.normals.get(i).copied().unwrap_or([0., 1., 0.]);
+            for k in 0..3 {
+                nor[j][k] += nn[k];
+            }
+            for k in 0..4 {
+                col[j][k] += mesh.colors[i][k];
+            }
+            cnt[j] += 1.;
+            remap.push(id);
+        }
+        for j in 0..pos.len() {
+            nor[j] = math::normalize(nor[j]);
+            col[j] = col[j].map(|v| v / cnt[j]);
+        }
+        let had_skin = !mesh.joints.is_empty();
+        mesh.indices = mesh.indices.iter().map(|&i| remap[i as usize]).collect();
+        mesh.uvs = vec![[0.; 2]; pos.len()];
+        mesh.positions = pos;
+        mesh.normals = nor;
+        mesh.colors = col;
+        if had_skin {
+            mesh.joints = joi;
+            mesh.weights = wei;
+        } else {
+            mesh.joints.clear();
+            mesh.weights.clear();
+        }
+        // Drop triangles that the weld made degenerate.
+        let tris: Vec<u32> = mesh
+            .indices
+            .chunks_exact(3)
+            .filter(|t| t[0] != t[1] && t[1] != t[2] && t[0] != t[2])
+            .flatten()
+            .copied()
+            .collect();
+        mesh.indices = tris;
+    }
+}
+/// Plain white textures under the donor's texture and palette names, so baked vertex colours show as they are.
+pub(crate) fn white_driver_textures(donor_tx: &Nsbtx) -> Result<Nsbtx> {
+    let white = nitro_formats::graphics::Image {
+        width: 8,
+        height: 8,
+        rgba: [255u8; 4].repeat(64),
+    };
+    let mut textures = vec![];
+    let mut palettes: Vec<nitro_formats::texture::Palette> = vec![];
+    for (i, t) in donor_tx.textures.iter().enumerate() {
+        let (mut texture, mut palette) = model::convert_texture(&white, &t.name, 3, 8)?;
+        texture.name = t.name.clone();
+        palette.name = donor_tx
+            .palettes
+            .get(i)
+            .or(donor_tx.palettes.first())
+            .map_or_else(|| t.name.clone(), |p| p.name.clone());
+        textures.push(texture);
+        if !palettes.iter().any(|p| p.name == palette.name) {
+            palettes.push(palette);
+        }
+    }
+    Ok(Nsbtx::new(textures, palettes)?)
+}
 fn fit(m: &mut Model, donor: &Model) -> Result<()> {
     let (lo, hi) = bounds(m)?;
     let (dl, dh) = bounds(donor)?;
@@ -491,54 +621,147 @@ fn fit(m: &mut Model, donor: &Model) -> Result<()> {
     }
     Ok(())
 }
-pub(crate) fn reduce(m: &mut Model, target: usize, vertices: usize) -> Result<()> {
-    let total: usize = m.meshes.iter().map(|m| m.indices.len() / 3).sum();
-    let input = m.meshes.clone();
+/// Removes separate pieces smaller than `fraction` of the model's size (eyes, teeth, buttons in downloaded
+/// models): invisible at DS size, and each would keep triangles the shape-preserving reduction can't remove.
+#[allow(clippy::needless_range_loop)] // parallel attribute arrays
+pub(crate) fn drop_specks(m: &mut Model, fraction: f32) -> Result<()> {
+    let (lo, hi) = bounds(m)?;
+    let size = (0..3).map(|k| (hi[k] - lo[k]).powi(2)).sum::<f32>().sqrt();
+    let before: usize = m.meshes.iter().map(|m| m.indices.len()).sum();
+    let original = m.meshes.clone();
     for mesh in &mut m.meshes {
+        let n = mesh.positions.len();
+        let mut parent: Vec<usize> = (0..n).collect();
+        fn root(p: &mut [usize], mut i: usize) -> usize {
+            while p[i] != i {
+                p[i] = p[p[i]];
+                i = p[i];
+            }
+            i
+        }
+        for t in mesh.indices.chunks_exact(3) {
+            for k in 1..3 {
+                let (a, b) = (
+                    root(&mut parent, t[0] as usize),
+                    root(&mut parent, t[k] as usize),
+                );
+                parent[a] = b;
+            }
+        }
+        let mut boxes = std::collections::HashMap::<usize, ([f32; 3], [f32; 3])>::new();
+        for i in 0..n {
+            let r = root(&mut parent, i);
+            let p = mesh.positions[i];
+            let e = boxes.entry(r).or_insert((p, p));
+            for k in 0..3 {
+                e.0[k] = e.0[k].min(p[k]);
+                e.1[k] = e.1[k].max(p[k]);
+            }
+        }
+        let keep: std::collections::HashSet<usize> = boxes
+            .iter()
+            .filter(|(_, (a, b))| {
+                (0..3).map(|k| (b[k] - a[k]).powi(2)).sum::<f32>().sqrt() >= size * fraction
+            })
+            .map(|(r, _)| *r)
+            .collect();
+        let indices: Vec<u32> = mesh
+            .indices
+            .chunks_exact(3)
+            .filter(|t| keep.contains(&root(&mut parent, t[0] as usize)))
+            .flatten()
+            .copied()
+            .collect();
+        mesh.indices = indices;
+    }
+    m.meshes.retain(|mesh| !mesh.indices.is_empty());
+    let after: usize = m.meshes.iter().map(|m| m.indices.len()).sum();
+    // Never let speck removal eat the model itself.
+    if after * 10 < before * 7 {
+        m.meshes = original;
+    }
+    Ok(())
+}
+pub(crate) fn reduce(m: &mut Model, target: usize, vertices: usize) -> Result<()> {
+    drop_specks(m, 0.04)?;
+    let count = |m: &[nitro_formats::model::Mesh]| -> (usize, usize) {
+        (
+            m.iter().map(|m| m.indices.len() / 3).sum(),
+            m.iter().map(|m| m.positions.len()).sum(),
+        )
+    };
+    let area = |m: &[nitro_formats::model::Mesh]| -> f32 {
+        m.iter()
+            .flat_map(|m| {
+                m.indices.chunks_exact(3).map(|t| {
+                    let [a, b, c] = [0, 1, 2].map(|k| m.positions[t[k] as usize]);
+                    let n = math::cross(
+                        std::array::from_fn(|k| b[k] - a[k]),
+                        std::array::from_fn(|k| c[k] - a[k]),
+                    );
+                    math::dot(n, n).sqrt() * 0.5
+                })
+            })
+            .sum()
+    };
+    let input = m.meshes.clone();
+    let (total, _) = count(&input);
+    let original_area = area(&input).max(1e-12);
+    // 1. Shape-preserving (quadric) reduction.
+    let mut quadric = input.clone();
+    for mesh in &mut quadric {
         let share = ((mesh.indices.len() / 3) * target / total.max(1)).max(1);
         if mesh.indices.len() / 3 > share {
             nitro_formats::model::decimate(mesh, share)?;
         }
     }
-    let count = |m: &Model| -> (usize, usize) {
-        (
-            m.meshes.iter().map(|m| m.indices.len() / 3).sum(),
-            m.meshes.iter().map(|m| m.positions.len()).sum(),
-        )
-    };
-    let (tris, verts) = count(m);
-    if tris > target || verts > vertices {
-        // Seams (UV islands, separate parts) can stop the careful reduction far above a tiny DS budget, as with
-        // typical downloaded game models. Fall back to vertex clustering on a growing grid, which always converges.
-        // Restart from the input: the careful pass can leave stray far-away vertices on meshes it couldn't finish.
-        m.meshes = input;
+    let (t, v) = count(&quadric);
+    let quadric = (t <= target && v <= vertices).then_some(quadric);
+    // 2. Vertex clustering on a growing grid (cells averaged), which always converges and keeps surfaces
+    //    connected. Seams and separate parts in downloaded models can stop or tear the quadric pass.
+    let clustered = if quadric.is_none() || total > target * 4 {
         let (lo, hi) = bounds(m)?;
         let extent = (0..3).map(|k| hi[k] - lo[k]).fold(0f32, f32::max).max(1e-6);
-        let original = m.meshes.clone();
         let mut cells = 256f32;
         loop {
-            m.meshes = original.clone();
-            for mesh in &mut m.meshes {
+            let mut meshes = input.clone();
+            for mesh in &mut meshes {
                 cluster(mesh, lo, extent / cells);
             }
-            m.meshes.retain(|mesh| !mesh.indices.is_empty());
-            let (t, v) = count(m);
-            if t <= target && v <= vertices || cells < 2. {
-                break;
+            meshes.retain(|mesh| !mesh.indices.is_empty());
+            let (t, v) = count(&meshes);
+            if t <= target && v <= vertices {
+                break Some(meshes);
+            }
+            if cells < 2. {
+                break None;
             }
             cells *= 0.85;
         }
-    }
-    let (tris, verts) = count(m);
-    if tris > target || verts > vertices {
-        return Err(invalid(
+    } else {
+        None
+    };
+    // Keep the result whose surface area stays closest to the original (torn results lose area).
+    let score = |m: &Vec<nitro_formats::model::Mesh>| (area(m) / original_area - 1.).abs();
+    m.meshes = match (quadric, clustered) {
+        (Some(q), Some(c)) => {
+            if score(&c) + 0.05 < score(&q) {
+                c
+            } else {
+                q
+            }
+        }
+        (Some(q), None) => q,
+        (None, Some(c)) => c,
+        (None, None) => return Err(invalid(
             "safe reduction could not reach the slot budget; simplify the mesh in Model and retry",
-        ));
-    }
+        )),
+    };
     Ok(())
 }
-/// Merges every vertex in the same grid cell into one (keeping the first vertex's attributes) and drops the
+/// Merges every vertex in the same grid cell into one (the cell's average position and colour) and drops the
 /// triangles that collapse or repeat.
+#[allow(clippy::needless_range_loop)] // parallel attribute arrays
 fn cluster(m: &mut nitro_formats::model::Mesh, origin: [f32; 3], cell: f32) {
     let mut first = std::collections::HashMap::new();
     let remap: Vec<u32> = m
@@ -550,6 +773,32 @@ fn cluster(m: &mut nitro_formats::model::Mesh, origin: [f32; 3], cell: f32) {
             *first.entry(key).or_insert(i as u32)
         })
         .collect();
+    // Each kept vertex becomes the average of its cell (shape and colour), not just the first vertex found.
+    let n = m.positions.len();
+    let mut sum = vec![([0f32; 3], [0f32; 3], [0f32; 4], 0f32); n];
+    for i in 0..n {
+        let r = remap[i] as usize;
+        let e = &mut sum[r];
+        for k in 0..3 {
+            e.0[k] += m.positions[i][k];
+            e.1[k] += m.normals.get(i).map_or(0., |v| v[k]);
+        }
+        for k in 0..4 {
+            e.2[k] += m.colors.get(i).map_or(1., |v| v[k]);
+        }
+        e.3 += 1.;
+    }
+    for (r, (p, nn, c, count)) in sum.into_iter().enumerate() {
+        if count > 0. {
+            m.positions[r] = p.map(|v| v / count);
+            if let Some(v) = m.normals.get_mut(r) {
+                *v = math::normalize(nn);
+            }
+            if let Some(v) = m.colors.get_mut(r) {
+                *v = c.map(|v| v / count);
+            }
+        }
+    }
     let mut seen = std::collections::HashSet::new();
     let mut indices = vec![];
     for t in m.indices.chunks_exact(3) {
@@ -706,6 +955,23 @@ pub(crate) fn driver_materials(
     }
     Ok(Nsbtx::new(textures, palettes)?)
 }
+/// Donor materials with every part on the main (non-face) material and white textures for baked colours.
+pub(crate) fn baked_driver_materials(
+    m: &mut Model,
+    donor: &Model,
+    donor_tx: &Nsbtx,
+) -> Result<Nsbtx> {
+    m.materials = donor.materials.clone();
+    let main = m
+        .materials
+        .iter()
+        .position(|m| !m.name.to_ascii_lowercase().contains("face"))
+        .unwrap_or(0);
+    for mesh in &mut m.meshes {
+        mesh.material = main;
+    }
+    white_driver_textures(donor_tx)
+}
 fn used_menu_path(s: &RomSession, path: &str) -> String {
     mkds_data::assets::used_duplicate(path)
         .filter(|p| s.file(p).is_ok())
@@ -775,10 +1041,11 @@ pub fn character_from(
             )?;
         }
     }
+    bake_vertex_colours(&mut m, source.textures.as_ref());
     fit(&mut m, donor)?;
     reduce(&mut m, 237, 536)?;
     rigid_rig(&mut m, donor)?;
-    let tx = driver_materials(&mut m, donor, &source, &tx)?;
+    let tx = baked_driver_materials(&mut m, donor, &tx)?;
     m.name = format!("P_{slot}");
     let b = Nsbmd {
         models: vec![m.clone()],
@@ -812,7 +1079,7 @@ pub fn character_from(
     }
     // Keep E texture names and the runtime face lookup contract.
     let etx = Nsbtx::parse(p.bytes(s, &epath.replace(".nsbmd", ".nsbtx"))?)?;
-    let etx = driver_materials(&mut e, &edonor.models[0], &source, &etx)?;
+    let etx = baked_driver_materials(&mut e, &edonor.models[0], &etx)?;
     edits.insert(epath.replace(".nsbmd", ".nsbtx"), etx.write());
     edits.insert(
         epath,

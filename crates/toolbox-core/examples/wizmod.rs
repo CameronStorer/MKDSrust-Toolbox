@@ -1,5 +1,5 @@
 //! Dev helper: run the character or kart wizard and install the result as an MKDSrust mod (race checks).
-//! Usage: wizmod <rom> <character|kart> <model file> <project dir> <MKDSrust game folder>
+//! Usage: wizmod <rom> <character|kart> <model file> <project dir> <MKDSrust game folder> [v3]
 use std::io::Read;
 use toolbox_core::{
     project::{Manifest, Project},
@@ -36,7 +36,7 @@ fn main() {
                 slot: 0,
                 base: 0,
                 source: a[3].clone(),
-                hips: 0.,
+                hips: 0.45,
                 rotation: [0., 0., 0., 1.],
             },
         )
@@ -46,7 +46,17 @@ fn main() {
         println!("warning: {w}");
     }
     // Legacy package format: what the current MKDSrust game reads (as Test Bench does).
-    let (packed, _) = toolbox_core::pack::build_legacy(&p, &s).unwrap();
+    // Pass "v3" as a sixth argument for the small format-3 package (needs a format-3 game).
+    let packed = if a.get(6).map(String::as_str) == Some("v3") {
+        let r = toolbox_core::pack::pack(&p, &s).unwrap();
+        println!(
+            "format-3 package: {} bytes",
+            std::fs::metadata(&r.path).unwrap().len()
+        );
+        std::fs::read(&r.path).unwrap()
+    } else {
+        toolbox_core::pack::build_legacy(&p, &s).unwrap().0
+    };
     let id = p.config.manifest.id.clone();
     let dest = game.join("mods").join(&id);
     let _ = std::fs::remove_dir_all(&dest);
